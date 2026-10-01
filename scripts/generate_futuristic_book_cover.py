@@ -31,7 +31,7 @@ for i in range(-5, 15):
 
 # 2. Load images
 spectra_path = 'docs/manual/figures/soil_nutrient_absorption_spectra.png'
-phone_path = 'docs/manual/figures/user_soil_scan_attached.jpg'
+phone_path = 'docs/manual/figures/npxai_app_np_analysis_screen.jpg'
 
 img_spectra = Image.open(spectra_path).convert('RGBA')
 img_phone = Image.open(phone_path).convert('RGBA')
@@ -59,8 +59,8 @@ def create_rounded_card(img, radius=24, border_color=(0, 229, 255, 220), border_
     return card
 
 # 4. Process Phone Image (Hero Mockup on Left / Foreground)
-# Phone target size: width ~ 660 px, height ~ 1470 px
-phone_w = 680
+# Phone target size: width ~ 670 px, height ~ 1490 px
+phone_w = 670
 phone_h = int(img_phone.height * (phone_w / img_phone.width))
 img_phone_resized = img_phone.resize((phone_w, phone_h), Image.Resampling.LANCZOS)
 
@@ -97,7 +97,6 @@ def add_dropshadow(bg, fg, pos, offset=(18, 25), blur_radius=35, shadow_alpha=16
     sh_draw.rounded_rectangle([(blur_radius*2, blur_radius*2), (blur_radius*2 + fw, blur_radius*2 + fh)],
                               radius=30, fill=(0, 0, 0, shadow_alpha))
     shadow_blurred = shadow.filter(ImageFilter.GaussianBlur(blur_radius))
-    
     bg.paste(shadow_blurred, (pos[0] + offset[0] - blur_radius*2, pos[1] + offset[1] - blur_radius*2), shadow_blurred)
     bg.paste(fg, pos, fg)
 
@@ -108,25 +107,40 @@ spectra_pos = (W - spectra_w - 70, 720)
 add_dropshadow(cover, spectra_card, spectra_pos, offset=(12, 18), blur_radius=30, shadow_alpha=170)
 
 # Phone Mockup on the Left (overlapping the spectra card gracefully):
-phone_pos = (90, 790)
+phone_pos = (90, 780)
 add_dropshadow(cover, phone_shell, phone_pos, offset=(20, 30), blur_radius=40, shadow_alpha=190)
 
 # 5. Add Futuristic HUD Elements & Data Overlays connecting Phone and Spectra
 hud_draw = ImageDraw.Draw(cover)
 
-# Connection lines from phone targeting circle to spectra peaks
-# Reticle center on phone is approximately at phone_pos + (375, 410)
-ret_x = phone_pos[0] + 375
-ret_y = phone_pos[1] + 410
+# Connection lines from phone actual N, P & Spectral Fingerprint to spectra chart
+# 1. Total Nitrogen (around Y_rel = 0.46)
+pt_n_x = phone_pos[0] + phone_shell_w - 20
+pt_n_y = phone_pos[1] + int(phone_shell_h * 0.45)
+target_n = (spectra_pos[0] + 890, spectra_pos[1] + 280) # SWIR Nitrogen absorption peak
 
-# Optical Laser Beam Line from Reticle to Spectra Card
-target_pt1 = (spectra_pos[0] + 280, spectra_pos[1] + 230) # Vis-NIR NPK region
-target_pt2 = (spectra_pos[0] + 520, spectra_pos[1] + 340) # Short-NIR Fe/P region
-target_pt3 = (spectra_pos[0] + 890, spectra_pos[1] + 280) # SWIR Nitrogen region
+# 2. Available Phosphorus (around Y_rel = 0.49)
+pt_p_x = phone_pos[0] + phone_shell_w - 20
+pt_p_y = phone_pos[1] + int(phone_shell_h * 0.50)
+target_p = (spectra_pos[0] + 520, spectra_pos[1] + 340) # Short-NIR Fe-Oxide / Ava P peak
 
-for (tx, ty), col in [(target_pt1, (0, 230, 153)), (target_pt2, (0, 210, 255)), (target_pt3, (255, 179, 0))]:
-    hud_draw.line([(ret_x, ret_y), (ret_x + 90, ret_y - 40), (tx - 50, ty), (tx, ty)], fill=col + (140,), width=2)
-    hud_draw.ellipse([(tx - 6, ty - 6), (tx + 6, ty + 6)], fill=col + (220,), outline=(255, 255, 255, 240), width=2)
+# 3. Vis-NIR Spectral Fingerprint Curve (around Y_rel = 0.68)
+pt_spec_x = phone_pos[0] + phone_shell_w - 20
+pt_spec_y = phone_pos[1] + int(phone_shell_h * 0.67)
+target_spec = (spectra_pos[0] + 330, spectra_pos[1] + spectra_h - 130) # LED 405-940nm stimulation channels
+
+# Draw Glowing Cyber Lines
+for (sx, sy), (tx, ty), col in [
+    ((pt_n_x, pt_n_y), target_n, (0, 210, 255)),     # Cyan for Nitrogen
+    ((pt_p_x, pt_p_y), target_p, (0, 230, 153)),     # Emerald for Phosphorus
+    ((pt_spec_x, pt_spec_y), target_spec, (255, 183, 77)) # Amber for Spectral Fingerprint
+]:
+    # Multi-segment sci-fi line
+    mid_x = sx + 80
+    hud_draw.line([(sx, sy), (mid_x, sy), (tx - 80, ty), (tx, ty)], fill=col + (180,), width=2)
+    # Origin and Target Glowing Nodes
+    hud_draw.ellipse([(sx - 5, sy - 5), (sx + 5, sy + 5)], fill=col + (230,), outline=(255, 255, 255, 255), width=2)
+    hud_draw.ellipse([(tx - 6, ty - 6), (tx + 6, ty + 6)], fill=col + (230,), outline=(255, 255, 255, 255), width=2)
 
 # High-Tech HUD Badges below the Spectra card
 badge_y = spectra_pos[1] + spectra_h + 35
@@ -134,11 +148,11 @@ badge_box = [(spectra_pos[0], badge_y), (spectra_pos[0] + spectra_w, badge_y + 1
 hud_draw.rounded_rectangle(badge_box, radius=16, fill=(15, 23, 42, 220), outline=(0, 230, 153, 140), width=2)
 
 # Floating Micro-Cards around the layout
-# Card 1: Edge AI Inference Engine
+# Card 1: Edge AI Inference Engine & Soil-ViT
 card1_box = [(spectra_pos[0] + 20, badge_y + 160), (spectra_pos[0] + 580, badge_y + 310)]
 hud_draw.rounded_rectangle(card1_box, radius=14, fill=(11, 20, 38, 220), outline=(0, 210, 255, 120), width=2)
 
-# Card 2: Optical Dark Chamber CIE 45°/0°
+# Card 2: Optical Dark Chamber CIE 45°/0° & Vis-NIR 7-Channels
 card2_box = [(spectra_pos[0] + 620, badge_y + 160), (spectra_pos[0] + spectra_w - 20, badge_y + 310)]
 hud_draw.rounded_rectangle(card2_box, radius=14, fill=(11, 20, 38, 220), outline=(255, 183, 77, 130), width=2)
 
@@ -180,16 +194,16 @@ hud_draw.line([(90, 440), (W - 90, 440)], fill=(245, 197, 66, 200), width=3)
 hud_draw.line([(90, 446), (W - 90, 446)], fill=(0, 230, 153, 160), width=1)
 
 # Badge Texts in HUD area
-hud_draw.text((spectra_pos[0] + 30, badge_y + 20), "การผสานสเปกโตรโฟโตเมทรีมัลติสเปกตรัลและการสแกนสดผ่านกล้องสมาร์ทโฟน", font=font_hud_title, fill=(0, 230, 153, 255))
-hud_draw.text((spectra_pos[0] + 30, badge_y + 65), "วิเคราะห์ธาตุอาหารหลัก Total N, Available P, pH และฮิวมัสในดินแบบเวลาจริงใน 3.0 วินาที", font=font_hud_desc, fill=(226, 232, 240, 240))
+hud_draw.text((spectra_pos[0] + 30, badge_y + 20), "การวิเคราะห์ผลสัมฤทธิ์ธาตุอาหารพืช N-P และลายพิมพ์สเปกตรัม Vis-NIR", font=font_hud_title, fill=(0, 230, 153, 255))
+hud_draw.text((spectra_pos[0] + 30, badge_y + 65), "Total N (Kjeldahl): 3.20 g/kg • Available P (Bray II): 30.29 mg/kg • ความเชื่อมั่น R²: 0.96", font=font_hud_desc, fill=(226, 232, 240, 240))
 
-# Card 1 Content (Edge AI)
-hud_draw.text((card1_box[0][0] + 25, card1_box[0][1] + 20), "ระบบปัญญาประดิษฐ์บนขอบ 5 โมเดล", font=font_hud_title, fill=(0, 210, 255, 255))
-hud_draw.text((card1_box[0][0] + 25, card1_box[0][1] + 65), "CNN ResNet-18 • Random Forest\nANN Perceptron • SVR • PLSR (Pure Dart)", font=font_hud_desc, fill=(203, 213, 225, 220))
+# Card 1 Content (Soil-ViT & Edge AI)
+hud_draw.text((card1_box[0][0] + 25, card1_box[0][1] + 20), "โมเดลปัญญาประดิษฐ์ Soil-ViT & AI", font=font_hud_title, fill=(0, 210, 255, 255))
+hud_draw.text((card1_box[0][0] + 25, card1_box[0][1] + 65), "Vision Transformer • CNN ResNet-18 • RF\nความแม่นยำสูงระดับแปลงเกษตรกรรมแบบเวลาจริง", font=font_hud_desc, fill=(203, 213, 225, 220))
 
 # Card 2 Content (Optics)
-hud_draw.text((card2_box[0][0] + 25, card2_box[0][1] + 20), "กล่องมืดเรขาคณิตเชิงแสง CIE 45°/0°", font=font_hud_title, fill=(255, 183, 77, 255))
-hud_draw.text((card2_box[0][0] + 25, card2_box[0][1] + 65), "กำจัดแสงสะท้อน Specular Glare 100%\nแหล่งกำเนิดแสง LED 7 แชนเนล (405 - 940 nm)", font=font_hud_desc, fill=(203, 213, 225, 220))
+hud_draw.text((card2_box[0][0] + 25, card2_box[0][1] + 20), "ลายพิมพ์สเปกตรัมและกล่องมืด 0-Lux", font=font_hud_title, fill=(255, 183, 77, 255))
+hud_draw.text((card2_box[0][0] + 25, card2_box[0][1] + 65), "เรขาคณิต CIE 45°/0° • LED 7 แชนเนล\nตรวจวัดช่วงคลื่น 405, 465, 525, 630, 850, 940 nm", font=font_hud_desc, fill=(203, 213, 225, 220))
 
 # Bottom Authors & Publisher Section
 author_box_top = H - 280
