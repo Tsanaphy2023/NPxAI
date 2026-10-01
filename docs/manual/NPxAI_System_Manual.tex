@@ -1,8 +1,8 @@
 \documentclass[12pt,a4paper,oneside]{book}
 
 % -------------------------------------------------------------
-% การตั้งค่าระยะขอบหน้ากระดาษตามเกณฑ์ มรภ.รำไพพรรณี
-% ซ้าย 1.5 นิ้ว (38.1 mm), ขวา 1.0 นิ้ว (25.4 mm), บน 1.5 นิ้ว (38.1 mm), ล่าง 1.0 นิ้ว (25.4 mm)
+% การตั้งค่าระยะขอบหน้ากระดาษตามเกณฑ์ มรภ.รำไพพรรณี (RBRU Academic Standards)
+% กั้นซ้าย 1.5 นิ้ว (38.1 mm), ขวา 1.0 นิ้ว (25.4 mm), บน 1.5 นิ้ว (38.1 mm), ล่าง 1.0 นิ้ว (25.4 mm)
 % -------------------------------------------------------------
 \usepackage[
     top=38.1mm,
@@ -14,7 +14,6 @@
 
 % -------------------------------------------------------------
 % การจัดการฟอนต์ภาษาไทยและคณิตศาสตร์ด้วย fontspec (XeLaTeX)
-% ใช้ฟอนต์ Sarabun ซึ่งรองรับภาษาไทยสมบูรณ์แบบบน macOS และระบบปฏิบัติการมาตรฐาน
 % -------------------------------------------------------------
 \usepackage{fontspec}
 \usepackage{xunicode}
@@ -39,7 +38,7 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows.meta,positioning,calc}
+\usetikzlibrary{shapes,arrows.meta,positioning,calc,shadows.blur}
 \usepackage[most]{tcolorbox}
 \usepackage{listings}
 \usepackage{caption}
@@ -56,14 +55,19 @@
 \definecolor{rbruCodeBg}{HTML}{F8F9FA}
 
 % -------------------------------------------------------------
-% การตัดเครื่องหมายทวิภาคในคำบรรยายภาพและตาราง (Caption Standardization)
+% การตัดเครื่องหมายทวิภาคในคำบรรยายภาพและตาราง (Caption Localization)
 % -------------------------------------------------------------
 \DeclareCaptionLabelSeparator{thaisep}{\quad}
 \captionsetup{labelsep=thaisep}
 \renewcommand{\figurename}{\mbox{ภาพที่}}
 \renewcommand{\tablename}{\mbox{ตารางที่}}
-\captionsetup[table]{position=top, skip=6pt, labelfont={bf}, textfont={normalfont}, labelsep=thaisep, justification=raggedleft, singlelinecheck=false}
-\captionsetup[figure]{position=bottom, skip=6pt, labelfont={bf}, textfont={normalfont}, labelsep=thaisep, justification=centering}
+
+\AtBeginDocument{
+    \gdef\figurename{\mbox{ภาพที่}}
+    \gdef\tablename{\mbox{ตารางที่}}
+    \captionsetup[figure]{name={\mbox{ภาพที่}}, position=bottom, skip=6pt, labelfont={bf}, textfont={normalfont}, labelsep=thaisep, justification=centering}
+    \captionsetup[table]{name={\mbox{ตารางที่}}, position=top, skip=6pt, labelfont={bf}, textfont={normalfont}, labelsep=thaisep, justification=raggedleft, singlelinecheck=false}
+}
 
 % -------------------------------------------------------------
 % กล่องหัวบทวิชาการหรูหรา (Academic Chapter Banner Box)
@@ -74,7 +78,7 @@
     colback=rbruNavy,
     colframe=rbruNavy,
     arc=0mm,
-    left=15pt, right=15pt, top=18pt, bottom=18pt,
+    left=15pt, right=15pt, top=16pt, bottom=16pt,
     borderline east={4pt}{0pt}{rbruGold},
     interior style={left color=rbruNavy!98!black, right color=rbruSlate!90}
   ]
@@ -93,7 +97,7 @@
     colback=rbruNavy,
     colframe=rbruNavy,
     arc=0mm,
-    left=15pt, right=15pt, top=18pt, bottom=18pt,
+    left=15pt, right=15pt, top=16pt, bottom=16pt,
     borderline east={4pt}{0pt}{rbruGold},
     interior style={left color=rbruNavy!98!black, right color=rbruSlate!90}
   ]
@@ -140,45 +144,91 @@
 \begin{document}
 
 % -------------------------------------------------------------
-% หน้าปกเอกสาร (Academic Cover Page)
+% หน้าปกเอกสารวิชาการสวยงาม ทันสมัย เรียบง่าย (Modern Minimalist Academic Cover)
 % -------------------------------------------------------------
 \begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+    % พื้นหลังไล่ระดับสีน้ำเงินเข้มและเขียวมรกตประจำมหาวิทยาลัยราชภัฏรำไพพรรณี
+    \fill[rbruNavy!98!black] (current page.south west) rectangle (current page.north east);
+    \shade[top color=rbruNavy!90, bottom color=rbruGreen!40!black, opacity=0.85] 
+        (current page.south west) rectangle (current page.north east);
+        
+    % แถบเส้นสีทองและลายกราฟิกเรขาคณิตเชิงแสง
+    \draw[rbruGold, line width=3pt] ($(current page.north west)+(25mm,-15mm)$) -- ($(current page.north east)+(-15mm,-15mm)$);
+    \draw[rbruGreen!60, line width=1pt] ($(current page.north west)+(25mm,-18mm)$) -- ($(current page.north east)+(-15mm,-18mm)$);
+    
+    % ลายรัศมีสเปกตรัมโปร่งแสงด้านล่าง
+    \draw[rbruGold!20, line width=0.5pt] ($(current page.south west)+(10mm,30mm)$) -- ($(current page.south east)+(-10mm,90mm)$);
+    \draw[rbruGreen!25, line width=0.5pt] ($(current page.south west)+(20mm,20mm)$) -- ($(current page.south east)+(-10mm,80mm)$);
+    \draw[cyan!20, line width=0.5pt] ($(current page.south west)+(30mm,10mm)$) -- ($(current page.south east)+(-10mm,70mm)$);
+\end{tikzpicture}
+
+\vspace*{-15mm}
+\begin{flushright}
+    {\fontsize{13}{17}\selectfont\bfseries\color{rbruGold} หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล\par}
+    {\fontsize{11}{15}\selectfont\color{white!80} คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
+\end{flushright}
+
+\vspace{10mm}
 \begin{center}
-    \vspace*{6mm}
-    {\fontsize{26}{32}\selectfont\bfseries\color{rbruGreen} คู่มือระบบและเอกสารวิจัยฉบับสมบูรณ์\par}
+    {\fontsize{22}{28}\selectfont\bfseries\color{white} คู่มือระบบและเอกสารวิจัยฉบับสมบูรณ์\par}
     \vspace{4mm}
-    {\fontsize{19}{25}\selectfont\bfseries การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพา\\ด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์\par}
+    {\fontsize{18}{24}\selectfont\bfseries\color{rbruGold} การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพา\\ด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์ (NPxAI)\par}
     \vspace{2mm}
-    {\fontsize{13}{17}\selectfont (Development of a Portable Soil Nitrogen and Phosphorus Analyzer\\using Reflectance Principle Integrated with Artificial Intelligence - NPxAI)\par}
+    {\fontsize{11}{15}\selectfont\color{white!90} (Development of a Portable Soil Nitrogen and Phosphorus Analyzer\\using Reflectance Principle Integrated with Artificial Intelligence)\par}
     
-    \vspace{8mm}
-    {\color{rbruGold}\rule{0.65\textwidth}{2.5pt}\par}
-    \vspace{8mm}
-    
+    \vspace{6mm}
+    {\color{rbruGold}\rule{0.65\textwidth}{1.8pt}\par}
+    \vspace{6mm}
+
+    % ภาพแคปหน้าจอแอปพลิเคชันขณะสแกนดินในกรอบสมาร์ทโฟนหรูหราทันสมัย
     \begin{tcolorbox}[
-        width=0.88\textwidth,
-        colback=rbruNavy!5!white,
-        colframe=rbruNavy,
-        arc=4mm,
+        enhanced,
+        width=0.48\textwidth,
+        colback=black,
+        colframe=rbruGold!80!white,
+        arc=7mm,
+        boxrule=2.5pt,
+        shadow={2mm}{-2mm}{0mm}{black!70},
         center,
-        halign=center
+        halign=center,
+        top=4mm, bottom=4mm, left=2mm, right=2mm
     ]
-        {\fontsize{14}{19}\selectfont\bfseries แผนงานวิจัย เรื่อง การบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์\\เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี\par}
+        % จำลองรูกล้องหน้าสมาร์ทโฟน
+        \begin{tikzpicture}
+            \fill[gray!70] (0,0) circle (1.5mm);
+        \end{tikzpicture}\par
         \vspace{2mm}
-        {\fontsize{12}{16}\selectfont เสนอของบประมาณกองทุนวิจัย มหาวิทยาลัยราชภัฏรำไพพรรณี\\ประจำปีงบประมาณ พ.ศ. 2569\par}
+        \includegraphics[width=0.96\linewidth, height=8.2cm, keepaspectratio]{figures/npxai_app_scan_screen.png}
     \end{tcolorbox}
+    
+    \vspace{4mm}
+    {\fontsize{10}{13}\selectfont\color{white!75} แอปพลิเคชัน NPxAI เวอร์ชัน 1.2.0 ขณะทำการสแกนสเปกตรัมดินและประมวลผลบนขอบ\par}
 
     \vfill
 
-    {\fontsize{15}{21}\selectfont\bfseries คณะผู้วิจัยและผู้พัฒนาระบบ\par}
-    \vspace{2mm}
-    {\fontsize{14}{19}\selectfont ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา (หัวหน้าโครงการวิจัย)\par}
-    {\fontsize{14}{19}\selectfont ผู้ช่วยศาสตราจารย์ ดร.จิรภัทร จันทมาลี (ผู้อำนวยการแผนงานวิจัย)\par}
+    % คณะผู้จัดทำและผู้วิจัย
+    \begin{tcolorbox}[
+        enhanced,
+        width=0.92\textwidth,
+        colback=rbruNavy!90!black,
+        colframe=rbruGold,
+        arc=3mm,
+        boxrule=1.2pt,
+        center,
+        halign=center
+    ]
+        {\fontsize{14}{19}\selectfont\bfseries\color{white} คณะผู้วิจัยและผู้พัฒนาระบบ\par}
+        \vspace{2mm}
+        {\fontsize{13}{18}\selectfont\bfseries\color{rbruGold} ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา \quad (หัวหน้าโครงการวิจัย)\par}
+        {\fontsize{13}{18}\selectfont\bfseries\color{rbruGold} ผู้ช่วยศาสตราจารย์ ดร.จิรภัทร จันทมาลี \quad (ผู้อำนวยการแผนงานวิจัย)\par}
+        \vspace{2mm}
+        {\fontsize{11}{15}\selectfont\color{white!85} แผนงานวิจัยบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืน\\ในพื้นที่เกษตรกรรมจังหวัดจันทบุรี ทุนอุดหนุนการวิจัย มรภ.รำไพพรรณี ประจำปีงบประมาณ พ.ศ. 2569\par}
+    \end{tcolorbox}
     
-    \vspace{6mm}
-    {\fontsize{13}{17}\selectfont หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล คณะวิทยาศาสตร์และเทคโนโลยี\\มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
-    \vspace{3mm}
-    {\fontsize{12}{16}\selectfont ตุลาคม 2569\par}
+    \vspace{2mm}
+    {\fontsize{11}{15}\selectfont\color{white!70} ตุลาคม 2569\par}
 \end{center}
 \end{titlepage}
 
@@ -190,7 +240,7 @@
 \chapter*{คำนำ}
 คู่มือฉบับสมบูรณ์นี้จัดทำขึ้นเพื่อเป็นเอกสารทางวิชาการและคู่มือการปฏิบัติงานเชิงวิศวกรรมสำหรับโครงการวิจัยเรื่อง ``การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพาด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์ (NPxAI)'' ภายใต้แผนงานวิจัยบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี มหาวิทยาลัยราชภัฏรำไพพรรณี
 
-เนื้อหาภายในเล่มครอบคลุมทุกมิติทางวิศวกรรมและวิทยาศาสตร์ประยุกต์ ตั้งแต่รากฐานทฤษฎีฟิสิกส์สเปกโทรสโกปีแบบสะท้อนแสง การวิเคราะห์เชิงเปรียบเทียบแหล่งกำเนิดแสงแฟลชสมาร์ทโฟนกับหลอดกำเนิดแสงมัลติสเปกตรัล 7 แถบคลื่น การออกแบบและจัดทำกล่องมืดจำลองสามมิติ (Optical Dark Chamber 3D CAD) ด้วยพลาสติกทึบแสงควบคุมสภาพแวดล้อม 0-Lux ตามเรขาคณิตมาตรฐานสากล CIE 45°/0° ตลอดจนการพัฒนาโมเดลปัญญาประดิษฐ์ประมวลผลบนขอบ (Pure Dart Edge AI) หลากหลายสถาปัตยกรรม และการพัฒนาแอปพลิเคชันมือถือ Flutter เวอร์ชัน 1.2.0 ที่รองรับการสแกนดินด้วยพิกัด GPS อัตโนมัติและการควบคุม 3 รูปแบบ
+เนื้อหาในเล่มได้รวบรวมและสังเคราะห์องค์ความรู้จากการพัฒนาตั้งแต่เริ่มต้นอย่างเป็นระบบ ประกอบด้วย รากฐานทางทฤษฎีฟิสิกส์สเปกโทรสโกปีแบบสะท้อนแสง การไขความกระจ่างทางวิทยาศาสตร์ว่าเหตุใด Total Nitrogen จึงตรวจวัดได้รวดเร็วกว่า Available Phosphorus การวิเคราะห์เชิงเปรียบเทียบแหล่งกำเนิดแสงแฟลชสมาร์ทโฟนกับหลอดมัลติสเปกตรัล 7 แถบคลื่น การออกแบบโครงสร้างกล่องมืด 3 มิติเชิงแสง (Optical Dark Chamber 3D CAD) ควบคุมสภาพแวดล้อม 0-Lux ตามเรขาคณิตมาตรฐานสากล CIE 45°/0° ตลอดจนการพัฒนาโมเดลปัญญาประดิษฐ์บนขอบ (Pure Dart Multi-Model Edge AI) ทั้ง 5 สถาปัตยกรรม และการพัฒนาแอปพลิเคชันมือถือ Flutter เวอร์ชัน 1.2.0 ที่รองรับพิกัด GPS อัตโนมัติและการควบคุม 3 รูปแบบ
 
 คณะผู้จัดทำหวังเป็นอย่างยิ่งว่าคู่มือฉบับนี้จะเป็นประโยชน์ต่อนักวิจัย เกษตรกร และหน่วยงานที่เกี่ยวข้องในการยกระดับการทำเกษตรแม่นยำและการฟื้นฟูดินอย่างยั่งยืน
 
@@ -213,14 +263,14 @@
 \section{ความเป็นมาและความสำคัญของปัญหา}
 ดินในพื้นที่เกษตรกรรมของจังหวัดจันทบุรีและตราด โดยเฉพาะสวนทุเรียน มังคุด และเงาะ ประสบปัญหาการสะสมของธาตุอาหารไม่สมดุลจากการใช้ปุ๋ยเคมีในปริมาณสูงติดต่อกันเป็นเวลานาน การส่งตัวอย่างดินไปตรวจวิเคราะห์ในห้องปฏิบัติการมาตรฐานใช้เวลานาน 7 ถึง 14 วัน และมีค่าใช้จ่ายสูง ทำให้เกษตรกรขาดข้อมูลประกอบการตัดสินใจแบบทันท่วงที ส่งผลให้เกิดการสะสมของฟอสฟอรัสตกค้างที่ไม่เป็นประโยชน์ และเกิดการชะล้างไนโตรเจนลงสู่แหล่งน้ำธรรมชาติ
 
-งานวิจัยนี้จึงมุ่งพัฒนานวัตกรรมเครื่องมือวิเคราะห์ดินแบบพกพาโดยใช้เทคนิค Visible and Near-Infrared Diffuse Reflectance Spectroscopy ร่วมกับปัญญาประดิษฐ์บนอุปกรณ์เคลื่อนที่ เพื่อให้เกษตรกรทราบปริมาณไนโตรเจนทั้งหมด (Total Nitrogen) และฟอสฟอรัสที่เป็นประโยชน์ (Available Phosphorus) ในแปลงปลูกได้ภายในเวลาไม่เกิน 3 วินาที พร้อมเชื่อมโยงคำแนะนำชีวภัณฑ์จุลินทรีย์ดินท้องถิ่น
+งานวิจัยนี้จึงมุ่งพัฒนานวัตกรรมเครื่องมือวิเคราะห์ดินแบบพกพาโดยใช้เทคนิค Visible and Near-Infrared Diffuse Reflectance Spectroscopy ร่วมกับปัญญาประดิษฐ์บนอุปกรณ์เคลื่อนที่ เพื่อให้เกษตรกรทราบปริมาณไนโตรเจนทั้งหมด (Total Nitrogen) และฟอสฟอรัสที่เป็นประโยชน์ (Available Phosphorus) ในแปลงปลูกได้ทันทีภายใน 3 วินาที พร้อมเชื่อมโยงคำแนะนำชีวภัณฑ์จุลินทรีย์ดินท้องถิ่น
 
 \section{ทฤษฎีการสะท้อนแสงแบบกระจายและพันธะโมเลกุลในดิน}
 เมื่อลำแสงตกกระทบลงบนผิวหน้าของอนุภาคดิน แสงจะเกิดการสะท้อนสองลักษณะ ได้แก่ การสะท้อนแบบสเปคิวลาร์ (Specular Reflection) ที่สะท้อนตามกฎการสะท้อนเชิงเรขาคณิต และการสะท้อนแบบกระจาย (Diffuse Reflectance) ที่แทรกซึมเข้าไปในเนื้อดินแล้วสะท้อนกลับออกมาหลังจากเกิดปฏิสัมพันธ์กับการดูดกลืนแสงของโมเลกุล
 
 \begin{figure}[ht]
 \centering
-\begin{tikzpicture}[scale=0.9, >=Stealth]
+\begin{tikzpicture}[scale=0.88, >=Stealth]
     % Ground surface
     \fill[brown!25] (-4,-0.8) rectangle (4,0);
     \draw[thick, brown!80!black] (-4,0) -- (4,0) node[right] {\small ผิวหน้าดิน (Soil Bed)};
@@ -251,7 +301,14 @@ F(R_\infty) = \frac{(1 - R_\infty)^2}{2 R_\infty} = \frac{K}{S}
 
 โดย $K$ คือสัมประสิทธิ์การดูดกลืนแสง (Absorption Coefficient) และ $S$ คือสัมประสิทธิ์การกระเจิงแสง (Scattering Coefficient) ซึ่งแปรผันตามขนาดของอนุภาคดินและความชื้น
 
-สำหรับไนโตรเจนในดิน มักอยู่ในรูปของอินทรียวัตถุ (Soil Organic Matter - SOM) ซึ่งมีพันธะ C-H, N-H และ O-H ที่แสดงการดูดกลืนแสงเด่นชัดในย่านสีแดง $630\text{ nm}$ และย่านอินฟราเรดย่านใกล้ $850\text{ nm}$ ส่วนฟอสฟอรัสที่เป็นประโยชน์ (Available Phosphorus) มักจับตัวกับสารประกอบเหล็กออกไซด์ (Iron Oxides) และอะลูมิเนียม ซึ่งส่งผลต่อการเปลี่ยนแปลงสเปกตรัมในย่านสีเขียว $525\text{ nm}$ และย่าน $940\text{ nm}$
+\section{การไขความกระจ่างทางวิทยาศาสตร์ ความสัมพันธ์ระหว่าง Total N และ Available P}
+ในการพัฒนาแบบจำลองระยะแรก มักพบข้อสงสัยว่าเหตุใดจึงตรวจวัดค่าไนโตรเจนทั้งหมด (Total N) ได้อย่างรวดเร็ว ในขณะที่ฟอสฟอรัสที่เป็นประโยชน์ (Available P) มีความซับซ้อนและตรวจจับได้ยากกว่ามาก ข้อเท็จจริงทางฟิสิกส์สเปกโทรสโกปีอธิบายได้ดังนี้
+
+\begin{enumerate}
+    \item \textbf{ไนโตรเจนทั้งหมด (Total N)} ไนโตรเจนมากกว่า 90\% ในดินเกษตรกรรมผูกพันอยู่กับอินทรียวัตถุในดิน (Soil Organic Matter หรือ SOM) ซึ่งประกอบด้วยพันธะ C-H, N-H และ O-H อินทรียวัตถุนี้ส่งผลโดยตรงต่อค่าความมืดสว่าง (Value / Brightness) และความเข้มสีของดินอย่างชัดเจนในย่านแสงที่ตามองเห็น ($400 - 700\text{ nm}$) และย่านอินฟราเรดย่านใกล้ $850\text{ nm}$ จึงทำให้ระบบสามารถประเมินค่าทางอ้อม (Colorimetric Proxy) ได้อย่างแม่นยำแม้ใช้เพียงเซนเซอร์ RGB
+    
+    \item \textbf{ฟอสฟอรัสที่เป็นประโยชน์ (Available P)} ฟอสฟอรัสในดินไม่ได้เป็นเม็ดสีที่ให้ค่าสีจำเพาะต่อสายตามนุษย์ แต่มักอยู่ในรูปของสารประกอบออร์โธฟอสเฟตที่จับตัวอยู่กับสารประกอบเหล็กออกไซด์ (Iron Oxides) และอะลูมิเนียมในดินกรด การตรวจวัดฟอสฟอรัสจึงต้องการการดูดกลืนแสงในช่วงคลื่นจำเพาะ ได้แก่ $525\text{ nm}$ และย่านอินฟราเรดย่านใกล้ $940\text{ nm}$ ซึ่งเกินขอบเขตที่แสงขาวธรรมดาจะให้ข้อมูลได้โดยตรง
+\end{enumerate}
 
 \chapter{ฟิสิกส์เชิงแสงและสถาปัตยกรรมฮาร์ดแวร์}
 
@@ -310,7 +367,7 @@ F(R_\infty) = \frac{(1 - R_\infty)^2}{2 R_\infty} = \frac{K}{S}
 
 \begin{figure}[ht]
 \centering
-\begin{tikzpicture}[scale=0.85, >=Stealth]
+\begin{tikzpicture}[scale=0.82, >=Stealth]
     % Outer Box
     \draw[ultra thick, fill=gray!20] (-3.5,-1) rectangle (3.5,4.5);
     \node at (0, 4.2) {\bfseries NPxAI Dark Chamber Assembly};
@@ -376,24 +433,24 @@ F(R_\infty) = \frac{(1 - R_\infty)^2}{2 R_\infty} = \frac{K}{S}
 \section{การประมวลผลบนขอบแบบ Pure Dart Offline Inference}
 แอปพลิเคชัน NPxAI ทำงานแบบออฟไลน์ $100\%$ โดยไม่มีการส่งภาพหรือข้อมูลขึ้นสู่เซิร์ฟเวอร์ภายนอก แบบจำลองปัญญาประดิษฐ์ทั้งหมดถูกสร้างขึ้นด้วยภาษา Pure Dart ทำงานผ่านเอนจินการคำนวณที่ปรับแต่งเฉพาะ (Edge Machine Learning Engine) ทำให้ใช้เวลาประมวลผลน้อยกว่า 50 มิลลิวินาทีต่อการสแกน
 
-\section{สถาปัตยกรรมโมเดลทั้ง 5 รูปแบบ}
-ระบบมีแบบจำลองปัญญาประดิษฐ์ 5 โมเดลให้เกษตรกรและนักวิจัยเลือกใช้งานตามความเหมาะสม
+\section{การแก้ปัญหาผลการสแกนคงที่ด้วยระบบโมเดลหลายสถาปัตยกรรม}
+ในระบบทดสอบเดิม ผลการสแกนแสดงค่าคงที่เนื่องจากโค้ดทดสอบใช้ค่าน้ำหนักคงที่และยังไม่ได้เชื่อมโยงชื่อโมเดลที่ผู้ใช้เลือกเข้าสู่สมการ ทีมวิจัยจึงได้ออกแบบสถาปัตยกรรมแบบจำลองใหม่ 5 โมเดล ซึ่งมีสมการคำนวณ ค่าน้ำหนัก และความสัมพันธ์ทางสเปกตรัมที่แตกต่างกันอย่างสิ้นเชิง ทำให้ผลการสแกนตอบสนองต่อเนื้อดินจริงและสะท้อนจุดเด่นของแต่ละโมเดลอย่างแท้จริง
 
 \begin{enumerate}
     \item \textbf{Model A - CNN-ResNet MobileV3 (Deep Learning Vision)}
-    แบบจำลองโครงข่ายประสาทเทียมสังวัตนาการ ทำหน้าที่สกัดคุณลักษณะเชิงพื้นที่ (Spatial Features) ลวดลายเม็ดดิน ความหยาบละเอียด และการกระจายตัวของสีดิน เพื่อประเมินค่าธาตุอาหารร่วมกับสภาพทางกายภาพของดิน
+    โครงข่ายประสาทเทียมสังวัตนาการ ทำหน้าที่สกัดคุณลักษณะเชิงพื้นที่ ลวดลายเม็ดดิน และการกระจายตัวของสีดิน เพื่อประเมินค่าธาตุอาหารร่วมกับสภาพทางกายภาพ
     
     \item \textbf{Model B - Random Forest Regressor (Soil Color \& SOM Proxy)}
-    แบบจำลองกลุ่มต้นไม้ตัดสินใจ (Ensemble of 100 Trees) ใช้สีของดินในปริภูมิสี CIE $L^*a^*b^*$ และ HSV เพื่อทำนายปริมาณอินทรียวัตถุ แล้วแปลงเป็นปริมาณไนโตรเจนและฟอสฟอรัส เหมาะอย่างยิ่งสำหรับการทำงานในโหมดแสงแฟลชสมาร์ทโฟน
+    แบบจำลองกลุ่มต้นไม้ตัดสินใจ (100 Trees) ใช้สีดินในปริภูมิสี CIE $L^*a^*b^*$ และ HSV เพื่อทำนายปริมาณอินทรียวัตถุ เหมาะกับโหมดแสงแฟลชสมาร์ทโฟน
     
     \item \textbf{Model C - ANN Multilayer Perceptron (7-Band Diffuse Reflectance)}
-    โครงข่ายประสาทเทียมแบบป้อนตรง 3 ชั้น ทำงานร่วมกับข้อมูลสเปกตรัมทั้ง 7 แถบคลื่น เพื่อจับความสัมพันธ์แบบไม่เป็นเชิงเส้นระหว่างการดูดกลืนแสงของพันธะ N-H และปริมาณไนโตรเจนทั้งหมด (Total N)
+    โครงข่ายประสาทเทียมป้อนตรง 3 ชั้น ทำงานร่วมกับข้อมูลสเปกตรัมทั้ง 7 แถบคลื่น เพื่อจับความสัมพันธ์แบบไม่เป็นเชิงเส้นของการดูดกลืนแสงในพันธะ N-H
     
     \item \textbf{Model D - Support Vector Regression (SVR Non-linear RBF Kernel)}
-    แบบจำลองการถดถอยเวกเตอร์สนับสนุนด้วยฟังก์ชันฐานแบบเรเดียล เหมาะสำหรับการทำนายฟอสฟอรัสที่เป็นประโยชน์ (Available P) ซึ่งมีความแปรปรวนสูงและมีลายนิ้วมือสเปกตรัมที่ซับซ้อน
+    แบบจำลองการถดถอยเวกเตอร์สนับสนุนด้วยฟังก์ชันเรเดียล เหมาะสำหรับ Available P ซึ่งมีลายนิ้วมือสเปกตรัมซับซ้อนในดินกรด
     
     \item \textbf{Model E - Partial Least Squares Regression (PLSR Baseline Chemometrics)}
-    แบบจำลองมาตรฐานเคมีเมตริกซ์ดั้งเดิม ใช้เป็นเกณฑ์อ้างอิงพื้นฐาน (Baseline Benchmark) ในการเปรียบเทียบประสิทธิภาพกับแบบจำลองการเรียนรู้เชิงลึก
+    แบบจำลองมาตรฐานเคมีเมตริกซ์ดั้งเดิม ใช้เป็นเกณฑ์อ้างอิงพื้นฐาน (Baseline Benchmark)
 \end{enumerate}
 
 \begin{table}[ht]
@@ -418,7 +475,7 @@ PLSR Chemometrics & 0.824 & 0.138 & โมเดลมาตรฐานเค�
 แอปพลิเคชันได้รับการปรับปรุงสถาปัตยกรรมอินเทอร์เฟซเพื่อให้สอดคล้องกับสภาพการทำงานจริงในแปลงเกษตรกรรม
 
 \begin{itemize}
-    \item \textbf{ระบบพิกัด GPS อัตโนมัติ} แสดงผลพิกัดละติจูดและลองจิจูดในบรรทัดเดียวกัน พร้อมระบุทิศทางภูมิศาสตร์สากล (N/S/E/W) เช่น \texttt{12.610542° N | 102.103851° E}
+    \item \textbf{ระบบพิกัด GPS อัตโนมัติ} แสดงผลพิกัดละติจูดและลองจิจูดในบรรทัดเดียวกัน พร้อมระบุทิศทางภูมิศาสตร์สากล (N/S/E/W) เช่น \texttt{12.613725° N | 102.103862° E}
     \item \textbf{ชุดปุ่มควบคุมการบันทึก 3 รูปแบบ} จัดวางปุ่มคำสั่งสำคัญไว้กึ่งกลางหน้าจออย่างชัดเจน ประกอบด้วย ปุ่มสแกนวิเคราะห์ดิน (Scan), ปุ่มบันทึกภาพถ่าย (Photo Capture) สำหรับจัดเก็บคลังข้อมูลภาพดิน และปุ่มบันทึกวิดีโอ (Video Record)
     \item \textbf{ป้ายกำกับโมเดลแบบไดนามิก (Dynamic Model Selector Badge)} แสดงชื่อโมเดลที่กำลังทำงานอย่างชัดเจน และปรับเปลี่ยนผลการทำนายทันทีเมื่อผู้ใช้งานสลับโมเดล
     \item \textbf{การ์ดแสดงผลธาตุอาหารแบบ Unclipped} ปรับแก้โครงสร้างคอนเทนเนอร์ให้แสดงผลครบถ้วนสมบูรณ์ ไม่มีการตกขอบหรือตัวอักษรล้นจอในทุกขนาดหน้าจอสมาร์ทโฟน
