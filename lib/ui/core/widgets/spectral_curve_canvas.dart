@@ -27,6 +27,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'color': Color(0xFF9D4EDD),
       'desc': 'การดูดกลืน Soret band ของฮิวมัส และไนโตรเจนอินทรีย์ในดิน',
       'target': 'Total N',
+      'shortTarget': 'Total N',
     },
     {
       'wl': '465nm',
@@ -35,6 +36,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'color': Color(0xFF00B4D8),
       'desc': 'การดูดกลืนสารอินทรีย์ฮิวมิกและแคโรทีนอยด์ในดิน',
       'target': 'Organic Matter',
+      'shortTarget': 'SOM',
     },
     {
       'wl': '525nm',
@@ -43,6 +45,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'color': Color(0xFF2EC4B6),
       'desc': 'รอยต่อการสะท้อนของคลอโรฟิลล์และ Munsell soil hue',
       'target': 'Soil Matrix',
+      'shortTarget': 'Matrix',
     },
     {
       'wl': '630nm',
@@ -51,6 +54,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'color': Color(0xFFFF595E),
       'desc': 'การดูดกลืนฮีมาไทต์ Fe3+ มีสหสัมพันธ์ตรงกับ Available P (Bray II)',
       'target': 'Available P',
+      'shortTarget': 'Avail P',
     },
     {
       'wl': '850nm',
@@ -59,6 +63,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'color': Color(0xFFFF924C),
       'desc': 'การดูดกลืนเกอไทต์ Fe-Oxide ไหล่การสั่นสะเทือนของฟอสเฟต',
       'target': 'Available P',
+      'shortTarget': 'Avail P',
     },
     {
       'wl': '940nm',
@@ -67,6 +72,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'color': Color(0xFFFFCA3A),
       'desc': 'โอเวอร์โทนที่ 3 ของน้ำและความชื้น เชื่อมโยง Total N (Kjeldahl)',
       'target': 'Total N',
+      'shortTarget': 'Total N',
     },
   ];
 
@@ -97,70 +103,74 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
         children: [
           // ส่วนหัวและปุ่มสลับโหมด Absorbance vs Reflectance
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _showAbsorbance
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _showAbsorbance
+                      ? AppTheme.accentLime
+                      : Colors.cyanAccent,
+                  boxShadow: [
+                    BoxShadow(
+                      color: (_showAbsorbance
                               ? AppTheme.accentLime
-                              : Colors.cyanAccent,
-                          boxShadow: [
-                            BoxShadow(
-                              color: (_showAbsorbance
-                                      ? AppTheme.accentLime
-                                      : Colors.cyanAccent)
-                                  .withValues(alpha: 0.6),
-                              blurRadius: 6,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        _showAbsorbance
-                            ? 'สเปกตรัมการดูดกลืนแสงธาตุอาหารพืช'
-                            : 'สเปกตรัมการสะท้อนแสงดิน (Vis-NIR)',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.textLight,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _showAbsorbance
-                        ? 'Beer-Lambert Absorbance [A = log₁₀(1/R)]'
-                        : 'Surface Reflectance Factor [%R]',
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      fontFamily: 'monospace',
-                      color: AppTheme.textMuted.withValues(alpha: 0.9),
+                              : Colors.cyanAccent)
+                          .withValues(alpha: 0.6),
+                      blurRadius: 6,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _showAbsorbance
+                          ? 'สเปกตรัมการดูดกลืนแสง'
+                          : 'สเปกตรัมการสะท้อนแสง',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textLight,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _showAbsorbance
+                          ? 'Absorbance [A = log₁₀(1/R)]'
+                          : 'Reflectance [%R]',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'monospace',
+                        color: AppTheme.textMuted.withValues(alpha: 0.9),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               // Segmented Toggle
               Container(
                 decoration: BoxDecoration(
                   color: AppTheme.backgroundDark,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppTheme.borderDark),
                 ),
                 padding: const EdgeInsets.all(2),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildToggleButton(
-                      label: 'Absorbance',
+                      label: 'Absorb',
                       isSelected: _showAbsorbance,
                       onTap: () => setState(() => _showAbsorbance = true),
                     ),
@@ -205,43 +215,51 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
 
           // แถบความยาวคลื่นและแท็กธาตุอาหารด้านล่างแกน X
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(_channelMeta.length, (i) {
               final isSel = i == _selectedPointIndex;
               final col = _channelMeta[i]['color'] as Color;
-              return GestureDetector(
-                onTap: () => setState(() => _selectedPointIndex = i),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: isSel
-                        ? col.withValues(alpha: 0.25)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: isSel ? col : Colors.transparent,
-                      width: 1,
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => setState(() => _selectedPointIndex = i),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: isSel
+                          ? col.withValues(alpha: 0.25)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: isSel ? col : Colors.transparent,
+                        width: 1,
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        _channelMeta[i]['wl'] as String,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
-                          color: isSel ? AppTheme.textLight : AppTheme.textMuted,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _channelMeta[i]['wl'] as String,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 9.5,
+                            fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
+                            color: isSel ? AppTheme.textLight : AppTheme.textMuted,
+                          ),
                         ),
-                      ),
-                      Text(
-                        _channelMeta[i]['target'] as String,
-                        style: TextStyle(
-                          fontSize: 8.5,
-                          fontWeight: FontWeight.w600,
-                          color: col,
+                        Text(
+                          _channelMeta[i]['shortTarget'] as String? ??
+                              _channelMeta[i]['target'] as String,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.w600,
+                            color: col,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -278,20 +296,25 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '${meta['name']} • ${meta['tag']}',
-                            style: TextStyle(
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.bold,
-                              color: meta['color'] as Color,
+                          Expanded(
+                            child: Text(
+                              '${meta['name']} • ${meta['tag']}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: meta['color'] as Color,
+                              ),
                             ),
                           ),
+                          const SizedBox(width: 6),
                           Text(
                             _showAbsorbance
                                 ? 'A = ${currentVal.toStringAsFixed(3)}'
                                 : 'R = ${(currentVal * 100).toStringAsFixed(1)}%',
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 11.5,
                               fontFamily: 'monospace',
                               fontWeight: FontWeight.bold,
                               color: AppTheme.accentLime,

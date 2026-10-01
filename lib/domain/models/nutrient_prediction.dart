@@ -19,6 +19,21 @@ enum NutrientLevel {
         return 'สูงมาก';
     }
   }
+
+  String get shortLabelTh {
+    switch (this) {
+      case NutrientLevel.veryLow:
+        return 'ต่ำมาก';
+      case NutrientLevel.low:
+        return 'ต่ำ';
+      case NutrientLevel.moderate:
+        return 'ปานกลาง';
+      case NutrientLevel.high:
+        return 'สูง';
+      case NutrientLevel.veryHigh:
+        return 'สูงมาก';
+    }
+  }
 }
 
 /// ผลการทำนายปริมาณธาตุอาหารในดิน (Total N และ Available P)
