@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../domain/models/spectral_signature.dart';
 import '../theme/app_theme.dart';
@@ -153,7 +152,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
               // Segmented Toggle
               Container(
                 decoration: BoxDecoration(
-                  color: AppTheme.bgDark,
+                  color: AppTheme.backgroundDark,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppTheme.borderDark),
                 ),
@@ -255,7 +254,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
             decoration: BoxDecoration(
-              color: AppTheme.bgDark.withValues(alpha: 0.7),
+              color: AppTheme.backgroundDark.withValues(alpha: 0.7),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: (meta['color'] as Color).withValues(alpha: 0.4),

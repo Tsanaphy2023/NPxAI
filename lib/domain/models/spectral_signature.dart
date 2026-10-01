@@ -47,6 +47,8 @@ class SpectralSignature {
       saturationMean,
       valueMean,
     ];
+  }
+
   /// คำนวณค่าการดูดกลืนแสงสัมพัทธ์ (Absorbance: A = log10(1/R))
   /// ตามกฎของ Beer-Lambert สำหรับคุณสมบัติการดูดกลืนแสงของธาตุอาหารพืช
   static double toAbsorbance(double reflectance) {
