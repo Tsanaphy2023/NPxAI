@@ -19,6 +19,23 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
   bool _showAbsorbance = true;
   int _selectedPointIndex = 3; // ค่าเริ่มต้นที่ 630nm (Available P / Fe3+)
 
+  // ควบคุมการเปิด/ปิดเส้นกราฟเปรียบเทียบมาตรฐานธาตุอาหารพืช (N, P, K Reference Curves)
+  bool _showSample = true;
+  bool _showRefN = true;
+  bool _showRefP = true;
+  bool _showRefK = true;
+
+  // 1. ข้อมูลสเปกตรัมมาตรฐานการดูดกลืนแสง (Plant Nutrient Standard Absorbance Spectra)
+  // Wavelengths: [405nm, 465nm, 525nm, 630nm, 850nm, 940nm]
+  static const List<double> refAbsorbanceN = [1.18, 0.85, 0.52, 0.40, 0.36, 0.66];
+  static const List<double> refAbsorbanceP = [0.58, 0.46, 0.40, 0.88, 0.82, 0.45];
+  static const List<double> refAbsorbanceK = [0.46, 0.52, 0.72, 0.50, 0.65, 0.68];
+
+  // 2. ข้อมูลสเปกตรัมมาตรฐานการสะท้อนแสง (Plant Nutrient Standard Reflectance Spectra %R)
+  static const List<double> refReflectanceN = [0.07, 0.14, 0.30, 0.40, 0.44, 0.22];
+  static const List<double> refReflectanceP = [0.26, 0.35, 0.40, 0.13, 0.15, 0.35];
+  static const List<double> refReflectanceK = [0.35, 0.30, 0.19, 0.32, 0.22, 0.21];
+
   static const List<Map<String, dynamic>> _channelMeta = [
     {
       'wl': '405nm',
@@ -102,6 +119,16 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
         : widget.signature.reflectanceList;
     final currentVal = values[_selectedPointIndex];
 
+    final currentRefN = _showAbsorbance
+        ? refAbsorbanceN[_selectedPointIndex]
+        : refReflectanceN[_selectedPointIndex];
+    final currentRefP = _showAbsorbance
+        ? refAbsorbanceP[_selectedPointIndex]
+        : refReflectanceP[_selectedPointIndex];
+    final currentRefK = _showAbsorbance
+        ? refAbsorbanceK[_selectedPointIndex]
+        : refReflectanceK[_selectedPointIndex];
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -176,8 +203,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                 ),
               ),
               const SizedBox(width: 8),
-              // Segmented Toggle
-              // Segmented Toggle
+              // Segmented Toggle (Absorb vs %Reflect)
               Container(
                 decoration: BoxDecoration(
                   color: AppTheme.backgroundDark,
@@ -251,6 +277,48 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
             ),
           ),
 
+          const SizedBox(height: 8),
+
+          // แถบเลือกเปิด/ปิดเส้นกราฟมาตรฐานธาตุอาหารพืช N, P, K (Interactive Legend & Filter Chips)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildRefChip(
+                  label: 'ตัวอย่างดินจริง',
+                  color: _showAbsorbance ? AppTheme.accentLime : Colors.cyanAccent,
+                  isSelected: _showSample,
+                  onTap: () => setState(() => _showSample = !_showSample),
+                  isDashed: false,
+                ),
+                const SizedBox(width: 6),
+                _buildRefChip(
+                  label: 'มาตรฐาน N',
+                  color: const Color(0xFF00E5FF),
+                  isSelected: _showRefN,
+                  onTap: () => setState(() => _showRefN = !_showRefN),
+                  isDashed: true,
+                ),
+                const SizedBox(width: 6),
+                _buildRefChip(
+                  label: 'มาตรฐาน P',
+                  color: const Color(0xFFFF9100),
+                  isSelected: _showRefP,
+                  onTap: () => setState(() => _showRefP = !_showRefP),
+                  isDashed: true,
+                ),
+                const SizedBox(width: 6),
+                _buildRefChip(
+                  label: 'มาตรฐาน K',
+                  color: const Color(0xFFE040FB),
+                  isSelected: _showRefK,
+                  onTap: () => setState(() => _showRefK = !_showRefK),
+                  isDashed: true,
+                ),
+              ],
+            ),
+          ),
+
           const SizedBox(height: 10),
 
           // พื้นที่วาดเส้นกราฟ CustomPaint
@@ -272,6 +340,13 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                   isAbsorbance: _showAbsorbance,
                   selectedIndex: _selectedPointIndex,
                   metaList: _channelMeta,
+                  showSample: _showSample,
+                  showRefN: _showRefN,
+                  showRefP: _showRefP,
+                  showRefK: _showRefK,
+                  refNValues: _showAbsorbance ? refAbsorbanceN : refReflectanceN,
+                  refPValues: _showAbsorbance ? refAbsorbanceP : refReflectanceP,
+                  refKValues: _showAbsorbance ? refAbsorbanceK : refReflectanceK,
                 ),
               ),
             ),
@@ -354,7 +429,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
 
           const SizedBox(height: 10),
 
-          // การ์ดรายละเอียดของจุดที่เลือก (Selected Wavelength Diagnostic HUD)
+          // การ์ดรายละเอียดของจุดที่เลือก (Selected Wavelength Diagnostic HUD & Nutrient Comparison)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
             decoration: BoxDecoration(
@@ -364,79 +439,126 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                 color: (meta['color'] as Color).withValues(alpha: 0.4),
               ),
             ),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 4,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: meta['color'] as Color,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: meta['color'] as Color,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                            decoration: BoxDecoration(
-                              color: (meta['bandColor'] as Color).withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                color: (meta['bandColor'] as Color).withValues(alpha: 0.5),
-                                width: 0.8,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                decoration: BoxDecoration(
+                                  color: (meta['bandColor'] as Color).withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: (meta['bandColor'] as Color).withValues(alpha: 0.5),
+                                    width: 0.8,
+                                  ),
+                                ),
+                                child: Text(
+                                  meta['band'] as String,
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.bold,
+                                    color: meta['bandColor'] as Color,
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: Text(
-                              meta['band'] as String,
-                              style: TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.bold,
-                                color: meta['bandColor'] as Color,
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  '${meta['name']} • ${meta['tag']}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: meta['color'] as Color,
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 6),
+                              Text(
+                                _showAbsorbance
+                                    ? 'A = ${currentVal.toStringAsFixed(3)}'
+                                    : 'R = ${(currentVal * 100).toStringAsFixed(1)}%',
+                                style: const TextStyle(
+                                  fontSize: 11.5,
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.accentLime,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              '${meta['name']} • ${meta['tag']}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: meta['color'] as Color,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 6),
+                          const SizedBox(height: 2),
                           Text(
-                            _showAbsorbance
-                                ? 'A = ${currentVal.toStringAsFixed(3)}'
-                                : 'R = ${(currentVal * 100).toStringAsFixed(1)}%',
+                            meta['desc'] as String,
                             style: const TextStyle(
-                              fontSize: 11.5,
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.accentLime,
+                              fontSize: 10.5,
+                              color: AppTheme.textMuted,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        meta['desc'] as String,
-                        style: const TextStyle(
-                          fontSize: 10.5,
-                          color: AppTheme.textMuted,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8),
+
+                // แถบเปรียบเทียบค่าสเปกตรัม ดินจริง vs มาตรฐาน N, P, K ณ ความยาวคลื่นนี้
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: AppTheme.cardDark.withValues(alpha: 0.65),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: AppTheme.borderDark.withValues(alpha: 0.5)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildHudValPill(
+                        'ดินจริง',
+                        currentVal,
+                        _showAbsorbance ? AppTheme.accentLime : Colors.cyanAccent,
+                        isAbsorbance: _showAbsorbance,
+                      ),
+                      _buildHudValPill(
+                        'Ref-N',
+                        currentRefN,
+                        const Color(0xFF00E5FF),
+                        isAbsorbance: _showAbsorbance,
+                      ),
+                      _buildHudValPill(
+                        'Ref-P',
+                        currentRefP,
+                        const Color(0xFFFF9100),
+                        isAbsorbance: _showAbsorbance,
+                      ),
+                      _buildHudValPill(
+                        'Ref-K',
+                        currentRefK,
+                        const Color(0xFFE040FB),
+                        isAbsorbance: _showAbsorbance,
                       ),
                     ],
                   ),
@@ -449,9 +571,94 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
     );
   }
 
+  Widget _buildHudValPill(
+    String name,
+    double val,
+    Color color, {
+    required bool isAbsorbance,
+  }) {
+    final str = isAbsorbance
+        ? val.toStringAsFixed(2)
+        : '${(val * 100).toStringAsFixed(0)}%';
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 5,
+          height: 5,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+        ),
+        const SizedBox(width: 3),
+        Text(
+          '$name: ',
+          style: TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textMuted.withValues(alpha: 0.85),
+          ),
+        ),
+        Text(
+          str,
+          style: TextStyle(
+            fontSize: 9.5,
+            fontFamily: 'monospace',
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRefChip({
+    required String label,
+    required Color color,
+    required bool isSelected,
+    required VoidCallback onTap,
+    bool isDashed = true,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withValues(alpha: 0.18) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? color : AppTheme.borderDark.withValues(alpha: 0.6),
+            width: isSelected ? 1.2 : 0.8,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 10,
+              height: 2.5,
+              decoration: BoxDecoration(
+                color: isSelected ? color : AppTheme.textMuted.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(1),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 9.5,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? color : AppTheme.textMuted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildBandPill({
     required String label,
-    required String sub,
+    required sub,
     required Color color,
     required bool isSelected,
     required VoidCallback onTap,
@@ -530,11 +737,26 @@ class _AdvancedSpectralPainter extends CustomPainter {
   final int selectedIndex;
   final List<Map<String, dynamic>> metaList;
 
+  final bool showSample;
+  final bool showRefN;
+  final bool showRefP;
+  final bool showRefK;
+  final List<double> refNValues;
+  final List<double> refPValues;
+  final List<double> refKValues;
+
   _AdvancedSpectralPainter({
     required this.values,
     required this.isAbsorbance,
     required this.selectedIndex,
     required this.metaList,
+    required this.showSample,
+    required this.showRefN,
+    required this.showRefP,
+    required this.showRefK,
+    required this.refNValues,
+    required this.refPValues,
+    required this.refKValues,
   });
 
   @override
@@ -545,10 +767,10 @@ class _AdvancedSpectralPainter extends CustomPainter {
     final drawH = size.height - 18.0;
 
     // หาค่า Min / Max สำหรับการทำ Scaling
-    double minVal = isAbsorbance ? 0.0 : 0.0;
-    double maxVal = isAbsorbance ? 1.5 : 1.0;
+    const double minVal = 0.0;
+    final double maxVal = isAbsorbance ? 1.5 : 1.0;
 
-    // คำนวณพิกัดแต่ละจุด
+    // คำนวณพิกัดแต่ละจุดของดินจริง
     final double stepX = drawW / (values.length - 1);
     final points = <Offset>[];
 
@@ -624,112 +846,150 @@ class _AdvancedSpectralPainter extends CustomPainter {
       canvas.drawLine(Offset(padX, y), Offset(padX + drawW, y), gridPaint);
     }
 
-    // 2. วาดเส้นประอ้างอิงคุณสมบัติการดูดกลืนดินเกษตรมาตรฐาน (Reference Baseline)
-    if (isAbsorbance) {
-      final refValues = [0.85, 0.72, 0.58, 0.44, 0.36, 0.32];
-      final refPoints = <Offset>[];
-      for (int i = 0; i < refValues.length; i++) {
+    // ฟังก์ชันช่วยวาดเส้นกราฟอ้างอิงมาตรฐานแบบเส้นประ Bezier Spline
+    void drawReferenceCurve(List<double> refVals, Color col) {
+      final rPoints = <Offset>[];
+      for (int i = 0; i < refVals.length; i++) {
         final x = padX + i * stepX;
-        final norm = ((refValues[i] - minVal) / (maxVal - minVal)).clamp(0.05, 0.95);
-        refPoints.add(Offset(x, drawH - (norm * drawH) + 8.0));
+        final norm = ((refVals[i] - minVal) / (maxVal - minVal)).clamp(0.05, 0.95);
+        rPoints.add(Offset(x, drawH - (norm * drawH) + 8.0));
       }
 
-      final refPaint = Paint()
-        ..color = Colors.cyan.withValues(alpha: 0.3)
+      final rPath = Path();
+      rPath.moveTo(rPoints.first.dx, rPoints.first.dy);
+      for (int i = 0; i < rPoints.length - 1; i++) {
+        final p0 = rPoints[i];
+        final p1 = rPoints[i + 1];
+        final midX = (p0.dx + p1.dx) / 2;
+        rPath.cubicTo(midX, p0.dy, midX, p1.dy, p1.dx, p1.dy);
+      }
+
+      final dashPaint = Paint()
+        ..color = col.withValues(alpha: 0.8)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.2;
+        ..strokeWidth = 1.6
+        ..strokeCap = StrokeCap.round;
 
-      // วาดเส้นประอ้างอิง
-      for (int i = 0; i < refPoints.length - 1; i++) {
-        final p1 = refPoints[i];
-        final p2 = refPoints[i + 1];
-        canvas.drawLine(p1, Offset(p1.dx + (p2.dx - p1.dx) * 0.6, p1.dy + (p2.dy - p1.dy) * 0.6), refPaint);
+      for (final metric in rPath.computeMetrics()) {
+        double distance = 0.0;
+        const double dashWidth = 5.0;
+        const double dashSpace = 3.5;
+        while (distance < metric.length) {
+          final double len = (distance + dashWidth < metric.length) ? dashWidth : metric.length - distance;
+          canvas.drawPath(metric.extractPath(distance, distance + len), dashPaint);
+          distance += dashWidth + dashSpace;
+        }
+      }
+
+      // วาดจุดโหนดเล็กๆ ประจำแต่ละช่องความยาวคลื่น
+      final dotPaint = Paint()
+        ..color = col
+        ..style = PaintingStyle.fill;
+      for (final pt in rPoints) {
+        canvas.drawCircle(pt, 2.4, dotPaint);
       }
     }
 
-    // 3. สร้างเส้นโค้งสมูท Bezier Spline
-    final path = Path();
-    path.moveTo(points.first.dx, points.first.dy);
-
-    for (int i = 0; i < points.length - 1; i++) {
-      final p0 = points[i];
-      final p1 = points[i + 1];
-      final midX = (p0.dx + p1.dx) / 2;
-      path.cubicTo(midX, p0.dy, midX, p1.dy, p1.dx, p1.dy);
+    // 2. วาดเส้นกราฟมาตรฐานธาตุอาหารพืช N, P, K ตามที่ผู้ใช้เลือก
+    if (showRefN) {
+      drawReferenceCurve(refNValues, const Color(0xFF00E5FF));
+    }
+    if (showRefP) {
+      drawReferenceCurve(refPValues, const Color(0xFFFF9100));
+    }
+    if (showRefK) {
+      drawReferenceCurve(refKValues, const Color(0xFFE040FB));
     }
 
-    // 4. วาด Gradient Area Fill ใต้เส้นกราฟ
-    final fillPath = Path.from(path)
-      ..lineTo(points.last.dx, drawH + 8.0)
-      ..lineTo(points.first.dx, drawH + 8.0)
-      ..close();
+    // 3. วาดเส้นกราฟตัวอย่างดินจริง (ถ้าเปิดใช้งาน)
+    if (showSample) {
+      final path = Path();
+      path.moveTo(points.first.dx, points.first.dy);
 
-    final fillPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          isAbsorbance
-              ? AppTheme.accentLime.withValues(alpha: 0.35)
-              : Colors.cyanAccent.withValues(alpha: 0.35),
-          isAbsorbance
-              ? AppTheme.primaryGreen.withValues(alpha: 0.0)
-              : Colors.blue.withValues(alpha: 0.0),
-        ],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, drawH + 8.0))
-      ..style = PaintingStyle.fill;
+      for (int i = 0; i < points.length - 1; i++) {
+        final p0 = points[i];
+        final p1 = points[i + 1];
+        final midX = (p0.dx + p1.dx) / 2;
+        path.cubicTo(midX, p0.dy, midX, p1.dy, p1.dx, p1.dy);
+      }
 
-    canvas.drawPath(fillPath, fillPaint);
+      // วาด Gradient Area Fill ใต้เส้นกราฟ
+      final fillPath = Path.from(path)
+        ..lineTo(points.last.dx, drawH + 8.0)
+        ..lineTo(points.first.dx, drawH + 8.0)
+        ..close();
 
-    // 5. วาดเส้นกราฟหลัก
-    final linePaint = Paint()
-      ..color = isAbsorbance ? AppTheme.accentLime : Colors.cyanAccent
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.6
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
+      final fillPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            isAbsorbance
+                ? AppTheme.accentLime.withValues(alpha: 0.32)
+                : Colors.cyanAccent.withValues(alpha: 0.32),
+            isAbsorbance
+                ? AppTheme.primaryGreen.withValues(alpha: 0.0)
+                : Colors.blue.withValues(alpha: 0.0),
+          ],
+        ).createShader(Rect.fromLTWH(0, 0, size.width, drawH + 8.0))
+        ..style = PaintingStyle.fill;
 
-    canvas.drawPath(path, linePaint);
+      canvas.drawPath(fillPath, fillPaint);
 
-    // 6. วาดเส้นไกด์แนวดิ่งสำหรับจุดที่เลือก
+      // วาดเส้นกราฟหลัก
+      final linePaint = Paint()
+        ..color = isAbsorbance ? AppTheme.accentLime : Colors.cyanAccent
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.6
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+
+      canvas.drawPath(path, linePaint);
+
+      // วาดจุดโหนดบนกราฟดินจริงทุกจุด
+      for (int i = 0; i < points.length; i++) {
+        final pt = points[i];
+        final isSel = i == selectedIndex;
+        final dotColor = metaList[i]['color'] as Color;
+
+        if (isSel) {
+          // วงแหวนสะท้อนเรืองแสงของจุดที่เลือก
+          final haloPaint = Paint()
+            ..color = dotColor.withValues(alpha: 0.35)
+            ..style = PaintingStyle.fill;
+          canvas.drawCircle(pt, 9.0, haloPaint);
+        }
+
+        final outerPaint = Paint()
+          ..color = isSel ? dotColor : (isAbsorbance ? AppTheme.accentLime : Colors.cyanAccent)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = isSel ? 2.5 : 1.8;
+
+        final innerPaint = Paint()
+          ..color = isSel ? Colors.white : AppTheme.cardDark
+          ..style = PaintingStyle.fill;
+
+        canvas.drawCircle(pt, isSel ? 5.0 : 3.8, innerPaint);
+        canvas.drawCircle(pt, isSel ? 5.0 : 3.8, outerPaint);
+      }
+    }
+
+    // 4. วาดเส้นไกด์แนวดิ่งสำหรับจุดความยาวคลื่นที่เลือก
     final selPt = points[selectedIndex];
     final guidePaint = Paint()
       ..color = (metaList[selectedIndex]['color'] as Color).withValues(alpha: 0.5)
       ..strokeWidth = 1.2
       ..style = PaintingStyle.stroke;
     canvas.drawLine(Offset(selPt.dx, 8.0), Offset(selPt.dx, drawH + 8.0), guidePaint);
-
-    // 7. วาดจุดโหนดบนกราฟทุกจุด
-    for (int i = 0; i < points.length; i++) {
-      final pt = points[i];
-      final isSel = i == selectedIndex;
-      final dotColor = metaList[i]['color'] as Color;
-
-      if (isSel) {
-        // วงแหวนสะท้อนเรืองแสงของจุดที่เลือก
-        final haloPaint = Paint()
-          ..color = dotColor.withValues(alpha: 0.35)
-          ..style = PaintingStyle.fill;
-        canvas.drawCircle(pt, 9.0, haloPaint);
-      }
-
-      final outerPaint = Paint()
-        ..color = isSel ? dotColor : (isAbsorbance ? AppTheme.accentLime : Colors.cyanAccent)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = isSel ? 2.5 : 1.8;
-
-      final innerPaint = Paint()
-        ..color = isSel ? Colors.white : AppTheme.cardDark
-        ..style = PaintingStyle.fill;
-
-      canvas.drawCircle(pt, isSel ? 5.0 : 3.8, innerPaint);
-      canvas.drawCircle(pt, isSel ? 5.0 : 3.8, outerPaint);
-    }
   }
 
   @override
   bool shouldRepaint(covariant _AdvancedSpectralPainter oldDelegate) =>
       oldDelegate.values != values ||
       oldDelegate.isAbsorbance != isAbsorbance ||
-      oldDelegate.selectedIndex != selectedIndex;
+      oldDelegate.selectedIndex != selectedIndex ||
+      oldDelegate.showSample != showSample ||
+      oldDelegate.showRefN != showRefN ||
+      oldDelegate.showRefP != showRefP ||
+      oldDelegate.showRefK != showRefK;
 }
