@@ -88,7 +88,7 @@ spectra_pos = (W - spectra_w - 70, 720)
 add_dropshadow(cover, spectra_card, spectra_pos, offset=(14, 20), blur_radius=30, shadow_alpha=160)
 
 # 4. Process Phone Image (Hero Mockup on Left - Authentic NPxAI N-P Analysis Screen)
-phone_path = 'docs/manual/figures/npxai_app_np_analysis_screen.jpg'
+phone_path = 'docs/manual/figures/app_screen_03_analysis_absorbance_result.png'
 img_phone = Image.open(phone_path).convert('RGBA')
 
 phone_w = 670
