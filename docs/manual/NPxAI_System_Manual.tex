@@ -55,6 +55,53 @@
 \definecolor{rbruCodeBg}{HTML}{F8F9FA}
 
 % -------------------------------------------------------------
+% ชุดสีมาตรฐานสำหรับแถบเทียบสีปฐพีวิทยาและเคมีดิน (Standard Color Swatches)
+% -------------------------------------------------------------
+% สีดินมาตรฐานมันเซลล์ (Munsell Soil Colors)
+\definecolor{swMunsellBlack}{HTML}{231F20}
+\definecolor{swMunsellDarkBrown}{HTML}{473D35}
+\definecolor{swMunsellBrown}{HTML}{7E5B3D}
+\definecolor{swMunsellYellowRed}{HTML}{9E472A}
+\definecolor{swMunsellDarkRed}{HTML}{8A2E26}
+\definecolor{swMunsellPaleBrown}{HTML}{B4A28B}
+
+% แถบสีค่าความเป็นกรด-ด่างของดิน (Soil pH Scale)
+\definecolor{swPh40}{HTML}{D32F2F}
+\definecolor{swPh45}{HTML}{E64A19}
+\definecolor{swPh50}{HTML}{F57C00}
+\definecolor{swPh55}{HTML}{FBC02D}
+\definecolor{swPh60}{HTML}{7CB342}
+\definecolor{swPh65}{HTML}{388E3C}
+\definecolor{swPh70}{HTML}{1B5E20}
+\definecolor{swPh75}{HTML}{00897B}
+\definecolor{swPh80}{HTML}{0288D1}
+\definecolor{swPh85}{HTML}{512DA8}
+
+% แถบสีฟอสฟอรัสที่เป็นประโยชน์ (Bray II / Molybdenum Blue)
+\definecolor{swPLowest}{HTML}{F4F6E0}
+\definecolor{swPLow}{HTML}{90CAF9}
+\definecolor{swPOptimal}{HTML}{2196F3}
+\definecolor{swPHigh}{HTML}{1565C0}
+\definecolor{swPExcess}{HTML}{0D2B66}
+
+% แถบสีไนโตรเจนและแอมโมเนียม (Indophenol Blue)
+\definecolor{swNLowest}{HTML}{FFF9C4}
+\definecolor{swNLow}{HTML}{C8E6C9}
+\definecolor{swNOptimal}{HTML}{4DD0E1}
+\definecolor{swNHigh}{HTML}{0097A7}
+\definecolor{swNExcess}{HTML}{006064}
+
+% แถบสีสารอินทรียวัตถุ (Walkley-Black SOM) และใบพืช
+\definecolor{swSomLow}{HTML}{EF6C00}
+\definecolor{swSomMed}{HTML}{A1887F}
+\definecolor{swSomHigh}{HTML}{2E7D32}
+\definecolor{swLeafGood}{HTML}{2E5A1E}
+\definecolor{swGrayCard}{HTML}{707070}
+
+% คำสั่งวาดแถบสีมาตรฐานขนาดกะทัดรัดคมชัด
+\newcommand{\cswatch}[1]{\tikz[baseline=-0.6ex]{\fill[#1, draw=black!35, rounded corners=1.2pt] (0,0) rectangle (1.1cm, 0.40cm);}}
+
+% -------------------------------------------------------------
 % การตัดเครื่องหมายทวิภาคในคำบรรยายภาพและตาราง (Caption Localization)
 % -------------------------------------------------------------
 \DeclareCaptionLabelSeparator{thaisep}{\quad}
@@ -417,16 +464,16 @@ R(\lambda) = \frac{I_{\text{sample}}(\lambda) - I_{\text{dark}}(\lambda)}{I_{\te
 \end{figure}
 
 \begin{enumerate}
-    \item \textbf{ตัวเรือนกล่องมืดหลัก (Chamber Body - `npxai_dark_chamber_body.stl`)}
+    \item \textbf{ตัวเรือนกล่องมืดหลัก (Chamber Body - \texttt{npxai\_dark\_chamber\_body.stl})}
     ขนาดภายนอก $80 \times 70 \times 55\text{ mm}$ กำหนดระยะการทำงานของเลนส์ (Working Distance) $55\text{ mm}$ ซึ่งเป็นระยะโฟกัสที่คมชัดที่สุดของกล้องสมาร์ทโฟน ภายในมีกรวยทางเดินแสงพร้อมครีบวงแหวนดักแสงสะท้อน (Anti-Reflection Baffles) 3 ชั้น และเจาะช่องหลอด LED 7 ช่อง ทำมุม 45 องศา ส่องตรงสู่กึ่งกลางถาดดิน
     
-    \item \textbf{แผ่นฝาบนประกบสมาร์ทโฟน (Smartphone Mount Adapter - `npxai_smartphone_mount_adapter.stl`)}
+    \item \textbf{แผ่นฝาบนประกบสมาร์ทโฟน (Smartphone Mount Adapter - \texttt{npxai\_smartphone\_mount\_adapter.stl})}
     มีช่องรับแสงเลนส์ขนาดเส้นผ่านศูนย์กลาง $20\text{ mm}$ พร้อมร่องใส่ปะเก็นยางโอริงหรือโฟม EVA ป้องกันแสงรั่วลอดเข้าสู่ตัวกล้อง
     
-    \item \textbf{ลิ้นชักตลับใส่ดิน (Soil Sample Drawer - `npxai_soil_sample_drawer.stl`)}
+    \item \textbf{ลิ้นชักตลับใส่ดิน (Soil Sample Drawer - \texttt{npxai\_soil\_sample\_drawer.stl})}
     รางสไลด์พร้อมหลุมบรรจุดินขนาดเส้นผ่านศูนย์กลาง $35\text{ mm}$ ลึก $8\text{ mm}$ มีมือจับสลักนูนตัวอักษร ``NPxAI'' และช่องฝังแม่เหล็กนีโอไดเมียมขนาด $5 \times 2\text{ mm}$ เพื่อดูดยึดล็อกตำแหน่งถาดดินให้คงที่
     
-    \item \textbf{ลูกสูบเกลี่ยหน้าดิน (Soil Leveler Press - `npxai_soil_leveler_press.stl`)}
+    \item \textbf{ลูกสูบเกลี่ยหน้าดิน (Soil Leveler Press - \texttt{npxai\_soil\_leveler\_press.stl})}
     แป้นกดขนาดเส้นผ่านศูนย์กลาง $34\text{ mm}$ พร้อมก้านจับ สำหรับเกลี่ยและอัดผิวหน้าดินให้เรียบสนิท เพื่อลดเงาตกกระทบและความไม่สม่ำเสมอของพื้นผิว
 \end{enumerate}
 
@@ -554,6 +601,149 @@ Total N ต่ำ ($< 1.5\text{ g/kg}$) & เสริมปุ๋ยยูเ�
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\chapter{ระบบการ์ดเทียบสีมาตรฐานและการวิเคราะห์ปริภูมิสีดิจิทัล}
+
+\section{ความสำคัญของสีและการวิเคราะห์สเปกโตรโฟโตเมทรีในงานวิจัยปฐพีวิทยา}
+สีของดิน (Soil Color) เป็นหนึ่งในสมบัติทางสัณฐานวิทยาที่สำคัญที่สุดทางปฐพีวิทยาที่บ่งบอกถึงปริมาณอินทรียวัตถุในดิน (Soil Organic Matter หรือ SOM), ระดับการเกิดออกซิเดชันของสารประกอบเหล็ก, สภาพการระบายน้ำและการถ่ายเทอากาศ, ตลอดจนศักยภาพความอุดมสมบูรณ์ของธาตุอาหารพืช การประยุกต์ใช้การประมวลผลภาพดิจิทัล (Digital Image Processing) ร่วมกับปัญญาประดิษฐ์บนอุปกรณ์เคลื่อนที่ จำเป็นต้องมีระบบเทียบเคียงกับชุดสีมาตรฐานสากล เพื่อแปลงค่าระดับสีดิจิทัล (Digital Color Values) ไปสู่ความเข้มข้นของธาตุอาหารและพารามิเตอร์เคมีดินได้อย่างแม่นยำ
+
+ในระบบแอปพลิเคชัน NPxAI ได้นำปริภูมิสี (Color Spaces) 3 รูปแบบหลักมาใช้ในกระบวนการอนุมาน ได้แก่
+\begin{enumerate}
+    \item \textbf{ปริภูมิสี sRGB} ค่าความเข้มแสงสามแชนเนล ($R, G, B \in [0, 255]$) ที่ได้จากเซนเซอร์รับภาพ CMOS สำหรับการวิเคราะห์คุณลักษณะพื้นผิวและการสกัดลวดลาย
+    \item \textbf{ปริภูมิสี HSV} ค่าองศาของสี (Hue, $H \in [0^\circ, 360^\circ]$), ความอิ่มตัวของสี (Saturation, $S \in [0\%, 100\%]$) และความสว่าง (Value, $V \in [0\%, 100\%]$) ซึ่งสะท้อนความมืดสว่างของฮิวมัสในดินอย่างเป็นอิสระต่อความเข้มแสง
+    \item \textbf{ปริภูมิสีสากลมันเซลล์ (Munsell Color System)} มาตรฐานปฐพีวิทยาระดับสากล (USDA-FAO) ที่จำแนกตาม Hue, Value และ Chroma
+\end{enumerate}
+
+\section{การ์ดเทียบสีดินตามระบบมาตรฐานมันเซลล์ (Munsell Soil Color Standards)}
+การจำแนกเนื้อดินและฮิวมัสในแปลงเกษตรกรรมภาคตะวันออก (จังหวัดจันทบุรีและตราด) อ้างอิงตามสมุดเทียบสีดินมาตรฐานมันเซลล์ (Munsell Soil Color Book) โดยระบบ NPxAI ได้ทำการแมปค่าสีดินมาตรฐานเข้ากับค่าดิจิทัล HEX, sRGB และ HSV ดังแสดงในตารางที่ \ref{tab:munsell_scale}
+
+\begin{table}[ht]
+\caption{การ์ดเทียบสีดินมาตรฐานมันเซลล์และการตีความคุณสมบัติดิน}\label{tab:munsell_scale}
+\centering
+\small
+\begin{tabularx}{\textwidth}{cclccY}
+\toprule
+\textbf{แถบสี} & \textbf{รหัส Munsell} & \textbf{ชื่อสีปฐพีวิทยา} & \textbf{รหัส HEX} & \textbf{ค่า HSV} & \textbf{การตีความธาตุอาหารและ SOM} \\
+\midrule
+\cswatch{swMunsellBlack} & 10YR 2/1 & Black (ดำสนิท) & \#231F20 & (345°, 11\%, 14\%) & SOM $> 4.0\%$, Total N สูงมาก ($> 3.5\text{ g/kg}$) ดินอินทรีย์สมบูรณ์ \\
+\cswatch{swMunsellDarkBrown} & 10YR 3/2 & Very Dark Grayish Brown & \#473D35 & (27°, 25\%, 28\%) & SOM $2.5 - 4.0\%$, Total N ปานกลางถึงสูง ดินสวนผลไม้คุณภาพดี \\
+\cswatch{swMunsellBrown} & 7.5YR 4/4 & Brown (น้ำตาล) & \#7E5B3D & (28°, 52\%, 49\%) & SOM $1.5 - 2.5\%$, ดินร่วนตะกอนน้ำพา การระบายน้ำดี \\
+\cswatch{swMunsellYellowRed} & 5YR 4/6 & Yellowish Red (แดงปนเหลือง) & \#9E472A & (15°, 73\%, 62\%) & ดินชุดจันทบุรี ดินร่วนเหนียวภูเขาไฟ ธาตุอาหารสมดุล \\
+\cswatch{swMunsellDarkRed} & 2.5YR 3/6 & Dark Red (แดงเข้ม) & \#8A2E26 & (5°, 72\%, 54\%) & ดินแลงเฟอร์ราลซอลล์ เฮมาไทต์สูง มีการตรึงฟอสเฟตสูง \\
+\cswatch{swMunsellPaleBrown} & 10YR 6/3 & Pale Brown (น้ำตาลซีด) & \#B4A28B & (34°, 23\%, 71\%) & SOM $< 1.0\%$, Total N ต่ำมาก ดินทรายชะล้าง ขาดธาตุอาหาร \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{การ์ดเทียบสีค่าความเป็นกรด-ด่างของดิน (Soil pH Colorimetric Scale)}
+ค่าความเป็นกรด-ด่างของดิน (Soil pH) ส่งผลโดยตรงต่อการละลายและการเป็นประโยชน์ของธาตุอาหารหลักและธาตุอาหารรอง การเทียบสีอ้างอิงตามชุดตรวจสอบดินของกรมพัฒนาที่ดิน (LDD Universal Indicator) ดังแสดงในตารางที่ \ref{tab:ph_scale}
+
+\begin{table}[ht]
+\caption{การ์ดเทียบสีค่าความเป็นกรด-ด่างของดินและผลต่อความพร้อมใช้ของธาตุอาหาร}\label{tab:ph_scale}
+\centering
+\small
+\begin{tabularx}{\textwidth}{cclccY}
+\toprule
+\textbf{แถบสี} & \textbf{ระดับ pH} & \textbf{สภาพกรด-ด่าง} & \textbf{รหัส HEX} & \textbf{ค่า HSV} & \textbf{ผลต่อความพร้อมใช้ของธาตุอาหารพืช} \\
+\midrule
+\cswatch{swPh40} & 4.0 & กรดรุนแรงมาก & \#D32F2F & (0°, 78\%, 83\%) & เกิดพิษจากอะลูมิเนียม ฟอสฟอรัสถูกตรึงแน่นหนา $100\%$ \\
+\cswatch{swPh45} & 4.5 & กรดจัดมาก & \#E64A19 & (14°, 89\%, 90\%) & จุลินทรีย์ตรึงไนโตรเจนชะงักการทำงาน พืชขาด P รุนแรง \\
+\cswatch{swPh50} & 5.0 & กรดจัด & \#F57C00 & (30°, 100\%, 96\%) & ประสิทธิภาพปุ๋ยไนโตรเจนลดลง พืชดูดซึมฟอสฟอรัสได้น้อย \\
+\cswatch{swPh55} & 5.5 & กรดปานกลาง & \#FBC02D & (43°, 82\%, 98\%) & ขอบเขตต่ำสุดที่ยอมรับได้สำหรับสวนทุเรียน ควรเสริมปูนโดโลไมต์ \\
+\cswatch{swPh60} & 6.0 & กรดเล็กน้อย & \#7CB342 & (89°, 63\%, 70\%) & ระดับที่เหมาะสมต่อการเจริญเติบโตของไม้ผลเขตร้อนส่วนใหญ่ \\
+\cswatch{swPh65} & 6.5 & กรดอ่อนมาก & \#388E3C & (123°, 61\%, 56\%) & ช่วงที่เหมาะสมที่สุด ธาตุ N, P, K, Ca, Mg ละลายได้สูงสุด \\
+\cswatch{swPh70} & 7.0 & เป็นกลาง & \#1B5E20 & (124°, 71\%, 37\%) & สมดุลธาตุอาหารดีเยี่ยม จุลินทรีย์ดินทำงานได้อย่างมีประสิทธิภาพ \\
+\cswatch{swPh75} & 7.5 & ด่างเล็กน้อย & \#00897B & (174°, 100\%, 54\%) & ฟอสฟอรัสเริ่มทำปฏิกิริยากับแคลเซียม ธาตุเหล็กเริ่มขาดแคลน \\
+\cswatch{swPh80} & 8.0 & ด่างปานกลาง & \#0288D1 & (201°, 99\%, 82\%) & การละลายของจุลธาตุ (Fe, Mn, Zn, Cu) ลดลงอย่างมาก \\
+\cswatch{swPh85} & 8.5+ & ด่างจัด & \#512DA8 & (258°, 73\%, 66\%) & เกิดสารประกอบ Tricalcium Phosphate พืชขาดฟอสฟอรัส \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{การ์ดเทียบสีปฏิกิริยาเคมีวิเคราะห์ N-P-K และอินทรียวัตถุ}
+นอกจากการวัดการสะท้อนแสงตรงจากเนื้อดินแล้ว การตรวจสอบเทียบเคียงกับการตรวจทางเคมีแบบวัดสี (Colorimetric Assay) ในห้องปฏิบัติการ มีแถบสีมาตรฐานจำเพาะในแต่ละธาตุอาหาร ดังนี้
+
+\subsection{ฟอสฟอรัสที่เป็นประโยชน์ (Available Phosphorus: Bray II / Molybdenum Blue)}
+การวิเคราะห์ฟอสฟอรัสด้วยวิธี Bray II ทำปฏิกิริยากับแอมโมเนียมโมลิบเดต เกิดเป็นสารเชิงซ้อนฟอสโฟโมลิบเดต (Phosphomolybdic Acid) แล้วถูกรีดิวซ์ด้วยกรดแอสคอร์บิกจนเกิดเป็นสีน้ำเงินโมลิบดีนัมบลู (Molybdenum Blue) ซึ่งความเข้มของสีแปรผันตรงกับปริมาณฟอสฟอรัส ดังแสดงในตารางที่ \ref{tab:p_scale}
+
+\begin{table}[ht]
+\caption{การ์ดเทียบสีสารละลายวิเคราะห์ฟอสฟอรัสที่เป็นประโยชน์ (Bray II Method)}\label{tab:p_scale}
+\centering
+\begin{tabularx}{\textwidth}{ccp{2.8cm}ccY}
+\toprule
+\textbf{แถบสี} & \textbf{ระดับ P (mg/kg)} & \textbf{ลักษณะสีสารละลาย} & \textbf{รหัส HEX} & \textbf{ค่า RGB} & \textbf{การแปลผลทางการเกษตร} \\
+\midrule
+\cswatch{swPLowest} & $< 5$ & ใสอมเหลืองจางมาก & \#F4F6E0 & (244, 246, 224) & ขาดแคลนรุนแรง จำเป็นต้องใส่ปุ๋ยฟอสเฟตร่วมกับเชื้อ PSB \\
+\cswatch{swPLow} & $5 - 15$ & ฟ้าอ่อน (Light Sky Blue) & \#90CAF9 & (144, 202, 249) & ระดับต่ำ ควรเสริมปุ๋ยอินทรีย์และเชื้อละลายฟอสเฟต RBRU-PSB-01 \\
+\cswatch{swPOptimal} & $15 - 25$ & น้ำเงินครามสว่าง (Cyan Blue) & \#2196F3 & (33, 150, 243) & ระดับเหมาะสม สำหรับการสร้างตาดอกและพัฒนาระบบรากทุเรียน \\
+\cswatch{swPHigh} & $25 - 45$ & น้ำเงินเข้ม (Royal Blue) & \#1565C0 & (21, 101, 192) & ระดับสูง ควรงดการใส่ปุ๋ยฟอสเฟตชั่วคราวเพื่อลดต้นทุน \\
+\cswatch{swPExcess} & $> 45$ & น้ำเงินกรมท่าเข้มจัด & \#0D2B66 & (13, 43, 102) & สะสมตกค้างเกินขนาด ขัดขวางการดูดซึมธาตุสังกะสีและเหล็ก \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{ไนโตรเจนและแอมโมเนียม (Total Nitrogen: Indophenol Blue Method)}
+การตรวจวัดปริมาณไนโตรเจนที่ถูกแปลงเป็นแอมโมเนียม ทำปฏิกิริยากับโซเดียมซาลิไซเลตและโซเดียมไฮโปคลอไรต์ เกิดสารประกอบอินโดฟีนอลบลู (Indophenol Blue) ที่ให้สีเขียวอมฟ้าจนถึงน้ำเงินครามเข้มจัด ดังแสดงในตารางที่ \ref{tab:n_scale}
+
+\begin{table}[ht]
+\caption{การ์ดเทียบสีสารละลายวิเคราะห์ไนโตรเจน (Indophenol Method)}\label{tab:n_scale}
+\centering
+\begin{tabularx}{\textwidth}{ccp{2.8cm}ccY}
+\toprule
+\textbf{แถบสี} & \textbf{ระดับ N (g/kg)} & \textbf{ลักษณะสีสารละลาย} & \textbf{รหัส HEX} & \textbf{ค่า RGB} & \textbf{การแปลผลทางการเกษตร} \\
+\midrule
+\cswatch{swNLowest} & $< 1.0$ & เหลืองอ่อนจาง & \#FFF9C4 & (255, 249, 196) & ขาดแคลนไนโตรเจนรุนแรง พืชชะงักการเจริญเติบโต ใบซีดเหลือง \\
+\cswatch{swNLow} & $1.0 - 1.8$ & เขียวตองอ่อนจาง & \#C8E6C9 & (200, 230, 201) & ระดับต่ำ ควรเสริมปุ๋ยไนโตรเจนร่วมกับเชื้อตรึงไนโตรเจน NFB \\
+\cswatch{swNOptimal} & $1.8 - 2.8$ & เขียวฟ้าไซแอน & \#4DD0E1 & (77, 208, 225) & ระดับเหมาะสม ส่งเสริมการแตกใบอ่อนและการสังเคราะห์แสง \\
+\cswatch{swNHigh} & $2.8 - 3.8$ & น้ำเงินอินโดฟีนอล & \#0097A7 & (0, 151, 167) & ระดับสูง เพียงพอต่อความต้องการของพืชตลอดฤดูกาล \\
+\cswatch{swNExcess} & $> 3.8$ & น้ำเงินครามเข้มจัด & \#006064 & (0, 96, 100) & สูงเกินขนาด ทำให้พืชบ้าใบ เกิดโรคใบไหม้และผลร่วงได้ง่าย \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{อินทรียวัตถุในดิน (Soil Organic Matter: Walkley-Black Wet Oxidation)}
+การวิเคราะห์อินทรียวัตถุด้วยวิธี Walkley-Black ใช้โพแทสเซียมไดโครเมต ($\text{K}_2\text{Cr}_2\text{O}_7$) ในกรดซัลฟิวริก เกิดปฏิกิริยารีดอกซ์เปลี่ยนไอออนไดโครเมต ($\text{Cr}_2\text{O}_7^{2-}$) สีส้มเข้ม ไปเป็นไอออนโครเมียม ($\text{Cr}^{3+}$) สีเขียวมรกต โดยระดับสีสะท้อนปริมาณอินทรียวัตถุดังนี้
+\begin{itemize}
+    \item \textbf{SOM ต่ำ ($< 1.5\%$)} สารละลายสีส้มแดง (\cswatch{swSomLow} HEX \#EF6C00) ไดโครเมตเหลืออยู่มาก
+    \item \textbf{SOM ปานกลาง ($1.5 - 2.5\%$)} สารละลายสีส้มแกมน้ำตาลมะกอก (\cswatch{swSomMed} HEX \#A1887F)
+    \item \textbf{SOM สูง ($> 3.5\%$)} สารละลายสีเขียวมรกตเข้ม (\cswatch{swSomHigh} HEX \#2E7D32) เกิดโครเมียม ($\text{Cr}^{3+}$) สมบูรณ์
+\end{itemize}
+
+\section{การ์ดเทียบสีดิจิทัลมาตรฐานสำหรับการปรับเทียบกล้อง (Digital Calibration Standards)}
+เพื่อให้การตรวจวัดผ่านกล้องสมาร์ทโฟนมีความแม่นยำข้ามรุ่นอุปกรณ์ (Cross-Device Consistency) ระบบ NPxAI ได้นำแถบสีมาตรฐานสากล X-Rite / Calibrite 24-ColorChecker มาใช้ในการปรับเทียบระบบประมวลผลสัญญาณภาพ (ISP Tuning)
+
+\begin{table}[ht]
+\caption{แถบสีมาตรฐานดิจิทัลสำหรับสอบเทียบกล้องและประเมินคลอโรฟิลล์ใบพืช}\label{tab:digital_calib}
+\centering
+\begin{tabularx}{\textwidth}{ccp{3.2cm}cccY}
+\toprule
+\textbf{แถบสี} & \textbf{พารามิเตอร์} & \textbf{ชื่อแถบมาตรฐาน} & \textbf{รหัส HEX} & \textbf{CIE $L^*$} & \textbf{CIE $a^*$} & \textbf{CIE $b^*$} \\
+\midrule
+\cswatch{white} & White 99\% & แผ่นเทียบขาวบริสุทธิ์ (PTFE) & \#F3F3F3 & 96.5 & -0.4 & 1.2 \\
+\cswatch{swGrayCard} & Gray 18\% & แผ่นการ์ดเทากลางมาตรฐาน & \#707070 & 50.8 & -0.1 & -0.5 \\
+\cswatch{black} & Black 2\% & จุดอ้างอิงแสงมืด (Zero Light) & \#212121 & 20.4 & -0.1 & -0.4 \\
+\cswatch{swLeafGood} & Foliage SPAD & สีใบพืชสมบูรณ์ (Chlorophyll) & \#2E5A1E & 36.2 & -24.8 & 28.5 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{สมการการแปลงปริภูมิสีในเอนจิน Pure Dart}
+เอนจินบนขอบของ NPxAI ทำการแปลงสัญญาณจากพิกัด sRGB ที่ผ่านการปรับเทียบมาตรฐาน เข้าสู่ปริภูมิสี HSV และ CIE $L^*a^*b^*$ ตามสมการ
+
+\begin{equation}
+V = \max(R, G, B), \quad S = \begin{cases} 0 & \text{ถ้า } V = 0 \\ \frac{V - \min(R, G, B)}{V} & \text{ถ้า } V > 0 \end{cases}
+\end{equation}
+
+\begin{equation}
+H = \begin{cases}
+0^\circ & \text{ถ้า } S = 0 \\
+60^\circ \times \frac{G - B}{V - \min(R, G, B)} \pmod{360^\circ} & \text{ถ้า } V = R \\
+60^\circ \times \left(2 + \frac{B - R}{V - \min(R, G, B)}\right) & \text{ถ้า } V = G \\
+60^\circ \times \left(4 + \frac{R - G}{V - \min(R, G, B)}\right) & \text{ถ้า } V = B
+\end{cases}
+\end{equation}
+
+การนำค่าพิกัดสี $(H, S, V)$ และ $(L^*, a^*, b^*)$ เข้าสู่โครงข่ายประสาทเทียม ทำให้โมเดลสามารถจำแนกระดับฮิวมัส, ค่า pH และความเข้มข้นของธาตุอาหารได้อย่างแม่นยำ แม้สภาพแสงภายนอกจะมีความแปรปรวนก็ตาม
 
 % -------------------------------------------------------------
 % ส่วนท้ายและภาคผนวก (Appendix & Backmatter)
