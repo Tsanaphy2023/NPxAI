@@ -126,24 +126,24 @@ class ConnectionView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
-                          children: [
-                            Icon(Icons.tune, size: 18, color: AppTheme.accentAmber),
-                            SizedBox(width: 8),
-                            Text(
-                              'การสอบเทียบมาตรฐานเครื่อง (Calibration)',
-                              style: TextStyle(
-                                fontSize: 13.5,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.textLight,
-                              ),
+                        const Icon(Icons.tune, size: 17, color: AppTheme.accentAmber),
+                        const SizedBox(width: 6),
+                        const Expanded(
+                          child: Text(
+                            'การสอบเทียบมาตรฐานเครื่อง (Calibration)',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.textLight,
                             ),
-                          ],
+                          ),
                         ),
+                        const SizedBox(width: 6),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
                           decoration: BoxDecoration(
                             color: status.isCalibrated
                                 ? AppTheme.primaryGreen.withValues(alpha: 0.3)
@@ -156,7 +156,7 @@ class ConnectionView extends StatelessWidget {
                           child: Text(
                             status.isCalibrated ? 'CALIBRATED' : 'UNCALIBRATED',
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 9.5,
                               fontWeight: FontWeight.bold,
                               color: status.isCalibrated ? AppTheme.accentLime : Colors.orangeAccent,
                             ),

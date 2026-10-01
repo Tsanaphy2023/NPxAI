@@ -174,35 +174,41 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      _showAbsorbance
-                          ? 'สเปกตรัมการดูดกลืนแสง'
-                          : 'สเปกตรัมการสะท้อนแสง',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textLight,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _showAbsorbance
+                            ? 'สเปกตรัมการดูดกลืนแสง'
+                            : 'สเปกตรัมการสะท้อนแสง',
+                        maxLines: 1,
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textLight,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      _showAbsorbance
-                          ? 'Absorbance [A = log₁₀(1/R)]'
-                          : 'Reflectance [%R]',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: 'monospace',
-                        color: AppTheme.textMuted.withValues(alpha: 0.9),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _showAbsorbance
+                            ? 'Absorbance [A = log₁₀(1/R)]'
+                            : 'Reflectance [%R]',
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          fontFamily: 'monospace',
+                          color: AppTheme.textMuted.withValues(alpha: 0.9),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               // Segmented Toggle (Absorb vs %Reflect)
               Container(
                 decoration: BoxDecoration(
@@ -431,7 +437,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
 
           // การ์ดรายละเอียดของจุดที่เลือก (Selected Wavelength Diagnostic HUD & Nutrient Comparison)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
               color: AppTheme.backgroundDark.withValues(alpha: 0.7),
               borderRadius: BorderRadius.circular(10),
@@ -459,10 +465,9 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
                                 decoration: BoxDecoration(
                                   color: (meta['bandColor'] as Color).withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(4),
@@ -474,32 +479,35 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                                 child: Text(
                                   meta['band'] as String,
                                   style: TextStyle(
-                                    fontSize: 9,
+                                    fontSize: 8.5,
                                     fontWeight: FontWeight.bold,
                                     color: meta['bandColor'] as Color,
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 6),
+                              const SizedBox(width: 5),
                               Expanded(
-                                child: Text(
-                                  '${meta['name']} • ${meta['tag']}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: meta['color'] as Color,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    '${meta['name']} • ${meta['tag']}',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: meta['color'] as Color,
+                                    ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 6),
+                              const SizedBox(width: 4),
                               Text(
                                 _showAbsorbance
                                     ? 'A = ${currentVal.toStringAsFixed(3)}'
                                     : 'R = ${(currentVal * 100).toStringAsFixed(1)}%',
                                 style: const TextStyle(
-                                  fontSize: 11.5,
+                                  fontSize: 11,
                                   fontFamily: 'monospace',
                                   fontWeight: FontWeight.bold,
                                   color: AppTheme.accentLime,
@@ -511,7 +519,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                           Text(
                             meta['desc'] as String,
                             style: const TextStyle(
-                              fontSize: 10.5,
+                              fontSize: 10,
                               color: AppTheme.textMuted,
                             ),
                             maxLines: 1,
@@ -523,42 +531,52 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                   ],
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(height: 7),
 
-                // แถบเปรียบเทียบค่าสเปกตรัม ดินจริง vs มาตรฐาน N, P, K ณ ความยาวคลื่นนี้
+                // แถบเปรียบเทียบค่าสเปกตรัม ดินจริง vs มาตรฐาน N, P, K ณ ความยาวคลื่นนี้ (Expanded + FittedBox ป้องกัน Overflow 100%)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppTheme.cardDark.withValues(alpha: 0.65),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: AppTheme.borderDark.withValues(alpha: 0.5)),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildHudValPill(
-                        'ดินจริง',
-                        currentVal,
-                        _showAbsorbance ? AppTheme.accentLime : Colors.cyanAccent,
-                        isAbsorbance: _showAbsorbance,
+                      Expanded(
+                        child: _buildHudValPill(
+                          'ดินจริง',
+                          currentVal,
+                          _showAbsorbance ? AppTheme.accentLime : Colors.cyanAccent,
+                          isAbsorbance: _showAbsorbance,
+                        ),
                       ),
-                      _buildHudValPill(
-                        'Ref-N',
-                        currentRefN,
-                        const Color(0xFF00E5FF),
-                        isAbsorbance: _showAbsorbance,
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _buildHudValPill(
+                          'Ref-N',
+                          currentRefN,
+                          const Color(0xFF00E5FF),
+                          isAbsorbance: _showAbsorbance,
+                        ),
                       ),
-                      _buildHudValPill(
-                        'Ref-P',
-                        currentRefP,
-                        const Color(0xFFFF9100),
-                        isAbsorbance: _showAbsorbance,
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _buildHudValPill(
+                          'Ref-P',
+                          currentRefP,
+                          const Color(0xFFFF9100),
+                          isAbsorbance: _showAbsorbance,
+                        ),
                       ),
-                      _buildHudValPill(
-                        'Ref-K',
-                        currentRefK,
-                        const Color(0xFFE040FB),
-                        isAbsorbance: _showAbsorbance,
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _buildHudValPill(
+                          'Ref-K',
+                          currentRefK,
+                          const Color(0xFFE040FB),
+                          isAbsorbance: _showAbsorbance,
+                        ),
                       ),
                     ],
                   ),
@@ -580,33 +598,37 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
     final str = isAbsorbance
         ? val.toStringAsFixed(2)
         : '${(val * 100).toStringAsFixed(0)}%';
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 5,
-          height: 5,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-        ),
-        const SizedBox(width: 3),
-        Text(
-          '$name: ',
-          style: TextStyle(
-            fontSize: 9,
-            fontWeight: FontWeight.w600,
-            color: AppTheme.textMuted.withValues(alpha: 0.85),
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 5,
+            height: 5,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: color),
           ),
-        ),
-        Text(
-          str,
-          style: TextStyle(
-            fontSize: 9.5,
-            fontFamily: 'monospace',
-            fontWeight: FontWeight.bold,
-            color: color,
+          const SizedBox(width: 3),
+          Text(
+            '$name: ',
+            style: TextStyle(
+              fontSize: 8.5,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textMuted.withValues(alpha: 0.85),
+            ),
           ),
-        ),
-      ],
+          Text(
+            str,
+            style: TextStyle(
+              fontSize: 9.0,
+              fontFamily: 'monospace',
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
