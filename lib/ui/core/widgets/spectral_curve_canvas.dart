@@ -25,54 +25,72 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
       'name': 'Violet (405 nm)',
       'tag': 'SOM / Organic N',
       'color': Color(0xFF9D4EDD),
-      'desc': 'การดูดกลืน Soret band ของฮิวมัส และไนโตรเจนอินทรีย์ในดิน',
+      'desc': 'ย่าน UV-A / Soret band ดูดกลืนพันธะคอนจูเกต C=C สารฮิวมัส และไนโตรเจนอินทรีย์',
       'target': 'Total N',
       'shortTarget': 'Total N',
+      'band': 'UV',
+      'bandColor': Color(0xFF9D4EDD),
+      'bandRange': '380–405 nm',
     },
     {
       'wl': '465nm',
       'name': 'Blue (465 nm)',
       'tag': 'Humic Acid',
       'color': Color(0xFF00B4D8),
-      'desc': 'การดูดกลืนสารอินทรีย์ฮิวมิกและแคโรทีนอยด์ในดิน',
+      'desc': 'ย่าน VIS Blue ดูดกลืนกรดฮิวมิก สารสีแคโรทีนอยด์ และอินทรียวัตถุในดิน (SOM)',
       'target': 'Organic Matter',
       'shortTarget': 'SOM',
+      'band': 'VIS',
+      'bandColor': Color(0xFF00B4D8),
+      'bandRange': '420–700 nm',
     },
     {
       'wl': '525nm',
       'name': 'Green (525 nm)',
       'tag': 'Soil Matrix',
       'color': Color(0xFF2EC4B6),
-      'desc': 'รอยต่อการสะท้อนของคลอโรฟิลล์และ Munsell soil hue',
+      'desc': 'ย่าน VIS Green จุดเปลี่ยนผ่านการสะท้อนของคลอโรฟิลล์ และฮิวสีดินมันเซลล์ (Munsell)',
       'target': 'Soil Matrix',
       'shortTarget': 'Matrix',
+      'band': 'VIS',
+      'bandColor': Color(0xFF00B4D8),
+      'bandRange': '420–700 nm',
     },
     {
       'wl': '630nm',
       'name': 'Red (630 nm)',
       'tag': 'Fe-Oxide (P)',
       'color': Color(0xFFFF595E),
-      'desc': 'การดูดกลืนฮีมาไทต์ Fe3+ มีสหสัมพันธ์ตรงกับ Available P (Bray II)',
+      'desc': 'ย่าน VIS Red ดูดกลืน d-d transition ของ Fe3+ (Hematite) สัมพันธ์กับ Available P',
       'target': 'Available P',
       'shortTarget': 'Avail P',
+      'band': 'VIS',
+      'bandColor': Color(0xFF00B4D8),
+      'bandRange': '420–700 nm',
     },
     {
       'wl': '850nm',
       'name': 'NIR 1 (850 nm)',
       'tag': 'Bray-II P Proxy',
       'color': Color(0xFFFF924C),
-      'desc': 'การดูดกลืนเกอไทต์ Fe-Oxide ไหล่การสั่นสะเทือนของฟอสเฟต',
+      'desc': 'ย่าน IR (NIR 1) ดูดกลืนเกอไทต์ Fe-Oxide ไหล่การสั่นสะเทือนของฟอสเฟตในดิน',
       'target': 'Available P',
       'shortTarget': 'Avail P',
+      'band': 'IR',
+      'bandColor': Color(0xFFFF924C),
+      'bandRange': '750–950 nm',
     },
     {
       'wl': '940nm',
       'name': 'NIR 2 (940 nm)',
       'tag': 'H2O / Total N',
       'color': Color(0xFFFFCA3A),
-      'desc': 'โอเวอร์โทนที่ 3 ของน้ำและความชื้น เชื่อมโยง Total N (Kjeldahl)',
+      'desc': 'ย่าน IR (NIR 2) โอเวอร์โทนที่ 3 ของน้ำและความชื้น เชื่อมโยง Total N (Kjeldahl)',
       'target': 'Total N',
       'shortTarget': 'Total N',
+      'band': 'IR',
+      'bandColor': Color(0xFFFF924C),
+      'bandRange': '750–950 nm',
     },
   ];
 
@@ -159,6 +177,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
               ),
               const SizedBox(width: 8),
               // Segmented Toggle
+              // Segmented Toggle
               Container(
                 decoration: BoxDecoration(
                   color: AppTheme.backgroundDark,
@@ -185,7 +204,54 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
             ],
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
+
+          // แถบจำแนกย่านสเปกตรัม (UV • VIS • IR Spectrum Band Selector)
+          Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: AppTheme.backgroundDark.withValues(alpha: 0.65),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppTheme.borderDark.withValues(alpha: 0.6)),
+            ),
+            child: Row(
+              children: [
+                _buildBandPill(
+                  label: 'UV',
+                  sub: '380–405 nm',
+                  color: const Color(0xFF9D4EDD),
+                  isSelected: meta['band'] == 'UV',
+                  onTap: () => setState(() => _selectedPointIndex = 0),
+                ),
+                const SizedBox(width: 4),
+                _buildBandPill(
+                  label: 'VIS',
+                  sub: '420–700 nm',
+                  color: const Color(0xFF00B4D8),
+                  isSelected: meta['band'] == 'VIS',
+                  onTap: () {
+                    if (meta['band'] != 'VIS') {
+                      setState(() => _selectedPointIndex = 3); // 630nm
+                    }
+                  },
+                ),
+                const SizedBox(width: 4),
+                _buildBandPill(
+                  label: 'IR (NIR)',
+                  sub: '750–950 nm',
+                  color: const Color(0xFFFF924C),
+                  isSelected: meta['band'] == 'IR',
+                  onTap: () {
+                    if (meta['band'] != 'IR') {
+                      setState(() => _selectedPointIndex = 4); // 850nm
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 10),
 
           // พื้นที่วาดเส้นกราฟ CustomPaint
           SizedBox(
@@ -213,11 +279,14 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
 
           const SizedBox(height: 8),
 
-          // แถบความยาวคลื่นและแท็กธาตุอาหารด้านล่างแกน X
+          // แถบความยาวคลื่นและแท็กธาตุอาหารด้านล่างแกน X (พร้อมป้ายกำกับ UV / VIS / IR)
           Row(
             children: List.generate(_channelMeta.length, (i) {
               final isSel = i == _selectedPointIndex;
               final col = _channelMeta[i]['color'] as Color;
+              final bandCol = _channelMeta[i]['bandColor'] as Color;
+              final bandName = _channelMeta[i]['band'] as String;
+
               return Expanded(
                 child: GestureDetector(
                   onTap: () => setState(() => _selectedPointIndex = i),
@@ -236,6 +305,23 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // ป้ายย่านคลื่น UV, VIS, IR
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: bandCol.withValues(alpha: isSel ? 0.35 : 0.15),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          child: Text(
+                            bandName,
+                            style: TextStyle(
+                              fontSize: 7.5,
+                              fontWeight: FontWeight.w800,
+                              color: bandCol,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
                         Text(
                           _channelMeta[i]['wl'] as String,
                           maxLines: 1,
@@ -288,7 +374,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,6 +382,26 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: (meta['bandColor'] as Color).withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: (meta['bandColor'] as Color).withValues(alpha: 0.5),
+                                width: 0.8,
+                              ),
+                            ),
+                            child: Text(
+                              meta['band'] as String,
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                color: meta['bandColor'] as Color,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               '${meta['name']} • ${meta['tag']}',
@@ -339,6 +445,54 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBandPill({
+    required String label,
+    required String sub,
+    required Color color,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: isSelected ? color.withValues(alpha: 0.22) : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isSelected ? color : Colors.transparent,
+              width: 1.2,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  color: isSelected ? AppTheme.textLight : AppTheme.textMuted,
+                ),
+              ),
+              Text(
+                sub,
+                style: TextStyle(
+                  fontSize: 8.5,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? color : AppTheme.textMuted.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -404,6 +558,61 @@ class _AdvancedSpectralPainter extends CustomPainter {
       final y = drawH - (normalized * drawH) + 8.0;
       points.add(Offset(x, y));
     }
+
+    // 0. วาดแถบพื้นหลังแบ่ง 3 ย่านคลื่นสเปกตรัม (UV, VIS, IR Spectral Zones)
+    final uvVisSplitX = (points[0].dx + points[1].dx) / 2;
+    final visIrSplitX = (points[3].dx + points[4].dx) / 2;
+
+    // UV Zone (380 - 420 nm)
+    final uvRect = Rect.fromLTRB(padX, 4.0, uvVisSplitX, drawH + 12.0);
+    final uvPaint = Paint()..color = const Color(0xFF9D4EDD).withValues(alpha: 0.08);
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(uvRect, topLeft: const Radius.circular(8), bottomLeft: const Radius.circular(8)),
+      uvPaint,
+    );
+
+    // VIS Zone (420 - 700 nm)
+    final visRect = Rect.fromLTRB(uvVisSplitX, 4.0, visIrSplitX, drawH + 12.0);
+    final visPaint = Paint()..color = const Color(0xFF00B4D8).withValues(alpha: 0.05);
+    canvas.drawRect(visRect, visPaint);
+
+    // IR Zone (750 - 980 nm)
+    final irRect = Rect.fromLTRB(visIrSplitX, 4.0, padX + drawW, drawH + 12.0);
+    final irPaint = Paint()..color = const Color(0xFFFF924C).withValues(alpha: 0.08);
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(irRect, topRight: const Radius.circular(8), bottomRight: const Radius.circular(8)),
+      irPaint,
+    );
+
+    // วาดเส้นประแนวตั้งแบ่งขอบเขตย่านสเปกตรัม
+    final splitLinePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.15)
+      ..strokeWidth = 1.0;
+    for (double y = 4.0; y < drawH + 12.0; y += 8.0) {
+      canvas.drawLine(Offset(uvVisSplitX, y), Offset(uvVisSplitX, y + 4.0), splitLinePaint);
+      canvas.drawLine(Offset(visIrSplitX, y), Offset(visIrSplitX, y + 4.0), splitLinePaint);
+    }
+
+    // วาดป้ายข้อความกำกับย่านคลื่น UV, VIS, IR
+    void drawZoneLabel(String text, double centerX, Color col) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: text,
+          style: TextStyle(
+            fontSize: 9.0,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.0,
+            color: col.withValues(alpha: 0.65),
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      tp.paint(canvas, Offset(centerX - tp.width / 2, 6.0));
+    }
+
+    drawZoneLabel('UV', (padX + uvVisSplitX) / 2, const Color(0xFF9D4EDD));
+    drawZoneLabel('VIS', (uvVisSplitX + visIrSplitX) / 2, const Color(0xFF00B4D8));
+    drawZoneLabel('IR (NIR)', (visIrSplitX + padX + drawW) / 2, const Color(0xFFFF924C));
 
     // 1. วาดเส้นแนวนอนบอกระดับสเกล (Background Grid)
     final gridPaint = Paint()
