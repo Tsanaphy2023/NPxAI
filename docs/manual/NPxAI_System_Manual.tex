@@ -194,73 +194,15 @@
 % หน้าปกเอกสารวิชาการสวยงาม ทันสมัย เรียบง่าย (Modern Minimalist Academic Cover)
 % -------------------------------------------------------------
 \begin{titlepage}
-\newgeometry{left=20mm, right=20mm, top=16mm, bottom=16mm}
 \thispagestyle{empty}
 \begin{tikzpicture}[remember picture, overlay]
-    % พื้นหลังไล่ระดับสีน้ำเงินเข้มและเขียวมรกตประจำมหาวิทยาลัยราชภัฏรำไพพรรณีเต็มหน้ากระดาษแบบ Full-Bleed 100%
-    \fill[rbruNavy!98!black] ([xshift=-10mm, yshift=-10mm]current page.south west) rectangle ([xshift=10mm, yshift=10mm]current page.north east);
-    \shade[top color=rbruNavy!92!black, bottom color=rbruGreen!28!black, opacity=0.92] 
-        ([xshift=-10mm, yshift=-10mm]current page.south west) rectangle ([xshift=10mm, yshift=10mm]current page.north east);
-        
-    % แถบเส้นสีทองและลายกราฟิกเรขาคณิตเชิงแสงหรูหรา
-    \draw[rbruGold, line width=2.5pt] ($(current page.north west)+(15mm,-12mm)$) -- ($(current page.north east)+(-15mm,-12mm)$);
-    \draw[rbruGreen!60, line width=0.8pt] ($(current page.north west)+(15mm,-14.5mm)$) -- ($(current page.north east)+(-15mm,-14.5mm)$);
-    
-    % ลายรัศมีสเปกตรัมโปร่งแสงด้านล่าง
-    \draw[rbruGold!20, line width=0.5pt] ($(current page.south west)+(5mm,30mm)$) -- ($(current page.south east)+(-5mm,85mm)$);
-    \draw[rbruGreen!25, line width=0.5pt] ($(current page.south west)+(15mm,20mm)$) -- ($(current page.south east)+(-5mm,75mm)$);
-    \draw[cyan!20, line width=0.5pt] ($(current page.south west)+(25mm,10mm)$) -- ($(current page.south east)+(-5mm,65mm)$);
+    \node[inner sep=0pt] at (current page.center) {
+        \includegraphics[width=\paperwidth, height=\paperheight]{figures/npxai_futuristic_book_cover.jpg}
+    };
 \end{tikzpicture}
-
-\begin{flushright}
-    {\fontsize{11.5}{15}\selectfont\bfseries\color{rbruGold} หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล\par}
-    {\fontsize{10}{13.5}\selectfont\color{white!80} คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
-\end{flushright}
-
-\vspace{3mm}
-\begin{center}
-    {\fontsize{19}{25}\selectfont\bfseries\color{white} คู่มือระบบและเอกสารวิจัยฉบับสมบูรณ์\par}
-    \vspace{2.5mm}
-    {\fontsize{15}{21}\selectfont\bfseries\color{rbruGold} การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพา\\ด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์ (NPxAI)\par}
-    \vspace{1.5mm}
-    {\fontsize{10}{13.5}\selectfont\color{white!85} (Development of a Portable Soil Nitrogen and Phosphorus Analyzer\\using Reflectance Principle Integrated with Artificial Intelligence)\par}
-    
-    \vspace{3.5mm}
-    {\color{rbruGold}\rule{0.55\textwidth}{1.4pt}\par}
-    \vspace{3.5mm}
-
-    % ภาพการใช้สมาร์ทโฟนแอปพลิเคชัน NPxAI วิเคราะห์ดินจริงในสนาม
-    \begin{tcolorbox}[
-        enhanced,
-        width=0.54\textwidth,
-        colback=black,
-        colframe=rbruGold!85!white,
-        arc=4mm,
-        boxrule=1.5pt,
-        shadow={1.5mm}{-1.5mm}{0mm}{black!75},
-        center,
-        halign=center,
-        top=1.5mm, bottom=1.5mm, left=1.5mm, right=1.5mm
-    ]
-        \includegraphics[width=\linewidth, height=7.5cm, keepaspectratio]{figures/npxai_phone_soil_cover.jpg}
-    \end{tcolorbox}
-    
-    \vspace{2.5mm}
-    {\fontsize{9.5}{12}\selectfont\color{white!80} นวัตกรรมการวิเคราะห์ปริมาณธาตุอาหารในดินผ่านสมาร์ทโฟนแบบเวลาจริง\par}
-
-    \vfill
-
-    % ผู้จัดทำและผู้เขียน (แบบมินิมอล เรียบหรู ทันสมัย)
-    {\fontsize{16}{22}\selectfont\bfseries\color{white} ชีวะ ทัศนา \qquad\qquad จิรภัทร จันทมาลี\par}
-    \vspace{2mm}
-    {\fontsize{11.5}{15}\selectfont\color{rbruGold} มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
-    
-    \vspace{2.5mm}
-    {\fontsize{9.5}{13}\selectfont\color{white!65} 2569\par}
-    \vspace*{2mm}
-\end{center}
+\mbox{}
+\vfill
 \end{titlepage}
-\restoregeometry
 
 % -------------------------------------------------------------
 % ส่วนนำ (Frontmatter)
