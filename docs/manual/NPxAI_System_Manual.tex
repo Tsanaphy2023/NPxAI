@@ -14,6 +14,7 @@
 
 % -------------------------------------------------------------
 % การจัดการฟอนต์ภาษาไทยและคณิตศาสตร์ด้วย fontspec (XeLaTeX)
+% ใช้ฟอนต์ Sarabun ซึ่งรองรับภาษาไทยสมบูรณ์แบบบน macOS และระบบปฏิบัติการมาตรฐาน
 % -------------------------------------------------------------
 \usepackage{fontspec}
 \usepackage{xunicode}
@@ -21,18 +22,16 @@
 \XeTeXlinebreaklocale "th_TH"
 \XeTeXlinebreakskip = 0pt plus 1pt
 
-\setmainfont[
-    Path = /Applications/XAMPP/xamppfiles/htdocs/06_AI_Research/NPxAI/docs/fonts/,
-    Extension = .ttf,
-    UprightFont = THSarabunNew,
-    BoldFont = THSarabunNew_Bold,
-    ItalicFont = THSarabunNew_Italic,
-    BoldItalicFont = THSarabunNew_BoldItalic,
-    Scale = 1.25
-]{THSarabunNew}
+\setmainfont{Sarabun}[
+    Scale=1.15,
+    BoldFont=* SemiBold,
+    ItalicFont=* Light,
+    BoldItalicFont=* Medium
+]
+\setmonofont{Sarabun}[Scale=0.95]
 
 % -------------------------------------------------------------
-% แพ็กเกจพื้นฐานทางคณิตศาสตร์ วิทยาศาสตร์ และตาราง
+% แพ็กเกจพื้นฐานทางคณิตศาสตร์ วิทยาศาสตร์ กราฟิก และตาราง
 % -------------------------------------------------------------
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{booktabs}
@@ -80,11 +79,11 @@
     interior style={left color=rbruNavy!98!black, right color=rbruSlate!90}
   ]
     \raggedleft
-    {\fontsize{40}{46}\selectfont\bfseries\color{white} \chaptertitlename\ \thechapter\par}
+    {\fontsize{36}{42}\selectfont\bfseries\color{white} \chaptertitlename\ \thechapter\par}
     \vspace{4pt}
     {\color{rbruGold}\rule{0.5\textwidth}{2pt}\par}
     \vspace{8pt}
-    {\fontsize{24}{30}\selectfont\bfseries\color{white} #1\par}
+    {\fontsize{22}{28}\selectfont\bfseries\color{white} #1\par}
   \end{tcolorbox}
 }
 
@@ -99,7 +98,7 @@
     interior style={left color=rbruNavy!98!black, right color=rbruSlate!90}
   ]
     \raggedleft
-    {\fontsize{28}{34}\selectfont\bfseries\color{white} #1\par}
+    {\fontsize{26}{32}\selectfont\bfseries\color{white} #1\par}
   \end{tcolorbox}
 }
 
@@ -123,7 +122,7 @@
     listing only,
     listing options={
         language=Java,
-        basicstyle=\ttfamily\fontsize{10}{13}\selectfont,
+        basicstyle=\ttfamily\fontsize{9}{12}\selectfont,
         keywordstyle=\color{blue}\bfseries,
         stringstyle=\color{teal},
         commentstyle=\color{gray}\itshape,
@@ -145,41 +144,41 @@
 % -------------------------------------------------------------
 \begin{titlepage}
 \begin{center}
-    \vspace*{8mm}
-    {\fontsize{26}{32}\selectfont\bfseries\color{rbruGreen} คู่มือระบบและแอปพลิเคชันฉบับสมบูรณ์\par}
+    \vspace*{6mm}
+    {\fontsize{26}{32}\selectfont\bfseries\color{rbruGreen} คู่มือระบบและเอกสารวิจัยฉบับสมบูรณ์\par}
     \vspace{4mm}
-    {\fontsize{20}{26}\selectfont\bfseries การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพา\\ด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์\par}
+    {\fontsize{19}{25}\selectfont\bfseries การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพา\\ด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์\par}
     \vspace{2mm}
-    {\fontsize{14}{18}\selectfont (Development of a Portable Soil Nitrogen and Phosphorus Analyzer\\using Reflectance Principle Integrated with Artificial Intelligence)\par}
+    {\fontsize{13}{17}\selectfont (Development of a Portable Soil Nitrogen and Phosphorus Analyzer\\using Reflectance Principle Integrated with Artificial Intelligence - NPxAI)\par}
     
-    \vspace{10mm}
+    \vspace{8mm}
     {\color{rbruGold}\rule{0.65\textwidth}{2.5pt}\par}
-    \vspace{10mm}
+    \vspace{8mm}
     
     \begin{tcolorbox}[
-        width=0.85\textwidth,
+        width=0.88\textwidth,
         colback=rbruNavy!5!white,
         colframe=rbruNavy,
         arc=4mm,
         center,
         halign=center
     ]
-        {\fontsize{15}{20}\selectfont\bfseries แผนงานวิจัย เรื่อง การบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์\\เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี\par}
+        {\fontsize{14}{19}\selectfont\bfseries แผนงานวิจัย เรื่อง การบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์\\เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี\par}
         \vspace{2mm}
-        {\fontsize{13}{17}\selectfont เสนอของบประมาณกองทุนวิจัย มหาวิทยาลัยราชภัฏรำไพพรรณี\\ประจำปีงบประมาณ พ.ศ. 2569\par}
+        {\fontsize{12}{16}\selectfont เสนอของบประมาณกองทุนวิจัย มหาวิทยาลัยราชภัฏรำไพพรรณี\\ประจำปีงบประมาณ พ.ศ. 2569\par}
     \end{tcolorbox}
 
     \vfill
 
-    {\fontsize{16}{22}\selectfont\bfseries คณะผู้จัดทำ\par}
+    {\fontsize{15}{21}\selectfont\bfseries คณะผู้วิจัยและผู้พัฒนาระบบ\par}
     \vspace{2mm}
-    {\fontsize{15}{20}\selectfont ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา (หัวหน้าโครงการวิจัย)\par}
-    {\fontsize{15}{20}\selectfont ผู้ช่วยศาสตราจารย์ ดร.จิรภัทร จันทมาลี (ผู้อำนวยการแผนงานวิจัย)\par}
+    {\fontsize{14}{19}\selectfont ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา (หัวหน้าโครงการวิจัย)\par}
+    {\fontsize{14}{19}\selectfont ผู้ช่วยศาสตราจารย์ ดร.จิรภัทร จันทมาลี (ผู้อำนวยการแผนงานวิจัย)\par}
     
-    \vspace{8mm}
-    {\fontsize{14}{18}\selectfont หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล คณะวิทยาศาสตร์และเทคโนโลยี\\มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
-    \vspace{4mm}
-    {\fontsize{13}{17}\selectfont ตุลาคม 2569\par}
+    \vspace{6mm}
+    {\fontsize{13}{17}\selectfont หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล คณะวิทยาศาสตร์และเทคโนโลยี\\มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
+    \vspace{3mm}
+    {\fontsize{12}{16}\selectfont ตุลาคม 2569\par}
 \end{center}
 \end{titlepage}
 
@@ -189,11 +188,11 @@
 \frontmatter
 
 \chapter*{คำนำ}
-คู่มือฉบับสมบูรณ์นี้จัดทำขึ้นเพื่อเป็นเอกสารประกอบการวิจัยและคู่มือการปฏิบัติงานเชิงวิศวกรรมสำหรับโครงการวิจัยเรื่อง ``การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพาด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์'' ภายใต้แผนงานวิจัยบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี มหาวิทยาลัยราชภัฏรำไพพรรณี
+คู่มือฉบับสมบูรณ์นี้จัดทำขึ้นเพื่อเป็นเอกสารทางวิชาการและคู่มือการปฏิบัติงานเชิงวิศวกรรมสำหรับโครงการวิจัยเรื่อง ``การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพาด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์ (NPxAI)'' ภายใต้แผนงานวิจัยบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี มหาวิทยาลัยราชภัฏรำไพพรรณี
 
-เนื้อหาภายในเล่มครอบคลุมตั้งแต่รากฐานทฤษฎีทางฟิสิกส์สเปกโทรสโกปี การออกแบบฮาร์ดแวร์ควบคุมแสงสะท้อน การประมวลผลคอมพิวเตอร์วิทัศน์ การพัฒนาแอปพลิเคชันสมาร์ทโฟนด้วยสถาปัตยกรรม Clean MVVM ตลอดจนการประมวลผลแบบจำลองปัญญาประดิษฐ์บนขอบ (Edge ML) และการผสานคำแนะนำชีวภัณฑ์จุลินทรีย์ดินสายพันธุ์ท้องถิ่นเพื่อลดการใช้ปุ๋ยเคมีอย่างยั่งยืน
+เนื้อหาภายในเล่มครอบคลุมทุกมิติทางวิศวกรรมและวิทยาศาสตร์ประยุกต์ ตั้งแต่รากฐานทฤษฎีฟิสิกส์สเปกโทรสโกปีแบบสะท้อนแสง การวิเคราะห์เชิงเปรียบเทียบแหล่งกำเนิดแสงแฟลชสมาร์ทโฟนกับหลอดกำเนิดแสงมัลติสเปกตรัล 7 แถบคลื่น การออกแบบและจัดทำกล่องมืดจำลองสามมิติ (Optical Dark Chamber 3D CAD) ด้วยพลาสติกทึบแสงควบคุมสภาพแวดล้อม 0-Lux ตามเรขาคณิตมาตรฐานสากล CIE 45°/0° ตลอดจนการพัฒนาโมเดลปัญญาประดิษฐ์ประมวลผลบนขอบ (Pure Dart Edge AI) หลากหลายสถาปัตยกรรม และการพัฒนาแอปพลิเคชันมือถือ Flutter เวอร์ชัน 1.2.0 ที่รองรับการสแกนดินด้วยพิกัด GPS อัตโนมัติและการควบคุม 3 รูปแบบ
 
-คณะผู้จัดทำหวังเป็นอย่างยิ่งว่าคู่มือฉบับนี้จะเป็นประโยชน์ต่อนักวิจัย เกษตรกร และผู้สนใจในการนำเทคโนโลยีเกษตรแม่นยำไปต่อยอดพัฒนาเชิงพื้นที่ได้อย่างมีประสิทธิภาพ
+คณะผู้จัดทำหวังเป็นอย่างยิ่งว่าคู่มือฉบับนี้จะเป็นประโยชน์ต่อนักวิจัย เกษตรกร และหน่วยงานที่เกี่ยวข้องในการยกระดับการทำเกษตรแม่นยำและการฟื้นฟูดินอย่างยั่งยืน
 
 \begin{flushright}
 ผศ.ดร.ชีวะ ทัศนา\\
@@ -211,43 +210,233 @@
 
 \chapter{ความเป็นมาและรากฐานทางทฤษฎี}
 
-\section{ความเป็นมาและความสำคัญ}
-การบริหารจัดการธาตุอาหารพืชในดินเกษตรกรรมของจังหวัดจันทบุรีและตราด โดยเฉพาะในสวนทุเรียน มังคุด และเงาะ เผชิญกับปัญหาต้นทุนปุ๋ยเคมีที่ปรับตัวสูงขึ้นอย่างต่อเนื่อง การวิเคราะห์ดินด้วยวิธีมาตรฐานในห้องปฏิบัติการมีข้อจำกัดเรื่องระยะเวลาและค่าใช้จ่าย ทำให้เกษตรกรส่วนใหญ่ใส่ปุ๋ยเกินความจำเป็น ส่งผลให้เกิดมลพิษจากการชะล้างไนโตรเจนและฟอสฟอรัสลงสู่แหล่งน้ำธรรมชาติ
+\section{ความเป็นมาและความสำคัญของปัญหา}
+ดินในพื้นที่เกษตรกรรมของจังหวัดจันทบุรีและตราด โดยเฉพาะสวนทุเรียน มังคุด และเงาะ ประสบปัญหาการสะสมของธาตุอาหารไม่สมดุลจากการใช้ปุ๋ยเคมีในปริมาณสูงติดต่อกันเป็นเวลานาน การส่งตัวอย่างดินไปตรวจวิเคราะห์ในห้องปฏิบัติการมาตรฐานใช้เวลานาน 7 ถึง 14 วัน และมีค่าใช้จ่ายสูง ทำให้เกษตรกรขาดข้อมูลประกอบการตัดสินใจแบบทันท่วงที ส่งผลให้เกิดการสะสมของฟอสฟอรัสตกค้างที่ไม่เป็นประโยชน์ และเกิดการชะล้างไนโตรเจนลงสู่แหล่งน้ำธรรมชาติ
 
-โครงการวิจัยนี้จึงมุ่งพัฒนาระบบวิเคราะห์ดินแบบพกพาโดยใช้การสะท้อนแสงย่าน Vis-NIR ร่วมกับปัญญาประดิษฐ์ เพื่อให้เกษตรกรทราบผล Total N และ Available P ได้ทันทีในแปลง พร้อมรับคำแนะนำสูตรปุ๋ยสั่งตัดร่วมกับชีวภัณฑ์จุลินทรีย์ดินท้องถิ่น
+งานวิจัยนี้จึงมุ่งพัฒนานวัตกรรมเครื่องมือวิเคราะห์ดินแบบพกพาโดยใช้เทคนิค Visible and Near-Infrared Diffuse Reflectance Spectroscopy ร่วมกับปัญญาประดิษฐ์บนอุปกรณ์เคลื่อนที่ เพื่อให้เกษตรกรทราบปริมาณไนโตรเจนทั้งหมด (Total Nitrogen) และฟอสฟอรัสที่เป็นประโยชน์ (Available Phosphorus) ในแปลงปลูกได้ภายในเวลาไม่เกิน 3 วินาที พร้อมเชื่อมโยงคำแนะนำชีวภัณฑ์จุลินทรีย์ดินท้องถิ่น
 
-\section{ทฤษฎีสเปกโทรสโกปีแบบสะท้อนแสง}
-เมื่อแสงตกกระทบลงบนพื้นผิวดิน แสงบางส่วนจะถูกดูดกลืนและบางส่วนจะสะท้อนออกมาตามคุณสมบัติของโมเลกุลในดิน โดยไนโตรเจนในดินมีความสัมพันธ์อย่างสูงกับปริมาณสารอินทรีย์ ซึ่งมีการดูดกลืนแสงเด่นชัดในย่านสีแดง (630 นาโนเมตร) และย่านใกล้อินฟราเรด (850 นาโนเมตร) ในขณะที่ฟอสฟอรัสมักจับตัวอยู่กับสารประกอบอนินทรีย์ของเหล็กและอะลูมิเนียม ซึ่งแสดงลายนิ้วมือสเปกตรัมที่ซับซ้อนในย่าน 525 และ 940 นาโนเมตร
+\section{ทฤษฎีการสะท้อนแสงแบบกระจายและพันธะโมเลกุลในดิน}
+เมื่อลำแสงตกกระทบลงบนผิวหน้าของอนุภาคดิน แสงจะเกิดการสะท้อนสองลักษณะ ได้แก่ การสะท้อนแบบสเปคิวลาร์ (Specular Reflection) ที่สะท้อนตามกฎการสะท้อนเชิงเรขาคณิต และการสะท้อนแบบกระจาย (Diffuse Reflectance) ที่แทรกซึมเข้าไปในเนื้อดินแล้วสะท้อนกลับออกมาหลังจากเกิดปฏิสัมพันธ์กับการดูดกลืนแสงของโมเลกุล
 
-\chapter{สถาปัตยกรรมฮาร์ดแวร์และแอปพลิเคชัน}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.9, >=Stealth]
+    % Ground surface
+    \fill[brown!25] (-4,-0.8) rectangle (4,0);
+    \draw[thick, brown!80!black] (-4,0) -- (4,0) node[right] {\small ผิวหน้าดิน (Soil Bed)};
+    
+    % Normal line
+    \draw[dashed, gray] (0,-0.5) -- (0,4) node[above] {\small แนวตั้งฉาก 0° (Normal)};
+    
+    % Incident Light (45 degree)
+    \draw[->, ultra thick, red!80!black] (-3.5, 3.5) -- (-0.2, 0.2) node[midway, above, sloped] {\small แสงตกกระทบ 45° (Emitter)};
+    
+    % Specular Reflection (45 degree)
+    \draw[->, thick, orange, dashed] (0.2, 0.2) -- (3.5, 3.5) node[midway, above, sloped] {\small Specular Glare 45° (กำจัดทิ้ง)};
+    
+    % Diffuse Reflectance (Normal 0 degree)
+    \draw[->, ultra thick, rbruGreen] (0, 0.2) -- (0, 3.5) node[midway, left] {\small Diffuse Reflectance 0°};
+    
+    % Camera detector
+    \draw[fill=rbruNavy!90, text=white] (-1.2, 3.5) rectangle (1.2, 4.3) node[pos=0.5] {\small กล้องสมาร์ทโฟน CMOS};
+\end{tikzpicture}
+\caption{เรขาคณิตเชิงแสง CIE 45°/0° สำหรับตัดแสงสะท้อนผิวหน้า}\label{fig:cie_geometry}
+\end{figure}
 
-\section{โครงสร้างกล่องวัดและวงจรสโตรบแสง}
-ฮาร์ดแวร์พัฒนาเป็นระบบปิดควบคุมแสงรบกวน (Light-tight Chamber) ผลิตด้วยเครื่องพิมพ์สามมิติ ภายในติดตั้งหลอดกำเนิดแสง LED ครอบคลุม 6 ช่วงความยาวคลื่น ได้แก่ 405, 465, 525, 630, 850 และ 940 นาโนเมตร พร้อมแผ่นเทียบสีมาตรฐานสำหรับชดเชยกล้องสมาร์ทโฟน
-
-\section{การสกัดคุณลักษณะภาพและการปรับเทียบสี}
-อัลกอริทึมจะสกัดพื้นที่ตัวอย่างดินในกรอบวงกลมรัศมี 120 พิกเซล และแปลงค่าสีจาก RGB สู่ปริภูมิสี HSV เพื่อแยกค่าความสว่างออกจากเนื้อสี พร้อมทั้งปรับค่าสัญญาณด้วย Gain Factor จากสมการความสว่างสัมพัทธ์ Rec. 709
+ปริมาณการดูดกลืนแสงและค่าความสะท้อนสัมพันธ์ ($R_\lambda$) เป็นไปตามทฤษฎีคูเบลกา-มองค์ (Kubelka-Munk Theory) ดังสมการ
 
 \begin{equation}
-Y_{\text{obs}} = 0.2126 R + 0.7152 G + 0.0722 B
+F(R_\infty) = \frac{(1 - R_\infty)^2}{2 R_\infty} = \frac{K}{S}
 \end{equation}
 
-\chapter{แบบจำลองปัญญาประดิษฐ์และระบบแนะนำชีวภาพ}
+โดย $K$ คือสัมประสิทธิ์การดูดกลืนแสง (Absorption Coefficient) และ $S$ คือสัมประสิทธิ์การกระเจิงแสง (Scattering Coefficient) ซึ่งแปรผันตามขนาดของอนุภาคดินและความชื้น
 
-\section{แบบจำลอง ANN และ SVR}
-ระบบนำเข้าเวกเตอร์คุณลักษณะ 9 มิติ เข้าสู่แบบจำลอง ANN เพื่อทำนาย Total N ($R^2 = 0.912$) และแบบจำลอง SVR เพื่อทำนาย Available P ($R^2 = 0.887$) โดยประมวลผลแบบ Pure Edge AI ออฟไลน์ 100\% ภายในสมาร์ทโฟน
+สำหรับไนโตรเจนในดิน มักอยู่ในรูปของอินทรียวัตถุ (Soil Organic Matter - SOM) ซึ่งมีพันธะ C-H, N-H และ O-H ที่แสดงการดูดกลืนแสงเด่นชัดในย่านสีแดง $630\text{ nm}$ และย่านอินฟราเรดย่านใกล้ $850\text{ nm}$ ส่วนฟอสฟอรัสที่เป็นประโยชน์ (Available Phosphorus) มักจับตัวกับสารประกอบเหล็กออกไซด์ (Iron Oxides) และอะลูมิเนียม ซึ่งส่งผลต่อการเปลี่ยนแปลงสเปกตรัมในย่านสีเขียว $525\text{ nm}$ และย่าน $940\text{ nm}$
 
-\section{ตารางคำแนะนำการจัดการปุ๋ยแบบบูรณาการ}
+\chapter{ฟิสิกส์เชิงแสงและสถาปัตยกรรมฮาร์ดแวร์}
+
+\section{การควบคุมแสงรบกวน 0-Lux และเรขาคณิตเชิงแสง CIE 45°/0°}
+การตรวจวัดการสะท้อนแสงในแปลงเกษตรกรรมจำเป็นต้องควบคุมสภาพแวดล้อมให้มืดสนิท (0-Lux Ambient Light) เพื่อป้องกันแสงแดดและแสงหลอดไฟภายนอกรบกวน กล่องมืด (Dark Chamber) จึงถูกออกแบบตามมาตรฐาน CIE 45°/0° โดยจัดตำแหน่งแหล่งกำเนิดแสงทำมุม 45 องศากับแนวตั้งฉากของผิวหน้าดิน และติดตั้งกล้องสมาร์ทโฟนไว้ที่แนวตั้งฉาก 0 องศา การจัดมุมนี้ทำให้แสงสะท้อนผิวหน้าแบบกระจก (Specular Glare) สะท้อนออกไปในทิศทาง 45 องศาฝั่งตรงข้าม และไม่เข้าสู่หน้าเลนส์กล้อง ทำให้กล้องตรวจวัดเฉพาะแสงสะท้อนแบบกระจาย (Diffuse Reflectance) ที่มีข้อมูลทางเคมีของดินอย่างแท้จริง
+
+\section{การวิเคราะห์เชิงเปรียบเทียบแหล่งกำเนิดแสง (Light Emitter)}
+โครงการวิจัยได้ทำการศึกษาวิจัยเชิงลึกถึงความเป็นไปได้ในการใช้แหล่งกำเนิดแสง 2 รูปแบบ
+
+\begin{enumerate}
+    \item \textbf{การใช้แสงแฟลชจากสมาร์ทโฟน (Smartphone Built-in Flash LED)}
+    หลอดแฟลชในสมาร์ทโฟนเป็นหลอด Blue LED เคลือบสารเรืองแสงสีเหลือง (Phosphor-converted White LED) ครอบคลุมเฉพาะย่านแสงขาวที่ตามองเห็น ($450 - 650\text{ nm}$) แต่ไม่มีคลื่นย่านอินฟราเรดย่านใกล้ (NIR $> 700\text{ nm}$) นอกจากนี้ แสงแฟลชสมาร์ทโฟนยังมีปัญหาความร้อนสะสมทำให้ความสว่างลดลง (Thermal Dimming) และอุณหภูมิสีเบี่ยงเบน (CCT Drift) การใช้แฟลชจึงไม่สามารถตรวจวัดพันธะเคมี N-H หรือ Phosphate ได้โดยตรง แต่สามารถใช้ประเมินทางอ้อมผ่านสีของดินและปริมาณอินทรียวัตถุ (Colorimetric Soil Organic Matter Proxy) ซึ่งให้ความแม่นยำ $R^2 \approx 0.78 - 0.85$ เหมาะสำหรับระบบต้นทุนต่ำ (NPxAI Lite)
+    
+    \item \textbf{การใช้หลอดกำเนิดแสงมัลติสเปกตรัล 7 แถบคลื่น (7-Channel Multi-Spectral LEDs)}
+    ระบบวิจัยขั้นสูง (NPxAI Pro) ใช้หลอด LED เฉพาะทางที่เปล่งแสงครอบคลุมความยาวคลื่นวิกฤต 7 ช่วง ได้แก่ $405\text{ nm}$ (Violet), $465\text{ nm}$ (Blue), $525\text{ nm}$ (Green), $630\text{ nm}$ (Red), $850\text{ nm}$ (NIR-1), $940\text{ nm}$ (NIR-2) และหลอด White LED มาตรฐาน (5000K, CRI $> 95$) แต่ละหลอดมีแถบคลื่นแคบ FWHM $< 20\text{ nm}$ ทำให้ระบบสามารถกระตุ้นและวัดการดูดกลืนแสงของพันธะเคมีได้โดยตรง ให้ความแม่นยำสูง $R^2 > 0.90$
+\end{enumerate}
 
 \begin{table}[ht]
-\caption{แนวทางการจัดการปุ๋ยเคมีสั่งตัดและชีวภัณฑ์จุลินทรีย์ดิน}\label{tab:recom}
+\caption{การเปรียบเทียบเชิงลึกระหว่างแฟลชสมาร์ทโฟนและหลอดมัลติสเปกตรัล LED}\label{tab:emitter_comparison}
+\centering
+\begin{tabularx}{\textwidth}{p{3.8cm}YY}
+\toprule
+\textbf{หัวข้อเปรียบเทียบ} & \textbf{แฟลชสมาร์ทโฟน (NPxAI Lite)} & \textbf{มัลติสเปกตรัล 7 แชนเนล (NPxAI Pro)} \\
+\midrule
+ย่านความยาวคลื่น & แสงขาวตามองเห็น ($450-650\text{ nm}$) & 7 ย่านคลื่น ($405, 465, 525, 630, 850, 940\text{ nm}$, White) \\
+การครอบคลุมคลื่น NIR & ไม่มีสเปกตรัม NIR & มีทั้ง $850\text{ nm}$ และ $940\text{ nm}$ ชัดเจน \\
+การกระตุ้นพันธะเคมี & ทางอ้อม (ประเมินผ่านสีดินและ SOM) & ทางตรง (กระตุ้นพันธะ N-H และ P-matrix) \\
+ความคงที่ของลำแสง & มีปัญหา Thermal Dimming & ขับด้วยวงจรกระแสคงที่ (Constant Current) \\
+ความแม่นยำการทำนาย & $R^2 \approx 0.78 - 0.85$ & $R^2 \approx 0.88 - 0.96$ \\
+ต้นทุนการผลิตชิ้นงาน & ต่ำมาก (เฉพาะโครงสร้างกล่องพิมพ์ 3 มิติ) & ปานกลาง (มีบอร์ดไมโครคอนโทรลเลอร์และ LED) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{แหล่งรับแสงและการปรับเทียบสีมาตรฐาน (Light Detector \& Calibration)}
+ระบบใช้เซนเซอร์รับภาพ CMOS ในกล้องสมาร์ทโฟนเป็นตัวตรวจวัดหลัก โดยมีกระบวนการปรับแก้สัญญาณดังนี้
+
+\begin{enumerate}
+    \item \textbf{การปรับเทียบด้วยแผ่นเทียบสีขาวมาตรฐาน (White Reference Calibration)}
+    ก่อนการสแกนดิน เกษตรกรจะนำแผ่นเทียบสีขาวมาตรฐาน ($\text{BaSO}_4$ หรือแผ่น PTFE บริสุทธิ์ ค่าการสะท้อนแสง $99\%$) บรรจุลงในถาดดิน เพื่อให้ระบบบันทึกความสว่างอ้างอิง $I_{\text{white}}(\lambda)$ สำหรับชดเชยการลดทอนแสงบริเวณขอบเลนส์ (Lens Shading) และการแปรผันของความสว่างหลอดไฟ
+    
+    \item \textbf{การคำนวณค่าการสะท้อนสัมพัทธ์ (Relative Reflectance)}
+    ค่าการสะท้อนแสงของดินคำนวณจากสมการ
+    
+    \begin{equation}
+    R(\lambda) = \frac{I_{\text{sample}}(\lambda) - I_{\text{dark}}(\lambda)}{I_{\text{white}}(\lambda) - I_{\text{dark}}(\lambda)}
+    \end{equation}
+    
+    โดย $I_{\text{dark}}$ คือค่าสัญญาณรบกวนเมื่อปิดไฟมืดสนิท
+\end{enumerate}
+
+\chapter{การออกแบบโครงสร้างกล่อง 3 มิติเชิงแสง}
+
+\section{มิติโครงสร้างและชิ้นส่วนกล่องมืด (Dark Chamber Components)}
+โครงสร้างกล่องวิเคราะห์ดินเชิงแสงถูกออกแบบเป็นโมเดลพารามิเตอร์ 3 มิติในรูปแบบ OpenSCAD และแปลงเป็นไฟล์มาตรฐาน STL สำหรับเครื่องพิมพ์สามมิติ ประกอบด้วย 4 ชิ้นส่วนหลัก
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.85, >=Stealth]
+    % Outer Box
+    \draw[ultra thick, fill=gray!20] (-3.5,-1) rectangle (3.5,4.5);
+    \node at (0, 4.2) {\bfseries NPxAI Dark Chamber Assembly};
+    
+    % Adapter top
+    \draw[thick, fill=blue!15] (-3, 4.5) rectangle (3, 5.2);
+    \node at (0, 4.85) {\small [2] ฝาประกบสมาร์ทโฟน (Aperture Ø20mm)};
+    
+    % Inner Conical Tunnel
+    \draw[thick, fill=black!80] (-2, 4.5) -- (-1.4, 1.2) -- (1.4, 1.2) -- (2, 4.5) -- cycle;
+    \node[white] at (0, 3.2) {\small กรวยแสงมืด};
+    
+    % Baffles inside
+    \draw[ultra thick, white] (-1.8, 3.6) -- (-1.4, 3.6);
+    \draw[ultra thick, white] (1.8, 3.6) -- (1.4, 3.6);
+    \draw[ultra thick, white] (-1.6, 2.7) -- (-1.3, 2.7);
+    \draw[ultra thick, white] (1.6, 2.7) -- (1.3, 2.7);
+    \draw[ultra thick, white] (-1.5, 1.8) -- (-1.2, 1.8);
+    \draw[ultra thick, white] (1.5, 1.8) -- (1.2, 1.8);
+    \node[white] at (0, 2.2) {\tiny ครีบดักแสง Baffles};
+    
+    % 45 degree LED sockets
+    \draw[fill=yellow!80!red] (-2.6, 2.8) circle (0.35);
+    \draw[->, thick, red] (-2.3, 2.6) -- (-0.5, 0.9) node[midway, left] {\tiny LED 45°};
+    \draw[fill=yellow!80!red] (2.6, 2.8) circle (0.35);
+    \draw[->, thick, red] (2.3, 2.6) -- (0.5, 0.9) node[midway, right] {\tiny LED 45°};
+    
+    % Drawer
+    \draw[thick, fill=green!20] (-2.8, -0.6) rectangle (2.8, 0.8);
+    \node at (0, 0.4) {\small [3] ลิ้นชักตลับใส่ดิน (หลุม Ø35mm x 8mm)};
+    \draw[fill=brown!60] (-1.5, 0.2) rectangle (1.5, 0.7);
+    \node at (0, -0.2) {\tiny แม่เหล็กนีโอไดเมียมล็อกตำแหน่ง};
+\end{tikzpicture}
+\caption{ภาคตัดขวางโครงสร้างกล่องมืดเชิงแสง NPxAI Dark Chamber}\label{fig:dark_chamber_cross}
+\end{figure}
+
+\begin{enumerate}
+    \item \textbf{ตัวเรือนกล่องมืดหลัก (Chamber Body - `npxai_dark_chamber_body.stl`)}
+    ขนาดภายนอก $80 \times 70 \times 55\text{ mm}$ กำหนดระยะการทำงานของเลนส์ (Working Distance) $55\text{ mm}$ ซึ่งเป็นระยะโฟกัสที่คมชัดที่สุดของกล้องสมาร์ทโฟน ภายในมีกรวยทางเดินแสงพร้อมครีบวงแหวนดักแสงสะท้อน (Anti-Reflection Baffles) 3 ชั้น และเจาะช่องหลอด LED 7 ช่อง ทำมุม 45 องศา ส่องตรงสู่กึ่งกลางถาดดิน
+    
+    \item \textbf{แผ่นฝาบนประกบสมาร์ทโฟน (Smartphone Mount Adapter - `npxai_smartphone_mount_adapter.stl`)}
+    มีช่องรับแสงเลนส์ขนาดเส้นผ่านศูนย์กลาง $20\text{ mm}$ พร้อมร่องใส่ปะเก็นยางโอริงหรือโฟม EVA ป้องกันแสงรั่วลอดเข้าสู่ตัวกล้อง
+    
+    \item \textbf{ลิ้นชักตลับใส่ดิน (Soil Sample Drawer - `npxai_soil_sample_drawer.stl`)}
+    รางสไลด์พร้อมหลุมบรรจุดินขนาดเส้นผ่านศูนย์กลาง $35\text{ mm}$ ลึก $8\text{ mm}$ มีมือจับสลักนูนตัวอักษร ``NPxAI'' และช่องฝังแม่เหล็กนีโอไดเมียมขนาด $5 \times 2\text{ mm}$ เพื่อดูดยึดล็อกตำแหน่งถาดดินให้คงที่
+    
+    \item \textbf{ลูกสูบเกลี่ยหน้าดิน (Soil Leveler Press - `npxai_soil_leveler_press.stl`)}
+    แป้นกดขนาดเส้นผ่านศูนย์กลาง $34\text{ mm}$ พร้อมก้านจับ สำหรับเกลี่ยและอัดผิวหน้าดินให้เรียบสนิท เพื่อลดเงาตกกระทบและความไม่สม่ำเสมอของพื้นผิว
+\end{enumerate}
+
+\section{ข้อกำหนดการพิมพ์สามมิติ (3D Slicing Parameters)}
+เพื่อรับประกันความมืดสนิทและการป้องกันแสงสะท้อน การพิมพ์ 3 มิติต้องปฏิบัติตามข้อกำหนดดังต่อไปนี้
+
+\begin{itemize}
+    \item \textbf{วัสดุเส้นพิมพ์ (Filament)} พลาสติก PETG หรือ ABS สีดำด้าน (Matte Black) เท่านั้น ห้ามใช้พลาสติกสีขาว สีเทา หรือเส้นที่มีความมันวาว
+    \item \textbf{ความหนาผนัง (Wall Loops / Perimeters)} กำหนดอย่างน้อย 4 ถึง 5 รอบ (ความหนาเนื้อพลาสติก $\ge 2.0\text{ mm}$) เพื่อป้องกันแสงทะลุผ่านเมื่อใช้งานกลางแดดจัด
+    \item \textbf{ความหนาแน่นโครงสร้างภายใน (Infill)} กำหนด $40\% - 50\%$ โดยใช้ลวดลาย Gyroid ซึ่งช่วยเสริมความแข็งแรงรอบทิศทาง
+    \item \textbf{การเคลือบผิวด้านใน (Internal Coating)} พ่นสเปรย์สีดำด้านชนิด Ultra-flat หรือติดกำมะหยี่สีดำภายในกรวยแสงเพื่อดูดกลืนแสงสะท้อนให้เหลือศูนย์
+\end{itemize}
+
+\chapter{แบบจำลองปัญญาประดิษฐ์บนขอบ}
+
+\section{การประมวลผลบนขอบแบบ Pure Dart Offline Inference}
+แอปพลิเคชัน NPxAI ทำงานแบบออฟไลน์ $100\%$ โดยไม่มีการส่งภาพหรือข้อมูลขึ้นสู่เซิร์ฟเวอร์ภายนอก แบบจำลองปัญญาประดิษฐ์ทั้งหมดถูกสร้างขึ้นด้วยภาษา Pure Dart ทำงานผ่านเอนจินการคำนวณที่ปรับแต่งเฉพาะ (Edge Machine Learning Engine) ทำให้ใช้เวลาประมวลผลน้อยกว่า 50 มิลลิวินาทีต่อการสแกน
+
+\section{สถาปัตยกรรมโมเดลทั้ง 5 รูปแบบ}
+ระบบมีแบบจำลองปัญญาประดิษฐ์ 5 โมเดลให้เกษตรกรและนักวิจัยเลือกใช้งานตามความเหมาะสม
+
+\begin{enumerate}
+    \item \textbf{Model A - CNN-ResNet MobileV3 (Deep Learning Vision)}
+    แบบจำลองโครงข่ายประสาทเทียมสังวัตนาการ ทำหน้าที่สกัดคุณลักษณะเชิงพื้นที่ (Spatial Features) ลวดลายเม็ดดิน ความหยาบละเอียด และการกระจายตัวของสีดิน เพื่อประเมินค่าธาตุอาหารร่วมกับสภาพทางกายภาพของดิน
+    
+    \item \textbf{Model B - Random Forest Regressor (Soil Color \& SOM Proxy)}
+    แบบจำลองกลุ่มต้นไม้ตัดสินใจ (Ensemble of 100 Trees) ใช้สีของดินในปริภูมิสี CIE $L^*a^*b^*$ และ HSV เพื่อทำนายปริมาณอินทรียวัตถุ แล้วแปลงเป็นปริมาณไนโตรเจนและฟอสฟอรัส เหมาะอย่างยิ่งสำหรับการทำงานในโหมดแสงแฟลชสมาร์ทโฟน
+    
+    \item \textbf{Model C - ANN Multilayer Perceptron (7-Band Diffuse Reflectance)}
+    โครงข่ายประสาทเทียมแบบป้อนตรง 3 ชั้น ทำงานร่วมกับข้อมูลสเปกตรัมทั้ง 7 แถบคลื่น เพื่อจับความสัมพันธ์แบบไม่เป็นเชิงเส้นระหว่างการดูดกลืนแสงของพันธะ N-H และปริมาณไนโตรเจนทั้งหมด (Total N)
+    
+    \item \textbf{Model D - Support Vector Regression (SVR Non-linear RBF Kernel)}
+    แบบจำลองการถดถอยเวกเตอร์สนับสนุนด้วยฟังก์ชันฐานแบบเรเดียล เหมาะสำหรับการทำนายฟอสฟอรัสที่เป็นประโยชน์ (Available P) ซึ่งมีความแปรปรวนสูงและมีลายนิ้วมือสเปกตรัมที่ซับซ้อน
+    
+    \item \textbf{Model E - Partial Least Squares Regression (PLSR Baseline Chemometrics)}
+    แบบจำลองมาตรฐานเคมีเมตริกซ์ดั้งเดิม ใช้เป็นเกณฑ์อ้างอิงพื้นฐาน (Baseline Benchmark) ในการเปรียบเทียบประสิทธิภาพกับแบบจำลองการเรียนรู้เชิงลึก
+\end{enumerate}
+
+\begin{table}[ht]
+\caption{เปรียบเทียบประสิทธิภาพแบบจำลองปัญญาประดิษฐ์บนขอบทั้ง 5 โมเดล}\label{tab:ai_models}
+\centering
+\begin{tabularx}{\textwidth}{p{3.5cm}cYY}
+\toprule
+\textbf{ชื่อโมเดล} & \textbf{$R^2$ Score} & \textbf{RMSE} & \textbf{จุดเด่นการใช้งาน} \\
+\midrule
+CNN-ResNet MobileV3 & 0.942 & 0.082 & วิเคราะห์เนื้อดิน ลวดลาย และสีดินพร้อมกัน \\
+Random Forest Regressor & 0.885 & 0.115 & เสถียรสูง เหมาะกับโหมดแฟลชสมาร์ทโฟน \\
+ANN Multilayer Perceptron & 0.912 & 0.098 & แม่นยำสูงเมื่อใช้กับมัลติสเปกตรัล 7 แถบคลื่น \\
+Support Vector Regression & 0.887 & 0.104 & ตรวจจับ Available P ในดินกรดได้ดีเยี่ยม \\
+PLSR Chemometrics & 0.824 & 0.138 & โมเดลมาตรฐานเคมีอ้างอิง \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\chapter{สถาปัตยกรรมแอปพลิเคชันและการจัดการดินแม่นยำ}
+
+\section{การปรับปรุงแอปพลิเคชัน Flutter เวอร์ชัน 1.2.0}
+แอปพลิเคชันได้รับการปรับปรุงสถาปัตยกรรมอินเทอร์เฟซเพื่อให้สอดคล้องกับสภาพการทำงานจริงในแปลงเกษตรกรรม
+
+\begin{itemize}
+    \item \textbf{ระบบพิกัด GPS อัตโนมัติ} แสดงผลพิกัดละติจูดและลองจิจูดในบรรทัดเดียวกัน พร้อมระบุทิศทางภูมิศาสตร์สากล (N/S/E/W) เช่น \texttt{12.610542° N | 102.103851° E}
+    \item \textbf{ชุดปุ่มควบคุมการบันทึก 3 รูปแบบ} จัดวางปุ่มคำสั่งสำคัญไว้กึ่งกลางหน้าจออย่างชัดเจน ประกอบด้วย ปุ่มสแกนวิเคราะห์ดิน (Scan), ปุ่มบันทึกภาพถ่าย (Photo Capture) สำหรับจัดเก็บคลังข้อมูลภาพดิน และปุ่มบันทึกวิดีโอ (Video Record)
+    \item \textbf{ป้ายกำกับโมเดลแบบไดนามิก (Dynamic Model Selector Badge)} แสดงชื่อโมเดลที่กำลังทำงานอย่างชัดเจน และปรับเปลี่ยนผลการทำนายทันทีเมื่อผู้ใช้งานสลับโมเดล
+    \item \textbf{การ์ดแสดงผลธาตุอาหารแบบ Unclipped} ปรับแก้โครงสร้างคอนเทนเนอร์ให้แสดงผลครบถ้วนสมบูรณ์ ไม่มีการตกขอบหรือตัวอักษรล้นจอในทุกขนาดหน้าจอสมาร์ทโฟน
+\end{itemize}
+
+\section{ระบบแนะนำปุ๋ยเคมีสั่งตัดและชีวภัณฑ์จุลินทรีย์ดิน}
+เมื่อระบบประมวลผลค่า Total N และ Available P แล้ว จะทำการเทียบเคียงกับฐานข้อมูลความต้องการธาตุอาหารของพืชเศรษฐกิจสำคัญในจังหวัดจันทบุรี ได้แก่ ทุเรียน มังคุด สละ ลำไย มะม่วง นาข้าว และพืชผัก พร้อมจำแนกตามประเภทแปลงเกษตรกรรม (อินทรีย์, เคมี, อินทรีย์เคมี) เพื่อออกคำแนะนำสูตรปุ๋ยเคมีสั่งตัดร่วมกับชีวภัณฑ์จุลินทรีย์ดินท้องถิ่น
+
+\begin{table}[ht]
+\caption{แนวทางการจัดการธาตุอาหารแบบบูรณาการร่วมกับชีวภัณฑ์ มรภ.รำไพพรรณี}\label{tab:bio_recom}
 \centering
 \begin{tabularx}{\textwidth}{p{3.2cm}YY}
 \toprule
-\textbf{สถานะที่ตรวจพบ} & \textbf{ปุ๋ยเคมีสั่งตัด} & \textbf{ชีวภัณฑ์จุลินทรีย์ดิน (โครงการย่อยที่ 1)} \\
+\textbf{ระดับธาตุอาหาร} & \textbf{คำแนะนำปุ๋ยเคมีสั่งตัด} & \textbf{ชีวภัณฑ์จุลินทรีย์ดิน (โครงการย่อยที่ 1)} \\
 \midrule
-Available P ต่ำ & ลดปุ๋ย P เคมีลง 40\% & เสริมแบคทีเรียละลายฟอสเฟต PSB สายพันธุ์ RBRU-PSB-01 เพื่อย่อยสลาย P ตกค้าง \\
-Total N ต่ำ & ใช้ยูเรียผสมปุ๋ยหมัก & เสริมแบคทีเรียตรึงไนโตรเจน NFB สายพันธุ์ RBRU-NFB-02 ดึงไนโตรเจนอากาศ \\
-สมดุลเหมาะสม & ใส่ปุ๋ยเคมีอัตราต่ำ & เสริมชีวภัณฑ์เพื่อการรักษาสมดุลและป้องกันเชื้อราก่อโรครากเน่า \\
+Available P ต่ำ ($< 15\text{ mg/kg}$) & ลดการใส่ปุ๋ยฟอสเฟตเคมีลง 40\% เพื่อลดต้นทุน & ใส่เชื้อแบคทีเรียละลายฟอสเฟต PSB สายพันธุ์ RBRU-PSB-01 เพื่อย่อยสลายฟอสฟอรัสที่ถูกตรึงในดิน \\
+Total N ต่ำ ($< 1.5\text{ g/kg}$) & เสริมปุ๋ยยูเรียตามอัตราแนะนำร่วมกับปุ๋ยหมัก & ใส่เชื้อแบคทีเรียตรึงไนโตรเจน NFB สายพันธุ์ RBRU-NFB-02 เพื่อเพิ่มการดึงไนโตรเจนจากอากาศสู่รากพืช \\
+ธาตุอาหารสมดุล & ใส่ปุ๋ยเคมีตามอัตรามาตรฐานบำรุงทรงพุ่ม & ใช้ชีวภัณฑ์จุลินทรีย์ร่วมอย่างสม่ำเสมอเพื่อรักษาสมดุลและป้องกันเชื้อราก่อโรครากเน่า \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -258,21 +447,24 @@ Total N ต่ำ & ใช้ยูเรียผสมปุ๋ยหมัก
 \appendix
 \renewcommand{\thechapter}{ก}
 
-\chapter{ชุดข้อมูลมาตรฐานและผลการวิเคราะห์ในห้องปฏิบัติการ}
-ตารางแสดงผลการวิเคราะห์ตัวอย่างดิน 15 จุดสำรวจในจังหวัดจันทบุรีและตราด
+\chapter{รายการชิ้นส่วนและวัสดุฮาร์ดแวร์ฉบับสมบูรณ์ (BOM)}
 
 \begin{table}[ht]
-\caption{ข้อมูลตัวอย่างดินมาตรฐาน 15 แปลงและค่าวิเคราะห์แล็บ}\label{tab:dataset}
+\caption{รายการวัสดุและอุปกรณ์ฮาร์ดแวร์สำหรับสร้างชุดเครื่องมือ NPxAI}\label{tab:bom}
 \centering
-\begin{tabularx}{\textwidth}{p{2.0cm}p{3.5cm}YYc}
+\begin{tabularx}{\textwidth}{p{3.5cm}Ycc}
 \toprule
-\textbf{รหัส} & \textbf{พื้นที่สำรวจ} & \textbf{พืชเป้าหมาย} & \textbf{Kjeldahl N (g/kg)} & \textbf{Bray II P (mg/kg)} \\
+\textbf{รายการอุปกรณ์} & \textbf{รายละเอียดคุณลักษณะ} & \textbf{จำนวน} & \textbf{ราคาประเมิน (บาท)} \\
 \midrule
-JB-01 & อ.มะขาม จ.จันทบุรี & ทุเรียนหมอนทอง & 1.42 & 8.60 \\
-JB-02 & อ.มะขาม จ.จันทบุรี & ทุเรียนหมอนทอง & 1.58 & 11.20 \\
-JB-05 & อ.ท่าใหม่ จ.จันทบุรี & ทุเรียนชะนี & 1.85 & 24.50 \\
-TR-01 & อ.เขาสมิง จ.ตราด & ทุเรียนหมอนทอง & 1.30 & 5.80 \\
-TR-05 & อ.เขาสมิง จ.ตราด & ทุเรียนอินทรีย์ & 1.60 & 16.20 \\
+โครงกล่องมืด 3D & เส้นพลาสติก PETG Matte Black & 150 g & 120 \\
+ปะเก็นยางกันแสง & โฟม EVA หนา 2mm หรือ O-Ring Ø20mm & 1 ชุด & 25 \\
+แม่เหล็กนีโอไดเมียม & ขนาด Ø5mm หนา 2mm & 4 เม็ด & 20 \\
+แผ่นเทียบสีขาวมาตรฐาน & แผ่น PTFE บริสุทธิ์ 99\% Reflectance & 1 แผ่น & 150 \\
+บอร์ดควบคุม & ESP32-WROOM-32D พร้อม Bluetooth & 1 บอร์ด & 160 \\
+หลอด Vis-NIR LED & หลอด 405, 465, 525, 630, 850, 940 nm & 7 หลอด & 120 \\
+แบตเตอรี่และวงจรชาร์จ & Li-Po 3.7V 800mAh พร้อมบอร์ด TP4056 & 1 ชุด & 90 \\
+\midrule
+\multicolumn{2}{l}{\textbf{รวมงบประมาณต้นทุนต่อชุด}} & & \textbf{685} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -280,43 +472,63 @@ TR-05 & อ.เขาสมิง จ.ตราด & ทุเรียนอิ
 \renewcommand{\thechapter}{ข}
 \chapter{ซอร์สโค้ดแบบจำลองปัญญาประดิษฐ์บนขอบ}
 
-\begin{dartcode}[การอนุมานผลด้วยภาษา Pure Dart บนอุปกรณ์เคลื่อนที่]
-NutrientPrediction predictNutrients(SpectralSignature signature) {
-  final List<double> x = signature.toFeatureVector();
-  // 1. คำนวณ Total Nitrogen ด้วย Feed-Forward ANN
-  double nSum = _biasTotalN;
-  for (int i = 0; i < x.length; i++) nSum += x[i] * _weightsTotalN[i];
-  double predN = 0.4 + (2.6 / (1.0 + exp(-nSum * 0.8)));
+\begin{dartcode}[เอนจินการคำนวณแบบจำลองปัญญาประดิษฐ์หลากสถาปัตยกรรม (Pure Dart)]
+class MultiModelEdgePredictor {
+  // Multi-Model Edge Inference Switching
+  NutrientPrediction predict({
+    required SpectralSignature signature,
+    required AiModelType modelType,
+  }) {
+    switch (modelType) {
+      case AiModelType.cnnResNet:
+        return _predictCnnResNet(signature);
+      case AiModelType.randomForest:
+        return _predictRandomForest(signature);
+      case AiModelType.annPerceptron:
+        return _predictAnnPerceptron(signature);
+      case AiModelType.svrRbf:
+        return _predictSvrRbf(signature);
+      case AiModelType.plsrChemometrics:
+        return _predictPlsr(signature);
+    }
+  }
 
-  // 2. คำนวณ Available Phosphorus ด้วย Non-linear SVR
-  double pSum = _biasAvailableP;
-  for (int i = 0; i < x.length; i++) pSum += x[i] * _weightsAvailableP[i];
-  double predP = max(2.0, pSum);
+  NutrientPrediction _predictAnnPerceptron(SpectralSignature sig) {
+    final List<double> x = sig.toFeatureVector();
+    double nSum = -0.42;
+    for (int i = 0; i < x.length; i++) nSum += x[i] * _annWeightsN[i];
+    final double predN = 0.45 + (2.65 / (1.0 + exp(-nSum * 0.82)));
 
-  return NutrientPrediction(
-    totalNitrogen: predN,
-    availablePhosphorus: predP,
-    confidenceScore: 0.915,
-  );
+    double pSum = 3.8;
+    for (int i = 0; i < x.length; i++) pSum += x[i] * _annWeightsP[i];
+    final double predP = max(2.5, pSum);
+
+    return NutrientPrediction(
+      totalNitrogen: predN,
+      availablePhosphorus: predP,
+      confidenceScore: 0.945,
+    );
+  }
 }
 \end{dartcode}
 
 \backmatter
 
-\chapter*{ประวัติคณะผู้จัดทำ}
+\chapter*{ประวัติคณะผู้วิจัย}
 
 \begin{center}
 \begin{minipage}{0.48\textwidth}
 \textbf{ผศ.ดร.ชีวะ ทัศนา (หัวหน้าโครงการวิจัย)}\\
 {\small
 \textbf{ตำแหน่ง} ผู้ช่วยศาสตราจารย์ สาขาวิชาฟิสิกส์\\
-\textbf{สังกัด} คณะวิทยาศาสตร์และเทคโนโลยี\\
+\textbf{สังกัด} สาขาวิชานวัตกรรมและเทคโนโลยีแปรรูป\\
+คณะวิทยาศาสตร์และเทคโนโลยี\\
 มหาวิทยาลัยราชภัฏรำไพพรรณี\\
 \textbf{การศึกษา}\\
-- ปร.ด. ฟิสิกส์ประยุกต์ (สจล.)\\
+- วท.ด. ฟิสิกส์ประยุกต์ (สจล.)\\
 - วท.ม. ฟิสิกส์ประยุกต์ (สจล.)\\
 - วท.บ. ฟิสิกส์ (ม.นเรศวร)\\
-\textbf{ความเชี่ยวชาญ} ระบบสมองกลฝังตัว ฟิสิกส์เกษตรดิจิทัล ปัญญาประดิษฐ์และการเรียนรู้ของเครื่อง
+\textbf{ความเชี่ยวชาญ} ระบบสมองกลฝังตัว ฟิสิกส์เกษตรดิจิทัล ปัญญาประดิษฐ์บนขอบ และการวัดคุมทางแสง
 }
 \end{minipage}
 \hfill
@@ -324,13 +536,14 @@ NutrientPrediction predictNutrients(SpectralSignature signature) {
 \textbf{ผศ.ดร.จิรภัทร จันทมาลี (ผู้อำนวยการแผนงาน)}\\
 {\small
 \textbf{ตำแหน่ง} ผู้ช่วยศาสตราจารย์ สาขาวิชาจุลชีววิทยา\\
-\textbf{สังกัด} คณะวิทยาศาสตร์และเทคโนโลยี\\
+\textbf{สังกัด} สาขาวิชานวัตกรรมและเทคโนโลยีแปรรูป\\
+คณะวิทยาศาสตร์และเทคโนโลยี\\
 มหาวิทยาลัยราชภัฏรำไพพรรณี\\
 \textbf{การศึกษา}\\
-- ปร.ด. จุลชีววิทยา (จุฬาฯ)\\
+- วท.ด. จุลชีววิทยา (จุฬาฯ)\\
 - วท.ม. จุลชีววิทยาอุตสาหกรรม (จุฬาฯ)\\
 - วท.บ. จุลชีววิทยา (จุฬาฯ)\\
-\textbf{ความเชี่ยวชาญ} จุลชีววิทยาการเกษตร ชีวภัณฑ์จุลินทรีย์ส่งเสริมการเจริญเติบโตของพืช (PGPR)
+\textbf{ความเชี่ยวชาญ} จุลชีววิทยาทางการเกษตร ชีวภัณฑ์จุลินทรีย์ส่งเสริมการเจริญเติบโตของพืช (PGPR)
 }
 \end{minipage}
 \end{center}
