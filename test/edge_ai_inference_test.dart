@@ -85,5 +85,92 @@ void main() {
       expect(recommendation.estimatedCostReductionPercent, greaterThanOrEqualTo(10.0));
       expect(recommendation.chemicalFertilizerFormula.isNotEmpty, isTrue);
     });
+
+    test('4. Dual-Architecture - NPxAI Lite (Flash 45°) vs NPxAI Pro (Chamber 7-Band)', () {
+      const signature = SpectralSignature(
+        r405nm: 0.16,
+        r465nm: 0.24,
+        r525nm: 0.30,
+        r630nm: 0.40,
+        r850nm: 0.48,
+        r940nm: 0.52,
+        hueMean: 31.0,
+        saturationMean: 0.40,
+        valueMean: 0.36,
+        valueMedian: 0.35,
+        calibrationGainFactor: 1.0,
+      );
+
+      // Lite Mode
+      final litePred = aiUseCase.predictNutrients(signature, mode: NPxAIMode.liteFlash);
+      expect(litePred.hardwareMode, equals(NPxAIMode.liteFlash));
+      expect(litePred.confidenceScore, greaterThanOrEqualTo(0.85));
+      expect(litePred.confidenceScore, lessThanOrEqualTo(0.91));
+
+      // Pro Mode
+      final proPred = aiUseCase.predictNutrients(
+        signature,
+        mode: NPxAIMode.proChamber,
+        modelName: 'Soil-ViT',
+      );
+      expect(proPred.hardwareMode, equals(NPxAIMode.proChamber));
+      expect(proPred.confidenceScore, greaterThanOrEqualTo(0.93));
+    });
+
+    test('5. Available Potassium (K) - Prediction bounds and Classification', () {
+      const signature = SpectralSignature(
+        r405nm: 0.18,
+        r465nm: 0.25,
+        r525nm: 0.32,
+        r630nm: 0.42,
+        r850nm: 0.50,
+        r940nm: 0.55,
+        hueMean: 30.0,
+        saturationMean: 0.45,
+        valueMean: 0.35,
+        valueMedian: 0.34,
+        calibrationGainFactor: 1.0,
+      );
+
+      final pred = aiUseCase.predictNutrients(signature);
+      expect(pred.availablePotassium, greaterThanOrEqualTo(20.0));
+      expect(pred.availablePotassium, lessThanOrEqualTo(350.0));
+      expect(pred.potassiumLevel, isNotNull);
+
+      // Classify tests
+      expect(NutrientPrediction.classifyPotassium(30.0), equals(NutrientLevel.veryLow));
+      expect(NutrientPrediction.classifyPotassium(65.0), equals(NutrientLevel.low));
+      expect(NutrientPrediction.classifyPotassium(110.0), equals(NutrientLevel.moderate));
+      expect(NutrientPrediction.classifyPotassium(180.0), equals(NutrientLevel.high));
+      expect(NutrientPrediction.classifyPotassium(240.0), equals(NutrientLevel.veryHigh));
+    });
+
+    test('6. Integrated Advisor - Potassium (K) and KSB Strain Recommendation', () {
+      final lowKPrediction = NutrientPrediction(
+        totalNitrogen: 1.60,
+        nitrogenLevel: NutrientLevel.moderate,
+        availablePhosphorus: 25.0,
+        phosphorusLevel: NutrientLevel.moderate,
+        availablePotassium: 45.0, // Low K
+        potassiumLevel: NutrientLevel.low,
+        hardwareMode: NPxAIMode.proChamber,
+        confidenceScore: 0.96,
+        modelName: 'Soil-ViT',
+        predictedAt: DateTime.now(),
+      );
+
+      final recommendation = advisorUseCase.generateRecommendation(
+        prediction: lowKPrediction,
+        cropName: 'ทุเรียนหมอนทอง',
+        growthStage: 'ระยะขยายขนาดผล',
+      );
+
+      // เมื่อ K ต่ำ ต้องแนะนำสายพันธุ์ KSB (แบคทีเรียละลายโพแทสเซียม) และปุ๋ยโพแทสเซียม
+      final hasKsb = recommendation.recommendedStrains
+          .any((s) => s.functionalType == 'KSB');
+      expect(hasKsb, isTrue);
+      expect(recommendation.chemicalFertilizerFormula.contains('0-0-60') ||
+             recommendation.chemicalFertilizerFormula.contains('13-0-46'), isTrue);
+    });
   });
 }

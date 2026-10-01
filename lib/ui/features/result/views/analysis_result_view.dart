@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../domain/models/nutrient_prediction.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/nutrient_gauge_card.dart';
 import '../../../core/widgets/spectral_curve_canvas.dart';
@@ -211,6 +212,48 @@ class AnalysisResultView extends StatelessWidget {
                                   ],
                                 ),
                               ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: (prediction.hardwareMode == NPxAIMode.liteFlash
+                                          ? Colors.deepOrangeAccent
+                                          : AppTheme.accentLime)
+                                      .withValues(alpha: 0.18),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: (prediction.hardwareMode == NPxAIMode.liteFlash
+                                            ? Colors.deepOrangeAccent
+                                            : AppTheme.accentLime)
+                                        .withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      prediction.hardwareMode == NPxAIMode.liteFlash
+                                          ? Icons.flash_on_rounded
+                                          : Icons.biotech_rounded,
+                                      size: 13,
+                                      color: prediction.hardwareMode == NPxAIMode.liteFlash
+                                          ? Colors.deepOrangeAccent
+                                          : AppTheme.accentLime,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'โหมด: ${prediction.hardwareMode.shortLabelTh}',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: prediction.hardwareMode == NPxAIMode.liteFlash
+                                            ? Colors.deepOrangeAccent
+                                            : AppTheme.accentLime,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                           const Divider(color: AppTheme.borderDark, height: 18),
@@ -255,28 +298,46 @@ class AnalysisResultView extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
 
-                  // 2. การ์ดแสดงผล N และ P (Responsive Row/Column)
-                  screenWidth < 360
+                  // 2. การ์ดแสดงผล N, P และ K (Responsive Row/Column)
+                  screenWidth < 420
                       ? Column(
                           children: [
-                            NutrientGaugeCard(
-                              title: 'Total N',
-                              symbol: 'N',
-                              subtitle: 'ไนโตรเจนทั้งหมด (Kjeldahl)',
-                              value: prediction.totalNitrogen,
-                              unit: 'g/kg',
-                              level: prediction.nitrogenLevel,
-                              progress: prediction.totalNitrogen / 3.0,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: NutrientGaugeCard(
+                                    title: 'Total N',
+                                    symbol: 'N',
+                                    subtitle: 'ไนโตรเจนรวม (Kjeldahl)',
+                                    value: prediction.totalNitrogen,
+                                    unit: 'g/kg',
+                                    level: prediction.nitrogenLevel,
+                                    progress: prediction.totalNitrogen / 3.0,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: NutrientGaugeCard(
+                                    title: 'Available P',
+                                    symbol: 'P',
+                                    subtitle: 'ฟอสฟอรัส (Bray II)',
+                                    value: prediction.availablePhosphorus,
+                                    unit: 'mg/kg',
+                                    level: prediction.phosphorusLevel,
+                                    progress: prediction.availablePhosphorus / 60.0,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             NutrientGaugeCard(
-                              title: 'Available P',
-                              symbol: 'P',
-                              subtitle: 'ฟอสฟอรัสที่เป็นประโยชน์ (Bray II)',
-                              value: prediction.availablePhosphorus,
+                              title: 'Available K',
+                              symbol: 'K',
+                              subtitle: 'โพแทสเซียมที่แลกเปลี่ยนได้ (NH₄OAc)',
+                              value: prediction.availablePotassium,
                               unit: 'mg/kg',
-                              level: prediction.phosphorusLevel,
-                              progress: prediction.availablePhosphorus / 60.0,
+                              level: prediction.potassiumLevel,
+                              progress: prediction.availablePotassium / 200.0,
                             ),
                           ],
                         )
@@ -286,23 +347,35 @@ class AnalysisResultView extends StatelessWidget {
                               child: NutrientGaugeCard(
                                 title: 'Total N',
                                 symbol: 'N',
-                                subtitle: 'ไนโตรเจนทั้งหมด (Kjeldahl)',
+                                subtitle: 'ไนโตรเจนรวม (Kjeldahl)',
                                 value: prediction.totalNitrogen,
                                 unit: 'g/kg',
                                 level: prediction.nitrogenLevel,
                                 progress: prediction.totalNitrogen / 3.0,
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: NutrientGaugeCard(
                                 title: 'Available P',
                                 symbol: 'P',
-                                subtitle: 'ฟอสฟอรัสที่เป็นประโยชน์ (Bray II)',
+                                subtitle: 'ฟอสฟอรัส (Bray II)',
                                 value: prediction.availablePhosphorus,
                                 unit: 'mg/kg',
                                 level: prediction.phosphorusLevel,
                                 progress: prediction.availablePhosphorus / 60.0,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: NutrientGaugeCard(
+                                title: 'Available K',
+                                symbol: 'K',
+                                subtitle: 'โพแทสเซียม (NH₄OAc)',
+                                value: prediction.availablePotassium,
+                                unit: 'mg/kg',
+                                level: prediction.potassiumLevel,
+                                progress: prediction.availablePotassium / 200.0,
                               ),
                             ),
                           ],

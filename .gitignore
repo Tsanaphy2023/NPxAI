@@ -12,6 +12,13 @@
 .swiftpm/
 migrate_working_dir/
 
+# LaTeX auxiliary files
+*.aux
+*.toc
+*.out
+*.listing
+*.synctex.gz
+
 # IntelliJ related
 *.iml
 *.ipr

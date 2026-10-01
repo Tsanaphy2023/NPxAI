@@ -10,6 +10,7 @@ abstract class SoilRepository {
   Future<SpectralSignature> captureSpectralSignature();
   Future<NutrientPrediction> analyzeSoilNutrients(
     SpectralSignature signature, {
+    NPxAIMode mode = NPxAIMode.proChamber,
     String? modelName,
     String? farmingType,
     String? cropType,
@@ -50,12 +51,14 @@ class SoilRepositoryImpl implements SoilRepository {
   @override
   Future<NutrientPrediction> analyzeSoilNutrients(
     SpectralSignature signature, {
+    NPxAIMode mode = NPxAIMode.proChamber,
     String? modelName,
     String? farmingType,
     String? cropType,
   }) async {
     return _aiUseCase.predictNutrients(
       signature,
+      mode: mode,
       modelName: modelName,
       farmingType: farmingType,
       cropType: cropType,

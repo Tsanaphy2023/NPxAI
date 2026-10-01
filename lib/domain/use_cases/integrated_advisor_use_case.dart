@@ -42,6 +42,15 @@ class IntegratedAdvisorUseCase {
       applicationMethod:
           'ราดลงดินหลังเก็บเกี่ยวผลผลิต ช่วยตรึงไนโตรเจนจากอากาศในสภาพดินกรดจัด',
     ),
+    const MicrobeStrainInfo(
+      strainCode: 'RBRU-KSB-03',
+      scientificName: 'Bacillus mucilaginosus (Eastern K-solubilizer)',
+      functionalType: 'KSB',
+      efficacyScore: 78.5, // ปลดปล่อยโพแทสเซียมจากแร่ดินเหนียว 78.5 mg K/L
+      isolationSource: 'ดินร่วนปนทรายสวนผลไม้ อ.ขลุง จ.จันทบุรี',
+      applicationMethod:
+          'ผสมปุ๋ยหมักหรือรดโคนต้นช่วงพัฒนาการผล ช่วยปลดปล่อยโพแทสเซียมที่ถูกตรึงในโครงสร้างดินเหนียว',
+    ),
   ];
 
   /// สร้างคำแนะนำแบบสั่งตัดสำหรับพืชเศรษฐกิจ (เช่น ทุเรียน, มังคุด, เงาะ)
@@ -63,49 +72,85 @@ class IntegratedAdvisorUseCase {
         prediction.phosphorusLevel == NutrientLevel.low;
     final bool isHighP = prediction.phosphorusLevel == NutrientLevel.high ||
         prediction.phosphorusLevel == NutrientLevel.veryHigh;
+    final bool isLowK = prediction.potassiumLevel == NutrientLevel.veryLow ||
+        prediction.potassiumLevel == NutrientLevel.low;
+    final bool isHighK = prediction.potassiumLevel == NutrientLevel.high ||
+        prediction.potassiumLevel == NutrientLevel.veryHigh;
 
-    // ตรรกะวิเคราะห์ปุ๋ยเคมีร่วมกับสถานะ N/P
-    if (isLowN && isLowP) {
-      chemicalFormula = '15-15-15 หรือ 16-16-16';
+    // ตรรกะวิเคราะห์ปุ๋ยเคมีร่วมกับสถานะ N/P/K
+    if (isLowN && isLowP && isLowK) {
+      chemicalFormula = '15-15-15 หรือ 16-16-16 เสริม 0-0-60 เล็กน้อย';
       rateKg = 1.2;
       guide =
-          'ดินขาดทั้งไนโตรเจนและฟอสฟอรัส ใส่ปุ๋ยเคมีรองพื้นปริมาณพอเหมาะ แบ่งใส่ 2 ครั้ง พร้อมปรับปรุงอินทรียวัตถุ';
+          'ดินขาดทั้ง N, P และ K: ใส่ปุ๋ยสูตรเสมอรองพื้น แบ่งใส่ 2 ครั้ง พร้อมปรับปรุงฮิวมัสหน้าดิน';
       savingPercent = 15.0;
+      strains.addAll([localMicrobeStrains[0], localMicrobeStrains[2], localMicrobeStrains[4]]);
+      bioPlan =
+          'ใช้ชีวภัณฑ์ไตรภาคี (NFB + PSB + KSB): ตรึง N จากอากาศ ละลาย P ที่ตกค้าง และปลดปล่อย K จากโครงสร้างแร่ดินเหนียว';
+    } else if (isLowN && isLowP) {
+      chemicalFormula = '15-15-15 หรือ 16-16-16';
+      rateKg = 1.1;
+      guide =
+          'ดินขาดทั้งไนโตรเจนและฟอสฟอรัส แต่โพแทสเซียมเพียงพอ ใส่ปุ๋ยเคมีรองพื้นปริมาณพอเหมาะ แบ่งใส่ 2 ครั้ง พร้อมปรับปรุงอินทรียวัตถุ';
+      savingPercent = 18.0;
       strains.addAll([localMicrobeStrains[0], localMicrobeStrains[2]]);
       bioPlan =
           'ใช้ชีวภัณฑ์คู่ผสม: เสริมแบคทีเรียตรึง N (RBRU-NFB-02) เพื่อดึง N2 อากาศ และแบคทีเรียละลาย P (RBRU-PSB-01) ช่วยให้รากดูดซึมปุ๋ยได้ไว';
     } else if (isLowP && !isLowN) {
-      chemicalFormula = 'ลดสัดส่วนปุ๋ยฟอสเฟตเคมีลง 40% และใช้ปุ๋ยเดี่ยวสูตร 25-7-7 หรือ 46-0-0 เฉพาะที่จำเป็น';
+      chemicalFormula = isLowK
+          ? 'ปุ๋ยเคมี 13-0-46 หรือ 8-24-24 ตามระยะพืช ลดสัดส่วนฟอสเฟตลง 40%'
+          : 'ลดสัดส่วนปุ๋ยฟอสเฟตเคมีลง 40% และใช้ปุ๋ยเดี่ยวสูตร 25-7-7 หรือ 46-0-0 เฉพาะที่จำเป็น';
       rateKg = 0.8;
       guide =
           'ฟอสฟอรัสในรูปละลายน้ำมีจำกัด แต่ในดินจันทบุรีมักมีฟอสฟอรัสสะสมที่จับกับเหล็กและอะลูมิเนียม ไม่ควรเพิ่มปุ๋ย P เคมีมากเกินไป';
       savingPercent = 25.0;
       strains.add(localMicrobeStrains[0]);
       strains.add(localMicrobeStrains[1]);
+      if (isLowK) strains.add(localMicrobeStrains[4]);
       bioPlan =
           '★ พระเอกหลัก: ใช้แบคทีเรียละลายฟอสเฟต PSB (RBRU-PSB-01 / 04) เพื่อย่อยสลาย P อนินทรีย์ที่จับตัวแน่นในดิน ให้เปลี่ยนเป็นรูป Available P ที่รากพืชดูดซึมได้ทันที';
     } else if (isLowN && !isLowP) {
-      chemicalFormula = 'ใช้ปุ๋ยตัวหน้าสูง เช่น 25-7-7 หรือ ยูเรีย 46-0-0 ผสมปุ๋ยหมักชีวภาพ';
+      chemicalFormula = isLowK
+          ? 'ใช้ปุ๋ย 15-5-20 หรือ ยูเรีย 46-0-0 ผสม 0-0-60'
+          : 'ใช้ปุ๋ยตัวหน้าสูง เช่น 25-7-7 หรือ ยูเรีย 46-0-0 ผสมปุ๋ยหมักชีวภาพ';
       rateKg = 0.9;
       guide = 'ฟอสฟอรัสมีเพียงพอแล้ว งดใส่ปุ๋ยฟอสเฟตเพิ่มเติมเพื่อป้องกันธาตุอาหารตกค้างและชะล้างลงแหล่งน้ำ';
       savingPercent = 20.0;
       strains.add(localMicrobeStrains[2]);
       strains.add(localMicrobeStrains[3]);
+      if (isLowK) strains.add(localMicrobeStrains[4]);
       bioPlan =
           '★ ใส่ชีวภัณฑ์ NFB สายพันธุ์ทนดินกรด (RBRU-NFB-05) ช่วยสร้างสะสมไนโตรเจนทางชีวภาพ ลดการใส่ยูเรียเคมีลงได้ 20-30%';
     } else if (isHighP) {
-      chemicalFormula = 'งดใส่ปุ๋ยฟอสเฟต (งด 0-3-0 หรือตัวกลาง) ใส่เฉพาะ 13-0-46 หรือโพแทสเซียมตามระยะพืช';
+      chemicalFormula = isLowK
+          ? 'งดใส่ปุ๋ยฟอสเฟตเด็ดขาด ใส่เฉพาะโพแทสเซียมซัลเฟต 0-0-50 หรือ 13-0-46 เพื่อขยายขนาดผล'
+          : 'งดใส่ปุ๋ยฟอสเฟต (งด 0-3-0 หรือตัวกลาง) ใส่เฉพาะ 13-0-46 หรือโพแทสเซียมตามระยะพืช';
       rateKg = 0.5;
       guide =
           'ฟอสฟอรัสในดินสะสมสูงมากเกินเกณฑ์ (Over-fertilization) ควรงดปุ๋ยเคมีฟอสเฟตเด็ดขาด เพื่อรักษาสิ่งแวดล้อมและลดต้นทุน';
       savingPercent = 35.0;
       strains.add(localMicrobeStrains[0]);
+      if (isLowK) strains.add(localMicrobeStrains[4]);
       bioPlan =
           'ใช้จุลินทรีย์ช่วยปรับสมดุลและลดการปลดปล่อย P ส่วนเกินลงสู่น้ำใต้ดิน เสริมจุลินทรีย์กลุ่มยับยั้งเชื้อราก่อโรครากเน่า (คุณสมบัติ PGPR)';
+    } else if (isLowK) {
+      chemicalFormula = 'เสริมโพแทสเซียมคลอไรด์ 0-0-60 หรือโพแทสเซียมไนเตรท 13-0-46';
+      rateKg = 0.7;
+      guide = 'ระดับ N และ P เหมาะสม แต่ K ต่ำ อาจส่งผลต่อความหวาน ขนาดผล และการลำเลียงแป้ง/น้ำตาล';
+      savingPercent = 18.0;
+      strains.add(localMicrobeStrains[4]);
+      bioPlan = 'เติมแบคทีเรียละลายโพแทสเซียม KSB (RBRU-KSB-03) ร่วมกับอินทรียวัตถุเพื่อกระตุ้นการปลดปล่อย K ในดิน';
+    } else if (isHighK) {
+      chemicalFormula = 'งดใส่ปุ๋ยโพแทสเซียมชั่วคราว ให้เน้นอินทรีย์วัตถุและแคลเซียม-แมกนีเซียม (Ca-Mg)';
+      rateKg = 0.5;
+      guide = 'โพแทสเซียมในดินสูงมาก (High K) ระวังการแย่งการดูดซึมกับแคลเซียมและแมกนีเซียม ซึ่งทำให้เกิดอาการไส้ซึมในทุเรียน';
+      savingPercent = 22.0;
+      strains.add(localMicrobeStrains[1]);
+      bioPlan = 'รักษาสมดุลธาตุอาหารทางชีวภาพ เสริมสารปรับปรุงดินกลุ่มแคลเซียม-โบรอนทางใบ';
     } else {
       chemicalFormula = '16-16-16 ในอัตราปกติ หรือปุ๋ยอินทรีย์เคมี';
       rateKg = 0.7;
-      guide = 'ดินมีความอุดมสมบูรณ์ของ N และ P ในเกณฑ์ปานกลางที่เหมาะสม รักษาหน้าดินด้วยเศษอินทรียวัตถุ';
+      guide = 'ดินมีความอุดมสมบูรณ์ของ N, P และ K ในเกณฑ์ปานกลางที่เหมาะสม รักษาหน้าดินด้วยเศษอินทรียวัตถุ';
       savingPercent = 18.0;
       strains.add(localMicrobeStrains[1]);
       strains.add(localMicrobeStrains[3]);

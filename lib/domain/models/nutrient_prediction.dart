@@ -36,7 +36,45 @@ enum NutrientLevel {
   }
 }
 
-/// ผลการทำนายปริมาณธาตุอาหารในดิน (Total N และ Available P)
+/// สถาปัตยกรรมโหมดการทำงานของอุปกรณ์ (Dual-Architecture)
+enum NPxAIMode {
+  /// 1. โหมดพกพาประหยัด (NPxAI Lite - Flash Mode)
+  /// ใช้กล่อง 3D Box ดึงแสงจากแฟลชมือถือผ่านท่อนำแสง 45°
+  liteFlash,
+
+  /// 2. โหมดความแม่นยำสูงระดับห้องปฏิบัติการ (NPxAI Pro - Chamber Mode)
+  /// ใช้กล่อง 3D Box ร่วมกับชุดวงจรสโตรบ LED 7 แถบความยาวคลื่นและห้องมืดสมบูรณ์
+  proChamber;
+
+  String get labelTh {
+    switch (this) {
+      case NPxAIMode.liteFlash:
+        return 'NPxAI Lite (Flash 45°)';
+      case NPxAIMode.proChamber:
+        return 'NPxAI Pro (Chamber 7-Band)';
+    }
+  }
+
+  String get shortLabelTh {
+    switch (this) {
+      case NPxAIMode.liteFlash:
+        return 'Lite (Flash 45°)';
+      case NPxAIMode.proChamber:
+        return 'Pro (Chamber)';
+    }
+  }
+
+  String get descriptionTh {
+    switch (this) {
+      case NPxAIMode.liteFlash:
+        return 'โหมดพกพาประหยัด ใช้แสงแฟลชมือถือผ่านท่อนำแสง 45° รวดเร็ว ต้นทุนต่ำ (R² ≈ 0.86 - 0.88)';
+      case NPxAIMode.proChamber:
+        return 'โหมดความแม่นยำสูงระดับแล็บ ใช้สโตรบ LED 7 แถบความยาวคลื่น และ 0-Lux Calibration (R² ≈ 0.94 - 0.97)';
+    }
+  }
+}
+
+/// ผลการทำนายปริมาณธาตุอาหารในดิน (Total N, Available P และ Available K)
 class NutrientPrediction {
   /// ไนโตรเจนทั้งหมด (Total N) หน่วย: g/kg (หรือ %)
   final double totalNitrogen;
@@ -45,6 +83,13 @@ class NutrientPrediction {
   /// ฟอสฟอรัสที่เป็นประโยชน์ (Available P) หน่วย: mg/kg (ppm)
   final double availablePhosphorus;
   final NutrientLevel phosphorusLevel;
+
+  /// โพแทสเซียมที่แลกเปลี่ยนได้ (Available K) หน่วย: mg/kg (ppm)
+  final double availablePotassium;
+  final NutrientLevel potassiumLevel;
+
+  /// โหมดสถาปัตยกรรมฮาร์ดแวร์ที่ใช้ตรวจวัด
+  final NPxAIMode hardwareMode;
 
   /// สัมประสิทธิ์ความเชื่อมั่นของแบบจำลอง ($R^2$ หรือ Confidence)
   final double confidenceScore;
@@ -56,6 +101,9 @@ class NutrientPrediction {
     required this.nitrogenLevel,
     required this.availablePhosphorus,
     required this.phosphorusLevel,
+    this.availablePotassium = 110.0,
+    this.potassiumLevel = NutrientLevel.moderate,
+    this.hardwareMode = NPxAIMode.proChamber,
     required this.confidenceScore,
     required this.modelName,
     required this.predictedAt,
@@ -78,11 +126,22 @@ class NutrientPrediction {
     return NutrientLevel.veryHigh;
   }
 
+  static NutrientLevel classifyPotassium(double kMgPerKg) {
+    if (kMgPerKg < 40.0) return NutrientLevel.veryLow;
+    if (kMgPerKg < 80.0) return NutrientLevel.low;
+    if (kMgPerKg <= 140.0) return NutrientLevel.moderate;
+    if (kMgPerKg <= 200.0) return NutrientLevel.high;
+    return NutrientLevel.veryHigh;
+  }
+
   Map<String, dynamic> toJson() => {
         'totalNitrogen': totalNitrogen,
         'nitrogenLevel': nitrogenLevel.name,
         'availablePhosphorus': availablePhosphorus,
         'phosphorusLevel': phosphorusLevel.name,
+        'availablePotassium': availablePotassium,
+        'potassiumLevel': potassiumLevel.name,
+        'hardwareMode': hardwareMode.name,
         'confidenceScore': confidenceScore,
         'modelName': modelName,
         'predictedAt': predictedAt.toIso8601String(),

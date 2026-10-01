@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../domain/models/nutrient_prediction.dart';
 import '../../../core/theme/app_theme.dart';
 import '../view_models/soil_scanner_view_model.dart';
 
@@ -116,6 +117,7 @@ class _SoilScannerViewState extends State<SoilScannerView> {
       plotName: _plotController.text.trim(),
       cropType: _selectedCrop,
       farmingType: _selectedFarmingType,
+      mode: widget.viewModel.currentMode,
       latitude: widget.viewModel.autoLatitude,
       longitude: widget.viewModel.autoLongitude,
       aiModel: widget.viewModel.selectedAiModel,
@@ -223,8 +225,8 @@ class _SoilScannerViewState extends State<SoilScannerView> {
       ),
       builder: (context) {
         return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +236,7 @@ class _SoilScannerViewState extends State<SoilScannerView> {
                     Icon(Icons.tune, color: AppTheme.accentLime, size: 20),
                     SizedBox(width: 8),
                     Text(
-                      'เลือกโหมดการตรวจวัดและโมเดล AI',
+                      'การตั้งค่าสถาปัตยกรรมและโมเดล AI',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -243,26 +245,113 @@ class _SoilScannerViewState extends State<SoilScannerView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
+
+                // 1. ส่วนเลือกสถาปัตยกรรมฮาร์ดแวร์ (Dual-Architecture)
+                const Text(
+                  '1. สถาปัตยกรรมฮาร์ดแวร์ (Dual-Architecture)',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.accentLime,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                      color: vm.currentMode == NPxAIMode.liteFlash
+                          ? Colors.deepOrangeAccent
+                          : AppTheme.borderDark,
+                    ),
+                  ),
+                  tileColor: vm.currentMode == NPxAIMode.liteFlash
+                      ? Colors.deepOrangeAccent.withValues(alpha: 0.15)
+                      : Colors.transparent,
+                  leading: const Icon(Icons.flash_on_rounded, color: Colors.deepOrangeAccent),
+                  title: const Text(
+                    'NPxAI Lite (Flash Mode)',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textLight, fontSize: 13.5),
+                  ),
+                  subtitle: const Text(
+                    'กล่อง 3D Box ดึงแสงแฟลชมือถือผ่านท่อนำแสง 45° สะดวกรวดเร็ว ต้นทุนต่ำ (R² ≈ 0.86 - 0.88)',
+                    style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                  ),
+                  trailing: vm.currentMode == NPxAIMode.liteFlash
+                      ? const Icon(Icons.check_circle, color: Colors.deepOrangeAccent)
+                      : null,
+                  onTap: () {
+                    vm.setMode(NPxAIMode.liteFlash);
+                    Navigator.pop(context);
+                  },
+                ),
+                const SizedBox(height: 6),
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                      color: vm.currentMode == NPxAIMode.proChamber
+                          ? AppTheme.accentLime
+                          : AppTheme.borderDark,
+                    ),
+                  ),
+                  tileColor: vm.currentMode == NPxAIMode.proChamber
+                      ? AppTheme.primaryGreen.withValues(alpha: 0.18)
+                      : Colors.transparent,
+                  leading: const Icon(Icons.biotech_rounded, color: AppTheme.accentLime),
+                  title: const Text(
+                    'NPxAI Pro (Multi-Spectral Chamber)',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textLight, fontSize: 13.5),
+                  ),
+                  subtitle: const Text(
+                    'กล่อง 3D Box ร่วมกับชุดวงจรสโตรบ LED 7 แถบความยาวคลื่น และ 0-Lux Dark Chamber (R² ≈ 0.94 - 0.97)',
+                    style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                  ),
+                  trailing: vm.currentMode == NPxAIMode.proChamber
+                      ? const Icon(Icons.check_circle, color: AppTheme.accentLime)
+                      : null,
+                  onTap: () {
+                    vm.setMode(NPxAIMode.proChamber);
+                    Navigator.pop(context);
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // 2. ส่วนเลือกโมเดล AI (Backbone Edge ML)
+                const Text(
+                  '2. โมเดลประมวลผล (Edge AI / Simulation)',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.accentLime,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 ...vm.availableModels.map((model) {
                   final isSelected = vm.selectedAiModel == model;
                   return ListTile(
+                    dense: true,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                     leading: Icon(
                       model == 'SIMULATION' ? Icons.science : Icons.psychology,
                       color: isSelected ? AppTheme.accentLime : AppTheme.textMuted,
+                      size: 20,
                     ),
                     title: Text(
                       model == 'SIMULATION'
-                          ? 'SIMULATION (โหมดจำลอง)'
-                          : '$model (สแกนจริง Edge AI)',
+                          ? 'SIMULATION (โหมดจำลองเชิงสถิติ)'
+                          : '$model (Edge ML Model)',
                       style: TextStyle(
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         color: isSelected ? AppTheme.accentLime : AppTheme.textLight,
+                        fontSize: 13,
                       ),
                     ),
                     trailing: isSelected
-                        ? const Icon(Icons.check_circle, color: AppTheme.accentLime)
+                        ? const Icon(Icons.check_circle, color: AppTheme.accentLime, size: 18)
                         : null,
                     onTap: () {
                       vm.setAiModel(model);
@@ -374,7 +463,66 @@ class _SoilScannerViewState extends State<SoilScannerView> {
                               ),
                             ),
 
-                          // 1.2 ป้ายแสดงสถานะโหมดและโมเดล AI (SIMULATION หรือชื่อโมเดล AI ที่เลือก)
+                          // 1.2 (ก) ป้ายแสดงสถานะสถาปัตยกรรม (NPxAI Lite vs Pro) ด้านซ้ายบน
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: vm.isScanning ? null : () => _showModelSelectorDialog(vm),
+                                borderRadius: BorderRadius.circular(6),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: vm.currentMode == NPxAIMode.liteFlash
+                                        ? Colors.deepOrange.withValues(alpha: 0.92)
+                                        : const Color(0xFF1B5E20).withValues(alpha: 0.92),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: vm.currentMode == NPxAIMode.liteFlash
+                                          ? Colors.orangeAccent
+                                          : AppTheme.accentLime,
+                                      width: 1.2,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.6),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        vm.currentMode == NPxAIMode.liteFlash
+                                            ? Icons.flash_on_rounded
+                                            : Icons.biotech_rounded,
+                                        size: 13,
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        vm.currentMode == NPxAIMode.liteFlash
+                                            ? 'Lite (Flash 45°)'
+                                            : 'Pro (Chamber)',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          letterSpacing: 0.4,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // 1.2 (ข) ป้ายแสดงสถานะโหมดและโมเดล AI (SIMULATION หรือชื่อโมเดล AI ที่เลือก) ด้านขวาบน
                           Positioned(
                             top: 8,
                             right: 8,
@@ -836,6 +984,156 @@ class _SoilScannerViewState extends State<SoilScannerView> {
                             ),
                           ),
                           const SizedBox(height: 12),
+
+                          // สถาปัตยกรรมฮาร์ดแวร์ Dual-Mode (Lite Flash 45° vs Pro Chamber)
+                          Container(
+                            decoration: BoxDecoration(
+                              color: AppTheme.backgroundDark,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppTheme.borderDark),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 12, top: 10, right: 12),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.architecture_rounded, size: 16, color: AppTheme.accentLime),
+                                      SizedBox(width: 6),
+                                      Text(
+                                        'สถาปัตยกรรมฮาร์ดแวร์ (Dual-Architecture)',
+                                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.textLight),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: vm.isScanning ? null : () => vm.setMode(NPxAIMode.liteFlash),
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(4),
+                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: vm.currentMode == NPxAIMode.liteFlash
+                                                ? Colors.deepOrangeAccent.withValues(alpha: 0.22)
+                                                : Colors.transparent,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: vm.currentMode == NPxAIMode.liteFlash
+                                                  ? Colors.deepOrangeAccent
+                                                  : Colors.transparent,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.flash_on_rounded,
+                                                    size: 14,
+                                                    color: vm.currentMode == NPxAIMode.liteFlash
+                                                        ? Colors.deepOrangeAccent
+                                                        : AppTheme.textMuted,
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    'NPxAI Lite',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: vm.currentMode == NPxAIMode.liteFlash
+                                                          ? Colors.deepOrangeAccent
+                                                          : AppTheme.textMuted,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                'แฟลช 45° พกพา (R² ~0.87)',
+                                                style: TextStyle(
+                                                  fontSize: 9.5,
+                                                  color: vm.currentMode == NPxAIMode.liteFlash
+                                                      ? AppTheme.textLight
+                                                      : AppTheme.textMuted,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: vm.isScanning ? null : () => vm.setMode(NPxAIMode.proChamber),
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(4),
+                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: vm.currentMode == NPxAIMode.proChamber
+                                                ? AppTheme.primaryGreen.withValues(alpha: 0.28)
+                                                : Colors.transparent,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: vm.currentMode == NPxAIMode.proChamber
+                                                  ? AppTheme.accentLime
+                                                  : Colors.transparent,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.biotech_rounded,
+                                                    size: 14,
+                                                    color: vm.currentMode == NPxAIMode.proChamber
+                                                        ? AppTheme.accentLime
+                                                        : AppTheme.textMuted,
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    'NPxAI Pro',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: vm.currentMode == NPxAIMode.proChamber
+                                                          ? AppTheme.accentLime
+                                                          : AppTheme.textMuted,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                'สโตรบ 7-Band (R² ~0.96)',
+                                                style: TextStyle(
+                                                  fontSize: 9.5,
+                                                  color: vm.currentMode == NPxAIMode.proChamber
+                                                      ? AppTheme.textLight
+                                                      : AppTheme.textMuted,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
                           // Dropdown สำหรับเลือกโหมดจำลองหรือสแกนจริงพร้อมเลือกโมเดล AI
                           DropdownButtonFormField<String>(
                             initialValue: vm.selectedAiModel,
