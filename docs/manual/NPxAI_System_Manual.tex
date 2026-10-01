@@ -767,36 +767,10 @@ E_v = h\nu_0 \left(v + \frac{1}{2}\right) - h\nu_0 \chi_e \left(v + \frac{1}{2}\
 
 เมื่อ $v$ คือเลขควอนตัมการสั่น ($\nu = 0, 1, 2, \dots$), $\nu_0$ คือความถี่การสั่นมูลฐาน และ $\chi_e$ คือค่าคงที่แอนฮาร์มอนิก การเปลี่ยนระดับจาก $v = 0 \rightarrow 2$ ทำให้เกิดโอเวอร์โทนขั้นที่หนึ่ง (First Overtone: ความยาวคลื่นประมาณกึ่งหนึ่งของความถี่มูลฐาน) และ $v = 0 \rightarrow 3$ ก่อให้เกิดโอเวอร์โทนขั้นที่สอง (Second Overtone)
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[scale=0.92, >=Stealth]
-    % Spectral Axis
-    \draw[->, thick] (0, 0) -- (13.5, 0) node[right] {\small ความยาวคลื่น $\lambda\text{ (nm)}$};
-    
-    % Bands background
-    \fill[blue!15] (0.5, 0.2) rectangle (4.0, 3.2);
-    \node at (2.25, 3.4) {\footnotesize \textbf{UV-Visible (350--700 nm)}};
-    \node[align=center] at (2.25, 2.4) {\scriptsize \textbf{Electronic Transitions}\\\scriptsize $\text{Fe}^{3+}$ Crystal Field\\\scriptsize Humic Absorption\\\scriptsize Visible Soil Hue};
-    
-    \fill[green!15] (4.2, 0.2) rectangle (7.5, 3.2);
-    \node at (5.85, 3.4) {\footnotesize \textbf{Short NIR (700--1100 nm)}};
-    \node[align=center] at (5.85, 2.4) {\scriptsize \textbf{Smartphone CMOS Limit}\\\scriptsize $3\nu(\text{O-H})$ Water @ 960 nm\\\scriptsize Goethite @ 920 nm\\\scriptsize Hematite @ 880 nm\\\scriptsize $3\nu(\text{C-H})$ @ 1180 nm};
-    
-    \fill[orange!15] (7.7, 0.2) rectangle (13.0, 3.2);
-    \node at (10.35, 3.4) {\footnotesize \textbf{SWIR (1100--2500 nm)}};
-    \node[align=center] at (10.35, 2.4) {\scriptsize \textbf{Overtones \& Combinations}\\\scriptsize $2\nu(\text{O-H})$ @ 1450 nm\\\scriptsize $2\nu(\text{N-H})$ @ 1510 nm\\\scriptsize $2\nu(\text{C-H})$ @ 1720 nm\\\scriptsize $\text{H}_2\text{O}$ Comb @ 1940 nm\\\scriptsize $\text{N-H}$ Comb @ 2060, 2180 nm\\\scriptsize $\text{Al-OH}$ @ 2206 nm};
-    
-    % NPxAI LED Indicators
-    \draw[fill=purple, draw=black] (0.9, -0.4) circle (3pt) node[below] {\tiny 405};
-    \draw[fill=blue, draw=black] (1.8, -0.4) circle (3pt) node[below] {\tiny 465};
-    \draw[fill=green!70!black, draw=black] (2.7, -0.4) circle (3pt) node[below] {\tiny 525};
-    \draw[fill=red, draw=black] (3.6, -0.4) circle (3pt) node[below] {\tiny 630};
-    \draw[fill=red!60!black, draw=black] (5.8, -0.4) circle (3pt) node[below] {\tiny 850};
-    \draw[fill=red!30!black, draw=black] (6.8, -0.4) circle (3pt) node[below] {\tiny 940};
-    
-    \node[right] at (8.0, -0.6) {\scriptsize $\blacktriangle$ หลอด LED จำเพาะในระบบ NPxAI};
-\end{tikzpicture}
-\caption{การแบ่งย่านสเปกตรัมแม่เหล็กไฟฟ้าและตำแหน่งแถบการดูดกลืนวิกฤตของธาตุอาหารในดิน}\label{fig:spectral_regions}
+\includegraphics[width=\textwidth]{figures/soil_nutrient_absorption_spectra.png}
+\caption{สเปกตรัมการดูดกลืนคลื่นของธาตุอาหารหลักและองค์ประกอบในดินตามมาตรฐานการวิเคราะห์ Vis-NIR-SWIR}\label{fig:soil_nutrient_spectra}
 \end{figure}
 
 \section{งานวิจัยสเปกตรัมการดูดกลืนของไนโตรเจนและอินทรียวัตถุ}
