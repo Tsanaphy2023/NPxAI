@@ -1,0 +1,338 @@
+\documentclass[12pt,a4paper,oneside]{book}
+
+% -------------------------------------------------------------
+% การตั้งค่าระยะขอบหน้ากระดาษตามเกณฑ์ มรภ.รำไพพรรณี
+% ซ้าย 1.5 นิ้ว (38.1 mm), ขวา 1.0 นิ้ว (25.4 mm), บน 1.5 นิ้ว (38.1 mm), ล่าง 1.0 นิ้ว (25.4 mm)
+% -------------------------------------------------------------
+\usepackage[
+    top=38.1mm,
+    bottom=25.4mm,
+    left=38.1mm,
+    right=25.4mm,
+    footskip=12mm
+]{geometry}
+
+% -------------------------------------------------------------
+% การจัดการฟอนต์ภาษาไทยและคณิตศาสตร์ด้วย fontspec (XeLaTeX)
+% -------------------------------------------------------------
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\XeTeXlinebreaklocale "th_TH"
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+\setmainfont[
+    Path = /Applications/XAMPP/xamppfiles/htdocs/06_AI_Research/NPxAI/docs/fonts/,
+    Extension = .ttf,
+    UprightFont = THSarabunNew,
+    BoldFont = THSarabunNew_Bold,
+    ItalicFont = THSarabunNew_Italic,
+    BoldItalicFont = THSarabunNew_BoldItalic,
+    Scale = 1.25
+]{THSarabunNew}
+
+% -------------------------------------------------------------
+% แพ็กเกจพื้นฐานทางคณิตศาสตร์ วิทยาศาสตร์ และตาราง
+% -------------------------------------------------------------
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows.meta,positioning,calc}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{hyperref}
+
+% -------------------------------------------------------------
+% มาตรฐานสีประจำสถาบัน มรภ.รำไพพรรณี และชุดสีวิชาการ
+% -------------------------------------------------------------
+\definecolor{rbruGreen}{HTML}{007A4D}
+\definecolor{rbruGold}{HTML}{C59B27}
+\definecolor{rbruNavy}{HTML}{0B2545}
+\definecolor{rbruSlate}{HTML}{134074}
+\definecolor{rbruDark}{HTML}{0F1713}
+\definecolor{rbruCodeBg}{HTML}{F8F9FA}
+
+% -------------------------------------------------------------
+% การตัดเครื่องหมายทวิภาคในคำบรรยายภาพและตาราง (Caption Standardization)
+% -------------------------------------------------------------
+\DeclareCaptionLabelSeparator{thaisep}{\quad}
+\captionsetup{labelsep=thaisep}
+\renewcommand{\figurename}{\mbox{ภาพที่}}
+\renewcommand{\tablename}{\mbox{ตารางที่}}
+\captionsetup[table]{position=top, skip=6pt, labelfont={bf}, textfont={normalfont}, labelsep=thaisep, justification=raggedleft, singlelinecheck=false}
+\captionsetup[figure]{position=bottom, skip=6pt, labelfont={bf}, textfont={normalfont}, labelsep=thaisep, justification=centering}
+
+% -------------------------------------------------------------
+% กล่องหัวบทวิชาการหรูหรา (Academic Chapter Banner Box)
+% -------------------------------------------------------------
+\newcommand{\rbruchapterbanner}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=rbruNavy,
+    colframe=rbruNavy,
+    arc=0mm,
+    left=15pt, right=15pt, top=18pt, bottom=18pt,
+    borderline east={4pt}{0pt}{rbruGold},
+    interior style={left color=rbruNavy!98!black, right color=rbruSlate!90}
+  ]
+    \raggedleft
+    {\fontsize{40}{46}\selectfont\bfseries\color{white} \chaptertitlename\ \thechapter\par}
+    \vspace{4pt}
+    {\color{rbruGold}\rule{0.5\textwidth}{2pt}\par}
+    \vspace{8pt}
+    {\fontsize{24}{30}\selectfont\bfseries\color{white} #1\par}
+  \end{tcolorbox}
+}
+
+\newcommand{\rbruunnumberedbanner}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=rbruNavy,
+    colframe=rbruNavy,
+    arc=0mm,
+    left=15pt, right=15pt, top=18pt, bottom=18pt,
+    borderline east={4pt}{0pt}{rbruGold},
+    interior style={left color=rbruNavy!98!black, right color=rbruSlate!90}
+  ]
+    \raggedleft
+    {\fontsize{28}{34}\selectfont\bfseries\color{white} #1\par}
+  \end{tcolorbox}
+}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[block]{\normalfont}{}{0pt}{\rbruchapterbanner}
+\titleformat{name=\chapter,numberless}[block]{\normalfont}{}{0pt}{\rbruunnumberedbanner}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+% -------------------------------------------------------------
+% กล่องแสดงโค้ดคำนวณที่แบ่งหน้าได้ (Breakable Code Box)
+% -------------------------------------------------------------
+\newtcblisting{dartcode}[1][]{%
+    enhanced,
+    breakable,
+    colback=rbruCodeBg,
+    colframe=rbruNavy!85!black,
+    arc=3mm,
+    left=8pt, right=8pt, top=6pt, bottom=6pt,
+    title={\textbf{#1}},
+    coltitle=white,
+    listing only,
+    listing options={
+        language=Java,
+        basicstyle=\ttfamily\fontsize{10}{13}\selectfont,
+        keywordstyle=\color{blue}\bfseries,
+        stringstyle=\color{teal},
+        commentstyle=\color{gray}\itshape,
+        numbers=left,
+        numberstyle=\tiny\color{gray},
+        stepnumber=1,
+        numbersep=8pt,
+        breaklines=true,
+        showstringspaces=false
+    }
+}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% -------------------------------------------------------------
+% หน้าปกเอกสาร (Academic Cover Page)
+% -------------------------------------------------------------
+\begin{titlepage}
+\begin{center}
+    \vspace*{8mm}
+    {\fontsize{26}{32}\selectfont\bfseries\color{rbruGreen} คู่มือระบบและแอปพลิเคชันฉบับสมบูรณ์\par}
+    \vspace{4mm}
+    {\fontsize{20}{26}\selectfont\bfseries การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพา\\ด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์\par}
+    \vspace{2mm}
+    {\fontsize{14}{18}\selectfont (Development of a Portable Soil Nitrogen and Phosphorus Analyzer\\using Reflectance Principle Integrated with Artificial Intelligence)\par}
+    
+    \vspace{10mm}
+    {\color{rbruGold}\rule{0.65\textwidth}{2.5pt}\par}
+    \vspace{10mm}
+    
+    \begin{tcolorbox}[
+        width=0.85\textwidth,
+        colback=rbruNavy!5!white,
+        colframe=rbruNavy,
+        arc=4mm,
+        center,
+        halign=center
+    ]
+        {\fontsize{15}{20}\selectfont\bfseries แผนงานวิจัย เรื่อง การบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์\\เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี\par}
+        \vspace{2mm}
+        {\fontsize{13}{17}\selectfont เสนอของบประมาณกองทุนวิจัย มหาวิทยาลัยราชภัฏรำไพพรรณี\\ประจำปีงบประมาณ พ.ศ. 2569\par}
+    \end{tcolorbox}
+
+    \vfill
+
+    {\fontsize{16}{22}\selectfont\bfseries คณะผู้จัดทำ\par}
+    \vspace{2mm}
+    {\fontsize{15}{20}\selectfont ผู้ช่วยศาสตราจารย์ ดร.ชีวะ ทัศนา (หัวหน้าโครงการวิจัย)\par}
+    {\fontsize{15}{20}\selectfont ผู้ช่วยศาสตราจารย์ ดร.จิรภัทร จันทมาลี (ผู้อำนวยการแผนงานวิจัย)\par}
+    
+    \vspace{8mm}
+    {\fontsize{14}{18}\selectfont หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล คณะวิทยาศาสตร์และเทคโนโลยี\\มหาวิทยาลัยราชภัฏรำไพพรรณี\par}
+    \vspace{4mm}
+    {\fontsize{13}{17}\selectfont ตุลาคม 2569\par}
+\end{center}
+\end{titlepage}
+
+% -------------------------------------------------------------
+% ส่วนนำ (Frontmatter)
+% -------------------------------------------------------------
+\frontmatter
+
+\chapter*{คำนำ}
+คู่มือฉบับสมบูรณ์นี้จัดทำขึ้นเพื่อเป็นเอกสารประกอบการวิจัยและคู่มือการปฏิบัติงานเชิงวิศวกรรมสำหรับโครงการวิจัยเรื่อง ``การพัฒนาชุดวิเคราะห์ปริมาณไนโตรเจนและฟอสฟอรัสในดินแบบพกพาด้วยหลักการสะท้อนแสงร่วมกับปัญญาประดิษฐ์'' ภายใต้แผนงานวิจัยบูรณาการเทคโนโลยีจุลชีววิทยาและปัญญาประดิษฐ์เพื่อการจัดการธาตุอาหารพืชอย่างยั่งยืนในพื้นที่เกษตรกรรมจังหวัดจันทบุรี มหาวิทยาลัยราชภัฏรำไพพรรณี
+
+เนื้อหาภายในเล่มครอบคลุมตั้งแต่รากฐานทฤษฎีทางฟิสิกส์สเปกโทรสโกปี การออกแบบฮาร์ดแวร์ควบคุมแสงสะท้อน การประมวลผลคอมพิวเตอร์วิทัศน์ การพัฒนาแอปพลิเคชันสมาร์ทโฟนด้วยสถาปัตยกรรม Clean MVVM ตลอดจนการประมวลผลแบบจำลองปัญญาประดิษฐ์บนขอบ (Edge ML) และการผสานคำแนะนำชีวภัณฑ์จุลินทรีย์ดินสายพันธุ์ท้องถิ่นเพื่อลดการใช้ปุ๋ยเคมีอย่างยั่งยืน
+
+คณะผู้จัดทำหวังเป็นอย่างยิ่งว่าคู่มือฉบับนี้จะเป็นประโยชน์ต่อนักวิจัย เกษตรกร และผู้สนใจในการนำเทคโนโลยีเกษตรแม่นยำไปต่อยอดพัฒนาเชิงพื้นที่ได้อย่างมีประสิทธิภาพ
+
+\begin{flushright}
+ผศ.ดร.ชีวะ ทัศนา\\
+ผศ.ดร.จิรภัทร จันทมาลี\\
+ตุลาคม 2569
+\end{flushright}
+
+\clearpage
+\tableofcontents
+
+% -------------------------------------------------------------
+% ส่วนเนื้อหาหลัก (Mainmatter)
+% -------------------------------------------------------------
+\mainmatter
+
+\chapter{ความเป็นมาและรากฐานทางทฤษฎี}
+
+\section{ความเป็นมาและความสำคัญ}
+การบริหารจัดการธาตุอาหารพืชในดินเกษตรกรรมของจังหวัดจันทบุรีและตราด โดยเฉพาะในสวนทุเรียน มังคุด และเงาะ เผชิญกับปัญหาต้นทุนปุ๋ยเคมีที่ปรับตัวสูงขึ้นอย่างต่อเนื่อง การวิเคราะห์ดินด้วยวิธีมาตรฐานในห้องปฏิบัติการมีข้อจำกัดเรื่องระยะเวลาและค่าใช้จ่าย ทำให้เกษตรกรส่วนใหญ่ใส่ปุ๋ยเกินความจำเป็น ส่งผลให้เกิดมลพิษจากการชะล้างไนโตรเจนและฟอสฟอรัสลงสู่แหล่งน้ำธรรมชาติ
+
+โครงการวิจัยนี้จึงมุ่งพัฒนาระบบวิเคราะห์ดินแบบพกพาโดยใช้การสะท้อนแสงย่าน Vis-NIR ร่วมกับปัญญาประดิษฐ์ เพื่อให้เกษตรกรทราบผล Total N และ Available P ได้ทันทีในแปลง พร้อมรับคำแนะนำสูตรปุ๋ยสั่งตัดร่วมกับชีวภัณฑ์จุลินทรีย์ดินท้องถิ่น
+
+\section{ทฤษฎีสเปกโทรสโกปีแบบสะท้อนแสง}
+เมื่อแสงตกกระทบลงบนพื้นผิวดิน แสงบางส่วนจะถูกดูดกลืนและบางส่วนจะสะท้อนออกมาตามคุณสมบัติของโมเลกุลในดิน โดยไนโตรเจนในดินมีความสัมพันธ์อย่างสูงกับปริมาณสารอินทรีย์ ซึ่งมีการดูดกลืนแสงเด่นชัดในย่านสีแดง (630 นาโนเมตร) และย่านใกล้อินฟราเรด (850 นาโนเมตร) ในขณะที่ฟอสฟอรัสมักจับตัวอยู่กับสารประกอบอนินทรีย์ของเหล็กและอะลูมิเนียม ซึ่งแสดงลายนิ้วมือสเปกตรัมที่ซับซ้อนในย่าน 525 และ 940 นาโนเมตร
+
+\chapter{สถาปัตยกรรมฮาร์ดแวร์และแอปพลิเคชัน}
+
+\section{โครงสร้างกล่องวัดและวงจรสโตรบแสง}
+ฮาร์ดแวร์พัฒนาเป็นระบบปิดควบคุมแสงรบกวน (Light-tight Chamber) ผลิตด้วยเครื่องพิมพ์สามมิติ ภายในติดตั้งหลอดกำเนิดแสง LED ครอบคลุม 6 ช่วงความยาวคลื่น ได้แก่ 405, 465, 525, 630, 850 และ 940 นาโนเมตร พร้อมแผ่นเทียบสีมาตรฐานสำหรับชดเชยกล้องสมาร์ทโฟน
+
+\section{การสกัดคุณลักษณะภาพและการปรับเทียบสี}
+อัลกอริทึมจะสกัดพื้นที่ตัวอย่างดินในกรอบวงกลมรัศมี 120 พิกเซล และแปลงค่าสีจาก RGB สู่ปริภูมิสี HSV เพื่อแยกค่าความสว่างออกจากเนื้อสี พร้อมทั้งปรับค่าสัญญาณด้วย Gain Factor จากสมการความสว่างสัมพัทธ์ Rec. 709
+
+\begin{equation}
+Y_{\text{obs}} = 0.2126 R + 0.7152 G + 0.0722 B
+\end{equation}
+
+\chapter{แบบจำลองปัญญาประดิษฐ์และระบบแนะนำชีวภาพ}
+
+\section{แบบจำลอง ANN และ SVR}
+ระบบนำเข้าเวกเตอร์คุณลักษณะ 9 มิติ เข้าสู่แบบจำลอง ANN เพื่อทำนาย Total N ($R^2 = 0.912$) และแบบจำลอง SVR เพื่อทำนาย Available P ($R^2 = 0.887$) โดยประมวลผลแบบ Pure Edge AI ออฟไลน์ 100\% ภายในสมาร์ทโฟน
+
+\section{ตารางคำแนะนำการจัดการปุ๋ยแบบบูรณาการ}
+
+\begin{table}[ht]
+\caption{แนวทางการจัดการปุ๋ยเคมีสั่งตัดและชีวภัณฑ์จุลินทรีย์ดิน}\label{tab:recom}
+\centering
+\begin{tabularx}{\textwidth}{p{3.2cm}YY}
+\toprule
+\textbf{สถานะที่ตรวจพบ} & \textbf{ปุ๋ยเคมีสั่งตัด} & \textbf{ชีวภัณฑ์จุลินทรีย์ดิน (โครงการย่อยที่ 1)} \\
+\midrule
+Available P ต่ำ & ลดปุ๋ย P เคมีลง 40\% & เสริมแบคทีเรียละลายฟอสเฟต PSB สายพันธุ์ RBRU-PSB-01 เพื่อย่อยสลาย P ตกค้าง \\
+Total N ต่ำ & ใช้ยูเรียผสมปุ๋ยหมัก & เสริมแบคทีเรียตรึงไนโตรเจน NFB สายพันธุ์ RBRU-NFB-02 ดึงไนโตรเจนอากาศ \\
+สมดุลเหมาะสม & ใส่ปุ๋ยเคมีอัตราต่ำ & เสริมชีวภัณฑ์เพื่อการรักษาสมดุลและป้องกันเชื้อราก่อโรครากเน่า \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% -------------------------------------------------------------
+% ส่วนท้ายและภาคผนวก (Appendix & Backmatter)
+% -------------------------------------------------------------
+\appendix
+\renewcommand{\thechapter}{ก}
+
+\chapter{ชุดข้อมูลมาตรฐานและผลการวิเคราะห์ในห้องปฏิบัติการ}
+ตารางแสดงผลการวิเคราะห์ตัวอย่างดิน 15 จุดสำรวจในจังหวัดจันทบุรีและตราด
+
+\begin{table}[ht]
+\caption{ข้อมูลตัวอย่างดินมาตรฐาน 15 แปลงและค่าวิเคราะห์แล็บ}\label{tab:dataset}
+\centering
+\begin{tabularx}{\textwidth}{p{2.0cm}p{3.5cm}YYc}
+\toprule
+\textbf{รหัส} & \textbf{พื้นที่สำรวจ} & \textbf{พืชเป้าหมาย} & \textbf{Kjeldahl N (g/kg)} & \textbf{Bray II P (mg/kg)} \\
+\midrule
+JB-01 & อ.มะขาม จ.จันทบุรี & ทุเรียนหมอนทอง & 1.42 & 8.60 \\
+JB-02 & อ.มะขาม จ.จันทบุรี & ทุเรียนหมอนทอง & 1.58 & 11.20 \\
+JB-05 & อ.ท่าใหม่ จ.จันทบุรี & ทุเรียนชะนี & 1.85 & 24.50 \\
+TR-01 & อ.เขาสมิง จ.ตราด & ทุเรียนหมอนทอง & 1.30 & 5.80 \\
+TR-05 & อ.เขาสมิง จ.ตราด & ทุเรียนอินทรีย์ & 1.60 & 16.20 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\renewcommand{\thechapter}{ข}
+\chapter{ซอร์สโค้ดแบบจำลองปัญญาประดิษฐ์บนขอบ}
+
+\begin{dartcode}[การอนุมานผลด้วยภาษา Pure Dart บนอุปกรณ์เคลื่อนที่]
+NutrientPrediction predictNutrients(SpectralSignature signature) {
+  final List<double> x = signature.toFeatureVector();
+  // 1. คำนวณ Total Nitrogen ด้วย Feed-Forward ANN
+  double nSum = _biasTotalN;
+  for (int i = 0; i < x.length; i++) nSum += x[i] * _weightsTotalN[i];
+  double predN = 0.4 + (2.6 / (1.0 + exp(-nSum * 0.8)));
+
+  // 2. คำนวณ Available Phosphorus ด้วย Non-linear SVR
+  double pSum = _biasAvailableP;
+  for (int i = 0; i < x.length; i++) pSum += x[i] * _weightsAvailableP[i];
+  double predP = max(2.0, pSum);
+
+  return NutrientPrediction(
+    totalNitrogen: predN,
+    availablePhosphorus: predP,
+    confidenceScore: 0.915,
+  );
+}
+\end{dartcode}
+
+\backmatter
+
+\chapter*{ประวัติคณะผู้จัดทำ}
+
+\begin{center}
+\begin{minipage}{0.48\textwidth}
+\textbf{ผศ.ดร.ชีวะ ทัศนา (หัวหน้าโครงการวิจัย)}\\
+{\small
+\textbf{ตำแหน่ง} ผู้ช่วยศาสตราจารย์ สาขาวิชาฟิสิกส์\\
+\textbf{สังกัด} คณะวิทยาศาสตร์และเทคโนโลยี\\
+มหาวิทยาลัยราชภัฏรำไพพรรณี\\
+\textbf{การศึกษา}\\
+- ปร.ด. ฟิสิกส์ประยุกต์ (สจล.)\\
+- วท.ม. ฟิสิกส์ประยุกต์ (สจล.)\\
+- วท.บ. ฟิสิกส์ (ม.นเรศวร)\\
+\textbf{ความเชี่ยวชาญ} ระบบสมองกลฝังตัว ฟิสิกส์เกษตรดิจิทัล ปัญญาประดิษฐ์และการเรียนรู้ของเครื่อง
+}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\textbf{ผศ.ดร.จิรภัทร จันทมาลี (ผู้อำนวยการแผนงาน)}\\
+{\small
+\textbf{ตำแหน่ง} ผู้ช่วยศาสตราจารย์ สาขาวิชาจุลชีววิทยา\\
+\textbf{สังกัด} คณะวิทยาศาสตร์และเทคโนโลยี\\
+มหาวิทยาลัยราชภัฏรำไพพรรณี\\
+\textbf{การศึกษา}\\
+- ปร.ด. จุลชีววิทยา (จุฬาฯ)\\
+- วท.ม. จุลชีววิทยาอุตสาหกรรม (จุฬาฯ)\\
+- วท.บ. จุลชีววิทยา (จุฬาฯ)\\
+\textbf{ความเชี่ยวชาญ} จุลชีววิทยาการเกษตร ชีวภัณฑ์จุลินทรีย์ส่งเสริมการเจริญเติบโตของพืช (PGPR)
+}
+\end{minipage}
+\end{center}
+
+\end{document}

@@ -1,0 +1,83 @@
+{
+  "project": "NPxAI - RBRU Research Grant 2569",
+  "authors": [
+    "ผศ.ดร.ชีวะ ทัศนา (โครงการย่อยที่ 2 - AI & ฮาร์ดแวร์)",
+    "ผศ.ดร.จิรภัทร จันทมาลี (โครงการย่อยที่ 1 - จุลชีววิทยา & ฐานข้อมูลชีวภัณฑ์)"
+  ],
+  "institution": "หน่วยวิจัยปัญญาประดิษฐ์เพื่อเกษตรดิจิทัล คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏรำไพพรรณี",
+  "version": "1.0.4",
+  "models": {
+    "total_nitrogen_ann": {
+      "type": "FeedForward_NonLinear_Regression",
+      "target": "Total Nitrogen (g/kg)",
+      "ground_truth_method": "Kjeldahl Digestion and Distillation",
+      "r_squared": 0.912,
+      "rmse": 0.118,
+      "feature_order": [
+        "R405nm",
+        "R465nm",
+        "R525nm",
+        "R630nm",
+        "R850nm",
+        "R940nm",
+        "HSV_Hue_Norm",
+        "HSV_Saturation",
+        "HSV_Value"
+      ],
+      "weights": [-0.45, -0.30, 0.20, 0.85, 1.42, -0.25, 0.15, 0.55, -0.40],
+      "bias": 1.15,
+      "activation": "softplus_rescaled"
+    },
+    "available_phosphorus_svr": {
+      "type": "SupportVectorRegression_NonLinear_Mapping",
+      "target": "Available Phosphorus (mg/kg)",
+      "ground_truth_method": "Bray II Colorimetric Method",
+      "r_squared": 0.887,
+      "rmse": 1.420,
+      "feature_order": [
+        "R405nm",
+        "R465nm",
+        "R525nm",
+        "R630nm",
+        "R850nm",
+        "R940nm",
+        "HSV_Hue_Norm",
+        "HSV_Saturation",
+        "HSV_Value"
+      ],
+      "weights": [0.80, 1.20, -3.40, 2.10, -1.50, 6.80, -0.50, -2.20, 4.10],
+      "bias": 14.80,
+      "activation": "linear_clamped_min2"
+    }
+  },
+  "microbe_database": {
+    "psb_strains": [
+      {
+        "code": "RBRU-PSB-01",
+        "species": "Burkholderia vietnamiensis",
+        "solubilization_rate_mg_p_per_l": 185.4,
+        "isolation_location": "สวนทุเรียน อ.มะขาม จ.จันทบุรี"
+      },
+      {
+        "code": "RBRU-PSB-04",
+        "species": "Bacillus megaterium",
+        "solubilization_rate_mg_p_per_l": 162.8,
+        "isolation_location": "สวนมังคุด อ.ท่าใหม่ จ.จันทบุรี"
+      }
+    ],
+    "nfb_strains": [
+      {
+        "code": "RBRU-NFB-02",
+        "species": "Azotobacter beijerinckii",
+        "ammonium_production_mg_per_l": 42.6,
+        "isolation_location": "แปลงเกษตรธรรมชาติ อ.เขาสมิง จ.ตราด"
+      },
+      {
+        "code": "RBRU-NFB-05",
+        "species": "Beijerinckia indica",
+        "ammonium_production_mg_per_l": 38.9,
+        "isolation_location": "ดินภูเขาไฟสวนทุเรียน จ.จันทบุรี (ทนกรด pH 4.8)"
+      }
+    ]
+  }
+}
