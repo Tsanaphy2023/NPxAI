@@ -20,7 +20,7 @@ class SoilScannerView extends StatefulWidget {
   State<SoilScannerView> createState() => _SoilScannerViewState();
 }
 
-class _SoilScannerViewState extends State<SoilScannerView> {
+class _SoilScannerViewState extends State<SoilScannerView> with WidgetsBindingObserver {
   final _plotController = TextEditingController(text: 'แปลงวิจัยดินสวนผลไม้ 1');
   
   // ลิสต์พืชที่ปลูกตามข้อกำหนด: ทุเรียน, มังคุด, สละ, ลำไย, มะม่วง, นาข้าว, พืชไร่, พืชผักสวนครัว
@@ -55,6 +55,7 @@ class _SoilScannerViewState extends State<SoilScannerView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _currentTime = DateTime.now();
     _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) {
@@ -65,6 +66,22 @@ class _SoilScannerViewState extends State<SoilScannerView> {
     widget.viewModel.refreshGpsLocation();
     // เริ่มต้นเชื่อมต่อกล้องสมาร์ทโฟนจริง
     _initializeCamera();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      _cameraController?.dispose();
+      _cameraController = null;
+      if (mounted) {
+        setState(() => _isCameraInitialized = false);
+      }
+    } else if (state == AppLifecycleState.resumed) {
+      _initializeCamera();
+    }
   }
 
   Future<void> _initializeCamera() async {
@@ -79,24 +96,28 @@ class _SoilScannerViewState extends State<SoilScannerView> {
         orElse: () => cameras.first,
       );
 
+      await _cameraController?.dispose();
       final controller = CameraController(
         backCamera,
         ResolutionPreset.medium,
         enableAudio: false,
-        imageFormatGroup: ImageFormatGroup.jpeg,
       );
 
       await controller.initialize();
-      if (mounted) {
-        setState(() {
-          _cameraController = controller;
-          _isCameraInitialized = true;
-        });
+      if (!mounted) {
+        await controller.dispose();
+        return;
       }
+      setState(() {
+        _cameraController = controller;
+        _isCameraInitialized = true;
+        _cameraErrorMessage = null;
+      });
     } catch (e) {
       if (mounted) {
         setState(() {
-          _cameraErrorMessage = 'เปิดกล้องไม่สำเร็จ: $e';
+          _isCameraInitialized = false;
+          _cameraErrorMessage = 'แตะที่นี่เพื่อเชื่อมต่อกล้อง';
         });
       }
     }
@@ -104,8 +125,10 @@ class _SoilScannerViewState extends State<SoilScannerView> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _clockTimer?.cancel();
     _cameraController?.dispose();
+    _cameraController = null;
     _plotController.dispose();
     super.dispose();
   }
