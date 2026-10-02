@@ -88,6 +88,10 @@ class NutrientPrediction {
   final double availablePotassium;
   final NutrientLevel potassiumLevel;
 
+  /// อินทรียวัตถุในดิน (Soil Organic Matter: OM / SOM) หน่วย: %
+  final double soilOrganicMatter;
+  final NutrientLevel organicMatterLevel;
+
   /// โหมดสถาปัตยกรรมฮาร์ดแวร์ที่ใช้ตรวจวัด
   final NPxAIMode hardwareMode;
 
@@ -103,6 +107,8 @@ class NutrientPrediction {
     required this.phosphorusLevel,
     this.availablePotassium = 110.0,
     this.potassiumLevel = NutrientLevel.moderate,
+    this.soilOrganicMatter = 2.40,
+    this.organicMatterLevel = NutrientLevel.moderate,
     this.hardwareMode = NPxAIMode.proChamber,
     required this.confidenceScore,
     required this.modelName,
@@ -134,6 +140,14 @@ class NutrientPrediction {
     return NutrientLevel.veryHigh;
   }
 
+  static NutrientLevel classifyOrganicMatter(double omPercent) {
+    if (omPercent < 1.0) return NutrientLevel.veryLow;
+    if (omPercent < 1.5) return NutrientLevel.low;
+    if (omPercent <= 2.5) return NutrientLevel.moderate;
+    if (omPercent <= 3.5) return NutrientLevel.high;
+    return NutrientLevel.veryHigh;
+  }
+
   Map<String, dynamic> toJson() => {
         'totalNitrogen': totalNitrogen,
         'nitrogenLevel': nitrogenLevel.name,
@@ -141,6 +155,8 @@ class NutrientPrediction {
         'phosphorusLevel': phosphorusLevel.name,
         'availablePotassium': availablePotassium,
         'potassiumLevel': potassiumLevel.name,
+        'soilOrganicMatter': soilOrganicMatter,
+        'organicMatterLevel': organicMatterLevel.name,
         'hardwareMode': hardwareMode.name,
         'confidenceScore': confidenceScore,
         'modelName': modelName,

@@ -172,5 +172,33 @@ void main() {
       expect(recommendation.chemicalFertilizerFormula.contains('0-0-60') ||
              recommendation.chemicalFertilizerFormula.contains('13-0-46'), isTrue);
     });
+
+    test('7. Soil Organic Matter (SOM/OM) - Prediction bounds and DLD Classification', () {
+      const signature = SpectralSignature(
+        r405nm: 0.14,
+        r465nm: 0.20,
+        r525nm: 0.26,
+        r630nm: 0.35,
+        r850nm: 0.44,
+        r940nm: 0.48,
+        hueMean: 28.0,
+        saturationMean: 0.42,
+        valueMean: 0.32,
+        valueMedian: 0.31,
+        calibrationGainFactor: 1.0,
+      );
+
+      final pred = aiUseCase.predictNutrients(signature);
+      expect(pred.soilOrganicMatter, greaterThanOrEqualTo(0.5));
+      expect(pred.soilOrganicMatter, lessThanOrEqualTo(6.0));
+      expect(pred.organicMatterLevel, isNotNull);
+
+      // Classify tests according to Land Development Department (DLD) standards
+      expect(NutrientPrediction.classifyOrganicMatter(0.8), equals(NutrientLevel.veryLow));
+      expect(NutrientPrediction.classifyOrganicMatter(1.3), equals(NutrientLevel.low));
+      expect(NutrientPrediction.classifyOrganicMatter(2.1), equals(NutrientLevel.moderate));
+      expect(NutrientPrediction.classifyOrganicMatter(3.0), equals(NutrientLevel.high));
+      expect(NutrientPrediction.classifyOrganicMatter(4.2), equals(NutrientLevel.veryHigh));
+    });
   });
 }

@@ -41,6 +41,7 @@ class EdgeAiInferenceUseCase {
     double baseN = 2.45;
     double baseP = 18.0;
     double baseK = 115.0;
+    double baseOM = 2.35;
     double modelConfidence = 0.945;
 
     switch (effectiveModel) {
@@ -49,6 +50,7 @@ class EdgeAiInferenceUseCase {
         baseN = 2.30 + (ndsi * 1.8) + (somProxy * 0.9);
         baseP = 17.5 + ((rNir940 - rGreen) * 28.0) + (saturation * 8.5);
         baseK = 100.0 + (somProxy * 42.0) + ((rGreen / (rRed + 0.1)) * 25.0) + (rNir850 * 18.0);
+        baseOM = 1.60 + (somProxy * 2.2) + (saturation * 0.8);
         modelConfidence = 0.940 + (Random().nextDouble() * 0.015);
         break;
 
@@ -57,6 +59,7 @@ class EdgeAiInferenceUseCase {
         baseN = 2.15 + (somProxy * 1.4) + (ndsi * 1.2);
         baseP = 15.0 + ((rNir940 / (rGreen + 0.1)) * 6.5) + ((1.0 - brightness) * 9.0);
         baseK = 95.0 + (somProxy * 48.0) + ((rNir940 - rRed) * 35.0) + (saturation * 22.0);
+        baseOM = 1.70 + (somProxy * 2.5) + ((1.0 - brightness) * 1.2);
         modelConfidence = 0.950 + (Random().nextDouble() * 0.015);
         break;
 
@@ -65,6 +68,7 @@ class EdgeAiInferenceUseCase {
         baseN = 2.50 + (ndsi * 1.5) + (somProxy * 1.1);
         baseP = 19.0 + (rNir940 * 18.0) - (rGreen * 12.0) + (saturation * 6.0);
         baseK = 110.0 + (ndsi * 35.0) + (somProxy * 38.0) + ((rGreen - rRed) * 26.0);
+        baseOM = 1.80 + (somProxy * 2.4) + ((rNir850 - rRed).abs() * 1.5);
         modelConfidence = 0.965 + (Random().nextDouble() * 0.012);
         break;
 
@@ -73,6 +77,7 @@ class EdgeAiInferenceUseCase {
         baseN = 2.60 + (ndsi * 1.9) + (somProxy * 1.25);
         baseP = 21.0 + ((rNir940 - rGreen) * 22.0) + (saturation * 9.5);
         baseK = 118.0 + (ndsi * 40.0) + (somProxy * 45.0) + ((rNir850 - rGreen) * 30.0);
+        baseOM = 1.85 + (somProxy * 2.6) + (saturation * 0.9);
         modelConfidence = 0.970 + (Random().nextDouble() * 0.010);
         break;
 
@@ -93,6 +98,7 @@ class EdgeAiInferenceUseCase {
         baseN = 0.4 + (2.6 / (1.0 + exp(-nSum * 0.8)));
         baseP = max(2.0, pSum);
         baseK = max(25.0, kSum * 0.9 + 20.0);
+        baseOM = 1.40 + (somProxy * 2.0);
         modelConfidence = 0.935;
         break;
     }
@@ -104,16 +110,19 @@ class EdgeAiInferenceUseCase {
         baseN += 0.35;
         baseP = (baseP * 0.95).clamp(12.0, 35.0);
         baseK += 12.0;
+        baseOM += 0.65;
       } else if (farmingType.contains('เคมี') && !farmingType.contains('อินทรีย์เคมี')) {
         // ระบบเคมี: มีการใส่ปุ๋ยฟอสเฟตและโพแทสเซียมสูง (สูตร 15-15-15, 0-0-60, 13-0-46)
         baseP += 7.5;
         baseN = (baseN * 0.96).clamp(0.5, 3.2);
         baseK += 28.0;
+        baseOM -= 0.25;
       } else if (farmingType.contains('อินทรีย์เคมี')) {
-        // ระบบอินทรีย์เคมี: สมดุลทั้งไนโตรเจน ฟอสฟอรัส และโพแทสเซียม
+        // ระบบอินทรีย์เคมี: สมดุลทั้งไนโตรเจน ฟอสฟอรัส โพแทสเซียม และอินทรียวัตถุ
         baseN += 0.15;
         baseP += 3.0;
         baseK += 18.0;
+        baseOM += 0.25;
       }
     }
 
@@ -125,6 +134,7 @@ class EdgeAiInferenceUseCase {
       baseN += (Random().nextDouble() - 0.5) * 0.12;
       baseP += (Random().nextDouble() - 0.5) * 2.2;
       baseK += (Random().nextDouble() - 0.5) * 6.0;
+      baseOM += (Random().nextDouble() - 0.5) * 0.20;
     } else {
       // โหมด NPxAI Pro (Chamber 7-Band): สโตรบแสง 7 แถบความยาวคลื่นและตัดแสงรบกวน 0-Lux ความแม่นยำสูง R² ~0.94 - 0.97
       modelConfidence = modelConfidence.clamp(0.940, 0.975);
@@ -134,14 +144,17 @@ class EdgeAiInferenceUseCase {
     double predictedN = baseN.clamp(0.40, 3.20);
     double predictedP = baseP.clamp(2.0, 85.0);
     double predictedK = baseK.clamp(20.0, 350.0);
+    double predictedOM = baseOM.clamp(0.50, 6.50);
     predictedN = double.parse(predictedN.toStringAsFixed(2));
     predictedP = double.parse(predictedP.toStringAsFixed(2));
     predictedK = double.parse(predictedK.toStringAsFixed(1));
+    predictedOM = double.parse(predictedOM.toStringAsFixed(2));
 
-    // 6. จัดระดับความอุดมสมบูรณ์ของธาตุอาหาร N, P, K
+    // 6. จัดระดับความอุดมสมบูรณ์ของธาตุอาหาร N, P, K และอินทรียวัตถุ OM
     final NutrientLevel nLevel = NutrientPrediction.classifyNitrogen(predictedN);
     final NutrientLevel pLevel = NutrientPrediction.classifyPhosphorus(predictedP);
     final NutrientLevel kLevel = NutrientPrediction.classifyPotassium(predictedK);
+    final NutrientLevel omLevel = NutrientPrediction.classifyOrganicMatter(predictedOM);
 
     final double confidence = double.parse(modelConfidence.clamp(0.85, 0.98).toStringAsFixed(2));
 
@@ -152,6 +165,8 @@ class EdgeAiInferenceUseCase {
       phosphorusLevel: pLevel,
       availablePotassium: predictedK,
       potassiumLevel: kLevel,
+      soilOrganicMatter: predictedOM,
+      organicMatterLevel: omLevel,
       hardwareMode: mode,
       confidenceScore: confidence,
       modelName: effectiveModel,
