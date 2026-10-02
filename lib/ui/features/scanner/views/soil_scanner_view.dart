@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../domain/models/nutrient_prediction.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/nutrient_color_palette.dart';
 import '../view_models/soil_scanner_view_model.dart';
 
 class SoilScannerView extends StatefulWidget {
@@ -314,28 +315,59 @@ class _SoilScannerViewState extends State<SoilScannerView> with WidgetsBindingOb
     }
   }
 
-  Widget _buildLiveNutrientBadge(String symbol, String value, String unit, Color accent) {
+  Widget _buildLiveNutrientBadge(
+    String symbol,
+    String value,
+    String unit, {
+    NutrientLevel? level,
+  }) {
+    final baseCol = NutrientColorPalette.getBaseColor(symbol);
+    final valCol = level != null
+        ? NutrientColorPalette.getNutrientShade(symbol, level)
+        : baseCol;
+    final statusCol = level != null
+        ? NutrientColorPalette.getDiagnosticStatusColor(level)
+        : null;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          symbol,
-          style: TextStyle(
-            fontSize: 9.5,
-            fontWeight: FontWeight.w900,
-            color: accent,
-            letterSpacing: 0.5,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (statusCol != null) ...[
+              Container(
+                width: 5,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: statusCol,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 3),
+            ],
+            Text(
+              symbol,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w900,
+                color: baseCol,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
         ),
+        const SizedBox(height: 1),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: valCol,
             fontFamily: 'monospace',
             shadows: [
-              Shadow(color: Colors.black, blurRadius: 4),
+              Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 4),
+              Shadow(color: valCol.withValues(alpha: 0.35), blurRadius: 6),
             ],
           ),
         ),
@@ -843,10 +875,10 @@ class _SoilScannerViewState extends State<SoilScannerView> with WidgetsBindingOb
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                                       children: [
-                                        _buildLiveNutrientBadge('N', vm.livePrediction?.totalNitrogen.toStringAsFixed(2) ?? "2.45", 'g/kg', Colors.cyanAccent),
-                                        _buildLiveNutrientBadge('P', vm.livePrediction?.availablePhosphorus.toStringAsFixed(1) ?? "18.5", 'mg/kg', Colors.orangeAccent),
-                                        _buildLiveNutrientBadge('K', vm.livePrediction?.availablePotassium.toStringAsFixed(0) ?? "115", 'mg/kg', Colors.purpleAccent),
-                                        _buildLiveNutrientBadge('OM', '${vm.livePrediction?.soilOrganicMatter.toStringAsFixed(2) ?? "2.40"}%', '', Colors.lightGreenAccent),
+                                        _buildLiveNutrientBadge('N', vm.livePrediction?.totalNitrogen.toStringAsFixed(2) ?? "2.45", 'g/kg', level: vm.livePrediction?.nitrogenLevel ?? NutrientLevel.moderate),
+                                        _buildLiveNutrientBadge('P', vm.livePrediction?.availablePhosphorus.toStringAsFixed(1) ?? "18.5", 'mg/kg', level: vm.livePrediction?.phosphorusLevel ?? NutrientLevel.moderate),
+                                        _buildLiveNutrientBadge('K', vm.livePrediction?.availablePotassium.toStringAsFixed(0) ?? "115", 'mg/kg', level: vm.livePrediction?.potassiumLevel ?? NutrientLevel.moderate),
+                                        _buildLiveNutrientBadge('OM', '${vm.livePrediction?.soilOrganicMatter.toStringAsFixed(2) ?? "2.40"}%', '', level: vm.livePrediction?.organicMatterLevel ?? NutrientLevel.moderate),
                                       ],
                                     ),
                                   ],

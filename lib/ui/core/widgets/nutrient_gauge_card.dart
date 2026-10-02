@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../domain/models/nutrient_prediction.dart';
 import '../theme/app_theme.dart';
+import '../theme/nutrient_color_palette.dart';
 
 class NutrientGaugeCard extends StatelessWidget {
   final String title;
@@ -22,34 +23,38 @@ class NutrientGaugeCard extends StatelessWidget {
     this.subtitle,
   });
 
-  Color _getLevelColor(NutrientLevel l) {
-    switch (l) {
-      case NutrientLevel.veryLow:
-      case NutrientLevel.low:
-        return Colors.orangeAccent;
-      case NutrientLevel.moderate:
-        return AppTheme.accentLime;
-      case NutrientLevel.high:
-      case NutrientLevel.veryHigh:
-        return Colors.blueAccent;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final Color color = _getLevelColor(level);
+    // 1. สีอัตลักษณ์ประจำธาตุ (N=ฟ้า, P=ส้ม, K=แดง, OM=เขียว)
+    final Color baseElementColor = NutrientColorPalette.getBaseColor(symbol);
+
+    // 2. เฉดสีที่แปรผันตามมาตรฐานการวิเคราะห์ 5 ระดับ (Very Low -> Very High)
+    final Color shadeColor = NutrientColorPalette.getNutrientShade(symbol, level);
+
+    // 3. สีสถานะวินิจฉัยสุขภาพดินมาตรฐานสากล สำหรับป้ายระดับ (Status Badge)
+    final Color statusColor = NutrientColorPalette.getDiagnosticStatusColor(level);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
         color: AppTheme.cardDark,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppTheme.borderDark),
+        border: Border.all(
+          color: shadeColor.withValues(alpha: 0.28),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: shadeColor.withValues(alpha: 0.06),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header: Symbol + Title on the left, Level badge on the right
+          // Header: Symbol (สีประจำธาตุ) + Title + Status Badge (สีตามระดับการวิเคราะห์)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,17 +64,21 @@ class NutrientGaugeCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: color.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(4),
+                        color: baseElementColor.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: baseElementColor.withValues(alpha: 0.45),
+                          width: 1,
+                        ),
                       ),
                       child: Text(
                         symbol,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color: color,
+                          color: baseElementColor,
                         ),
                       ),
                     ),
@@ -93,20 +102,38 @@ class NutrientGaugeCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 4),
+              // ป้ายระดับการวิเคราะห์ เปลี่ยนสีตามมาตรฐานดิน LDD 5 ระดับ
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
+                  color: statusColor.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: color.withValues(alpha: 0.4)),
-                ),
-                child: Text(
-                  level.shortLabelTh,
-                  style: TextStyle(
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.bold,
-                    color: color,
+                  border: Border.all(
+                    color: statusColor.withValues(alpha: 0.50),
+                    width: 1,
                   ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 5,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: statusColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 3.5),
+                    Text(
+                      level.shortLabelTh,
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        fontWeight: FontWeight.bold,
+                        color: statusColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -125,6 +152,7 @@ class NutrientGaugeCard extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 8),
+          // ค่าตัวเลข เปลี่ยนเฉดสีตามระดับการวิเคราะห์
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
@@ -137,8 +165,14 @@ class NutrientGaugeCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: color,
+                    color: shadeColor,
                     letterSpacing: -0.5,
+                    shadows: [
+                      Shadow(
+                        color: shadeColor.withValues(alpha: 0.3),
+                        blurRadius: 6,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -154,13 +188,14 @@ class NutrientGaugeCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+          // แถบ Progress เปลี่ยนเฉดสีตามระดับการวิเคราะห์
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: progress.clamp(0.0, 1.0),
               minHeight: 5,
               backgroundColor: AppTheme.borderDark,
-              valueColor: AlwaysStoppedAnimation<Color>(color),
+              valueColor: AlwaysStoppedAnimation<Color>(shadeColor),
             ),
           ),
         ],

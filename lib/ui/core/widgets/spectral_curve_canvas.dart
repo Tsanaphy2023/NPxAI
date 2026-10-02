@@ -316,7 +316,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                 const SizedBox(width: 6),
                 _buildRefChip(
                   label: 'มาตรฐาน K',
-                  color: const Color(0xFFE040FB),
+                  color: const Color(0xFFFF5252),
                   isSelected: _showRefK,
                   onTap: () => setState(() => _showRefK = !_showRefK),
                   isDashed: true,
@@ -574,7 +574,7 @@ class _SpectralCurveCanvasState extends State<SpectralCurveCanvas> {
                         child: _buildHudValPill(
                           'Ref-K',
                           currentRefK,
-                          const Color(0xFFE040FB),
+                          const Color(0xFFFF5252),
                           isAbsorbance: _showAbsorbance,
                         ),
                       ),
@@ -920,7 +920,7 @@ class _AdvancedSpectralPainter extends CustomPainter {
       drawReferenceCurve(refPValues, const Color(0xFFFF9100));
     }
     if (showRefK) {
-      drawReferenceCurve(refKValues, const Color(0xFFE040FB));
+      drawReferenceCurve(refKValues, const Color(0xFFFF5252));
     }
 
     // 3. วาดเส้นกราฟตัวอย่างดินจริง (ถ้าเปิดใช้งาน)
