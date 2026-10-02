@@ -136,24 +136,67 @@ class _SoilScannerViewState extends State<SoilScannerView> with WidgetsBindingOb
   bool _isRecordingVideo = false;
 
   void _triggerScan() async {
-    final success = await widget.viewModel.startMultiSpectralScan(
+    final vm = widget.viewModel;
+    final isLite = vm.currentMode == NPxAIMode.liteFlash;
+
+    // หากอยู่ในโหมด NPxAI Lite ให้เปิดไฟฉายแฟลช 45° ส่องหน้าดินทันทีก่อนเริ่มสแกน
+    if (isLite && _cameraController != null && _cameraController!.value.isInitialized) {
+      try {
+        await _cameraController!.setFlashMode(FlashMode.torch);
+        vm.setFlashlight(true);
+        // ให้เวลาเซนเซอร์กล้องปรับสมดุลแสงและความสว่างของแฟลช 200 ms
+        await Future.delayed(const Duration(milliseconds: 200));
+      } catch (_) {}
+    }
+
+    final success = await vm.startMultiSpectralScan(
       plotName: _plotController.text.trim(),
       cropType: _selectedCrop,
       farmingType: _selectedFarmingType,
-      mode: widget.viewModel.currentMode,
-      latitude: widget.viewModel.autoLatitude,
-      longitude: widget.viewModel.autoLongitude,
-      aiModel: widget.viewModel.selectedAiModel,
+      mode: vm.currentMode,
+      latitude: vm.autoLatitude,
+      longitude: vm.autoLongitude,
+      aiModel: vm.selectedAiModel,
     );
+
+    // ปิดไฟฉายแฟลชเมื่อสแกนเสร็จสิ้น
+    if (isLite && _cameraController != null && _cameraController!.value.isInitialized) {
+      try {
+        await _cameraController!.setFlashMode(FlashMode.off);
+        vm.setFlashlight(false);
+      } catch (_) {}
+    }
+
     if (success && mounted) {
       widget.onScanCompleted();
     }
   }
 
   Future<void> _capturePhoto() async {
+    final vm = widget.viewModel;
+    final isLite = vm.currentMode == NPxAIMode.liteFlash;
+
     try {
       if (_cameraController != null && _cameraController!.value.isInitialized) {
+        // หากอยู่ในโหมด NPxAI Lite ให้เปิดไฟฉายแฟลช 45° ส่องตัวอย่างดินก่อนบันทึกภาพ
+        if (isLite) {
+          try {
+            await _cameraController!.setFlashMode(FlashMode.torch);
+            vm.setFlashlight(true);
+            await Future.delayed(const Duration(milliseconds: 250));
+          } catch (_) {}
+        }
+
         final XFile file = await _cameraController!.takePicture();
+
+        // ปิดไฟแฟลชหลังถ่ายภาพเสร็จ
+        if (isLite) {
+          try {
+            await _cameraController!.setFlashMode(FlashMode.off);
+            vm.setFlashlight(false);
+          } catch (_) {}
+        }
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -162,7 +205,11 @@ class _SoilScannerViewState extends State<SoilScannerView> with WidgetsBindingOb
                   const Icon(Icons.check_circle, color: AppTheme.accentLime),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text('ถ่ายภาพตัวอย่างดินสำเร็จ (${file.name})'),
+                    child: Text(
+                      isLite
+                          ? 'ถ่ายภาพตัวอย่างดินสำเร็จ (เปิดแฟลช 45°: ${file.name})'
+                          : 'ถ่ายภาพตัวอย่างดินสำเร็จ (${file.name})',
+                    ),
                   ),
                 ],
               ),
@@ -1161,9 +1208,13 @@ class _SoilScannerViewState extends State<SoilScannerView> with WidgetsBindingOb
                                     children: [
                                       Icon(Icons.architecture_rounded, size: 16, color: AppTheme.accentLime),
                                       SizedBox(width: 6),
-                                      Text(
-                                        'สถาปัตยกรรมฮาร์ดแวร์ (Dual-Architecture)',
-                                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.textLight),
+                                      Expanded(
+                                        child: Text(
+                                          'สถาปัตยกรรมฮาร์ดแวร์ (Dual-Architecture)',
+                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.textLight),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ],
                                   ),
